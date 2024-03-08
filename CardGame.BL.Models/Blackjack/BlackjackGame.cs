@@ -10,8 +10,14 @@ namespace CardGame.BL.Models.Blackjack
 {
     public class BlackjackGame : Game<BlackjackPlayer, BlackjackHand, BlackjackCard>
     {
+        private readonly GameType _gameType = GameType.Blackjack;
+        public readonly int minBet;
+        public readonly int maxBet;
+
         public BlackjackGame(int playerCount, int startingBalance) : base(playerCount, startingBalance)
         {
+            this.minBet = (startingBalance * 5) / 100;
+            this.maxBet = (startingBalance * 15) / 100;
             InitializeGame();
         }
 
@@ -19,8 +25,9 @@ namespace CardGame.BL.Models.Blackjack
         {
             try
             {
+                Players[0].IsDealer = true;
+                Players[0].Balance = Players[0].Balance * Players.Count;
                 GameDeck.ShuffleDeck(GameDeck);
-                DealHands();
             }
             catch (Exception)
             { 
@@ -35,7 +42,8 @@ namespace CardGame.BL.Models.Blackjack
             {
                 foreach (BlackjackPlayer player in Players)
                 {
-                    player.Hand = GameDeck.DealCards(Games.Blackjack, GameDeck);
+                    player.Hand = GameDeck.DealCards(_gameType, GameDeck);
+                    player.Hand.Cards[1].IsVisible = true;
                 }
             }
             catch (Exception)

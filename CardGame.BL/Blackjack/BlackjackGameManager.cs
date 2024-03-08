@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CardGame.BL.Models.Constants.BaseConstants;
 
 namespace CardGame.BL.BlackJack
 {
@@ -21,6 +22,7 @@ namespace CardGame.BL.BlackJack
         {
             int playerTurn = 0;
             int playerCount = 0;
+
             while (Game.Players.Count > 0)
             {
                 if (playerTurn >= Game.Players.Count)

@@ -32,7 +32,7 @@ namespace CardGame.BL.Models.Constants
             Clubs,
             Spades
         }
-        public enum Games
+        public enum GameType
         {
             Blackjack,
             TexasHoldem

@@ -13,6 +13,7 @@ namespace CardGame.BL.Models.Blackjack
 {
     public class BlackjackPlayer : Player<BlackjackCard>
     {
+        public bool IsDealer = false;
         public BlackjackPlayer(int balance, int playerNumber) : base(balance, playerNumber)
         {
 

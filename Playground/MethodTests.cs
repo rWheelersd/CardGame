@@ -17,7 +17,7 @@ namespace Playground
         {
             bool pause = false;
             BlackjackGame blackjackGame = new BlackjackGame(5, 5000);
-            BlackjackGameManager blackjackGameManager = new BlackjackGameManager(5, 5000);
+            //BlackjackGameManager blackjackGameManager = new BlackjackGameManager(5, 5000);
             Assert.IsTrue(pause);
         }
     }

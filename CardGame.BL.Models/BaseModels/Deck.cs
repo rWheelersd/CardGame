@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using CardGame.BL.Models.Blackjack;
+using System.Reflection;
 
 namespace CardGame.BL.Models.BaseModels
 {
@@ -73,7 +74,7 @@ namespace CardGame.BL.Models.BaseModels
         //    return Cards;
         //}
 
-        public Hand<TCard> DealCards(Games game, Deck<TCard> gameDeck)
+        public Hand<TCard> DealCards(GameType gameType, Deck<TCard> gameDeck)
         {
             try
             {
@@ -81,20 +82,22 @@ namespace CardGame.BL.Models.BaseModels
                 Random rng = new Random();
                 Hand<TCard> hand = new Hand<TCard>();
 
-                if (game == Games.Blackjack)
+                if (gameType == GameType.Blackjack)
                 {
                     handSize = 2;
                 }
 
                 while (handSize > 0)
                 {
-
-                    //////try remove at
-                    int card1 = rng.Next(gameDeck.Cards.Count);
-                    hand.Cards.Add(gameDeck.Cards[card1]);
-                    RemoveCard(card1, gameDeck);
+                    int card = rng.Next(gameDeck.Cards.Count);
+                    hand.Cards.Add(gameDeck.Cards[card]);
+                    //RemoveCard(card1, gameDeck);
+                    gameDeck.BurntCards.Add(gameDeck.Cards[card]);
+                    gameDeck.Cards.RemoveAt(card);
                     handSize--;
                 }
+
+
 
                 return hand;
             }
@@ -105,19 +108,19 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        public void RemoveCard(int index, Deck<TCard> gameDeck)
-        {
-            try
-            {
-                gameDeck.BurntCards.Add(gameDeck.Cards[index]);
-                gameDeck.Cards[index] = gameDeck.Cards[gameDeck.Cards.Count - 1];
-                gameDeck.Cards.Remove(gameDeck.Cards[gameDeck.Cards.Count - 1]);
-            }
-            catch (Exception)
-            {
+        //public void RemoveCard(int index, Deck<TCard> gameDeck)
+        //{
+        //    try
+        //    {
+        //        gameDeck.BurntCards.Add(gameDeck.Cards[index]);
+        //        gameDeck.Cards[index] = gameDeck.Cards[gameDeck.Cards.Count - 1];
+        //        gameDeck.Cards.Remove(gameDeck.Cards[gameDeck.Cards.Count - 1]);
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
     }
 }
