@@ -10,11 +10,12 @@ namespace CardGame.BL.BlackJack
 {
     public class BlackjackGameManager
     {
-        public BlackjackGame Game { get; set; }
+        private BlackjackGame game;
 
         public BlackjackGameManager(int players, int balance) 
         {
-            Game = new BlackjackGame(players, balance);
+            game = new BlackjackGame(players, balance);
+
             StartGame();
         }
 
@@ -22,28 +23,45 @@ namespace CardGame.BL.BlackJack
         {
             int playerTurn = 0;
             int playerCount = 0;
+            int roundCount = 0;
+            bool betsRetrieved = false;
+            bool roundActive = false;
 
-            while (Game.Players.Count > 0)
+            while (game.Players.Count > 0)
             {
-                if (playerTurn >= Game.Players.Count)
+                if (roundActive)
                 {
-                    playerTurn = 0;
-
-                    PlayerMove();
-
-                    if (Game.Players[playerTurn].Balance == 0)
+                    if (playerTurn >= game.Players.Count)
                     {
-                        Game.Players.RemoveAt(playerTurn);
+                        playerTurn = 0;
+
+
+                        if (game.Players[playerTurn].Balance == 0)
+                        {
+                            game.Players.RemoveAt(playerTurn);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (BlackjackPlayer player in game.Players)
+                    {
+                        if (player.IsHuman)
+                        {
+
+                        }
+                        else if (!player.IsDealer) 
+                        {
+                            
+                        }
+                        game.DealHands();
                     }
                 }
 
+                
+
                 playerTurn++;
             }
-        }
-
-        private void PlayerMove()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace CardGame.BL.Models.Blackjack
             {
                 Players[0].IsDealer = true;
                 Players[0].Balance = Players[0].Balance * Players.Count;
+                Players[1].IsHuman = true;
                 GameDeck.ShuffleDeck(GameDeck);
             }
             catch (Exception)
@@ -36,7 +37,7 @@ namespace CardGame.BL.Models.Blackjack
             }
         }
 
-        private void DealHands()
+        public void DealHands()
         {
             try
             {

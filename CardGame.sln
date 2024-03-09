@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame.BL.Models", "CardGame.BL.Models\CardGame.BL.Models.csproj", "{F658DB7A-2E0B-4A36-BA4E-CB397350C6F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.BL.Models", "CardGame.BL.Models\CardGame.BL.Models.csproj", "{F658DB7A-2E0B-4A36-BA4E-CB397350C6F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame.BL", "CardGame.BL\CardGame.BL.csproj", "{696CF197-D945-4572-BACC-D2A1727E3D17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.BL", "CardGame.BL\CardGame.BL.csproj", "{696CF197-D945-4572-BACC-D2A1727E3D17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{66DEDA4D-99DB-4838-A1C6-08259445FE8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground", "Playground\Playground.csproj", "{66DEDA4D-99DB-4838-A1C6-08259445FE8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame.UI", "CardGame.UI\CardGame.UI.csproj", "{451839A3-BFA4-4C39-935D-3FAC152B2907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{66DEDA4D-99DB-4838-A1C6-08259445FE8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66DEDA4D-99DB-4838-A1C6-08259445FE8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66DEDA4D-99DB-4838-A1C6-08259445FE8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{451839A3-BFA4-4C39-935D-3FAC152B2907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{451839A3-BFA4-4C39-935D-3FAC152B2907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{451839A3-BFA4-4C39-935D-3FAC152B2907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{451839A3-BFA4-4C39-935D-3FAC152B2907}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

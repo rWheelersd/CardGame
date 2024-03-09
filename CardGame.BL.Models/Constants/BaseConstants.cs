@@ -35,7 +35,7 @@ namespace CardGame.BL.Models.Constants
         public enum GameType
         {
             Blackjack,
-            TexasHoldem
+            //TexasHoldem
         }
     }
 }

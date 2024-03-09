@@ -10,6 +10,8 @@ namespace CardGame.BL.Models.BaseModels
 {
     public class Card<TCard>
     {
+        public string ImgPath { get; set; }
+        public string CardName { get; set; }
         public Rank CardRank { get; set; }
         public Suit CardSuit { get; set; }
 

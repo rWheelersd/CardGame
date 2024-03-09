@@ -31,7 +31,8 @@ namespace CardGame.BL.Models.BaseModels
                 {
                     foreach (Enum rank in Enum.GetValues(typeof(Rank)))
                     {
-                        Cards.Add(new TCard { CardRank = (Rank)rank, CardSuit = (Suit)suit });
+                        Cards.Add(new TCard { CardRank = (Rank)rank, CardSuit = (Suit)suit, CardName = $"{rank}_of_{suit}" });
+                        
                     }
                 }
             }
