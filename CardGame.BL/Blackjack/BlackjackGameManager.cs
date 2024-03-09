@@ -11,6 +11,9 @@ namespace CardGame.BL.BlackJack
     public class BlackjackGameManager
     {
         private BlackjackGame game;
+        public BlackjackGameManager()
+        {
+        }
 
         public BlackjackGameManager(int players, int balance) 
         {
@@ -26,42 +29,44 @@ namespace CardGame.BL.BlackJack
             int roundCount = 0;
             bool betsRetrieved = false;
             bool roundActive = false;
+            game.DealHands();
 
-            while (game.Players.Count > 0)
-            {
-                if (roundActive)
-                {
-                    if (playerTurn >= game.Players.Count)
-                    {
-                        playerTurn = 0;
+            //while (game.Players.Count > 0)
+            //{
+                
+            //    if (roundActive)
+            //    {
+            //        if (playerTurn >= game.Players.Count)
+            //        {
+            //            playerTurn = 0;
 
 
-                        if (game.Players[playerTurn].Balance == 0)
-                        {
-                            game.Players.RemoveAt(playerTurn);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (BlackjackPlayer player in game.Players)
-                    {
-                        if (player.IsHuman)
-                        {
+            //            if (game.Players[playerTurn].Balance == 0)
+            //            {
+            //                game.Players.RemoveAt(playerTurn);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        foreach (BlackjackPlayer player in game.Players)
+            //        {
+            //            if (player.IsHuman)
+            //            {
 
-                        }
-                        else if (!player.IsDealer) 
-                        {
+            //            }
+            //            else if (!player.IsDealer) 
+            //            {
                             
-                        }
-                        game.DealHands();
-                    }
-                }
+            //            }
+            //            game.DealHands();
+            //        }
+            //    }
 
                 
 
-                playerTurn++;
-            }
+            //    playerTurn++;
+            //}
         }
     }
 }

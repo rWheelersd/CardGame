@@ -12,9 +12,9 @@ namespace CardGame.UI.Controllers
     public class GameController : Controller
     {
         // GET: GameController
-        public ActionResult Index()
+        public ActionResult Index(BlackjackGameManager blackjackGameManager)
         {
-            return View();
+            return View(blackjackGameManager);
         }
 
         // GET: GameController/Create
@@ -33,8 +33,9 @@ namespace CardGame.UI.Controllers
             {
                 switch (newGame.SelectedGame)
                 {
-                    case "Blackjack" : return PlayBlackjack(new BlackjackGameManager(newGame.PlayerCount, newGame.StartingBalance));
-                        break;
+                    case "Blackjack" :
+                        BlackjackGameManager game = new BlackjackGameManager(newGame.PlayerCount, newGame.StartingBalance);
+                        return RedirectToAction("Index", game);
                     default:
                         break;
                 }
@@ -44,11 +45,6 @@ namespace CardGame.UI.Controllers
             {
                 return View();
             }
-        }
-
-        public ActionResult PlayBlackjack(BlackjackGameManager blackjackGameManager)
-        {
-            return View();
         }
     }
 }
