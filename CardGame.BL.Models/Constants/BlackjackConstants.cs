@@ -31,7 +31,8 @@ namespace CardGame.BL.Models.Constants
             Split,
             Busted,
             Held,
-            Blackjack
+            Blackjack,
+            Default
         }
         public enum PlayerActions
         {

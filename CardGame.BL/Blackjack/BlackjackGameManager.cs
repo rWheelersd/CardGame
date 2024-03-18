@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static CardGame.BL.Models.Constants.BaseConstants;
+using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.BlackJack
 {
@@ -28,47 +29,79 @@ namespace CardGame.BL.BlackJack
 
         private void StartGame()
         {
-            int playerTurn = 0;
-            int playerCount = 0;
-            int roundCount = 0;
-            bool betsRetrieved = false;
             bool roundActive = false;
-            game.DealHands();
+            bool gameOver = false;
+            BlackjackCard dealerShownCard = new BlackjackCard();
 
             try
             {
                 while (game.Players.Count > 0)
                 {
-                    if (game.Players[playerTurn].Balance == 0)
-                    {
-                        game.Players.RemoveAt(playerTurn);
-                        playerTurn++;
-                    }
-                    else
+                    if (!gameOver)
                     {
                         if (roundActive)
                         {
-                            if (playerTurn >= game.Players.Count)
-                            {
-                                playerTurn = 0;
+                            game.DealHands();
+                            dealerShownCard = game.Players.Last().Hand.Cards.FirstOrDefault(card => card.IsVisible);
 
-                                playerManager.PlayTurn(game.Players[playerTurn]);
-                                playerTurn++;
-                            }
-                        }
-                        else
-                        {
                             foreach (BlackjackPlayer player in game.Players)
                             {
                                 if (!player.IsHuman)
                                 {
-                                    playerManager.PlayerBet(player, game.minBet, game.maxBet, rng);
+                                    while (player.Status == PlayerStatus.Active)
+                                    {
+                                        DealerResponse(player, playerManager.PlayTurn(player, dealerShownCard));
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //foreach (BlackjackPlayer player in game.Players)
+                            //{
+                            //    if (!player.IsHuman && !player.IsDealer)
+                            //    {
+                            //        if (player.Balance <= 0)
+                            //        {
+                            //            game.Players.Remove(player);
+                            //            continue;
+                            //        }
+                            //        playerManager.PlayerBet(player, game.minBet, game.maxBet, rng);
+                            //    }
+                            //}
+
+                            for (int i = game.Players.Count - 1; i >= 0; i--)
+                            {
+                                BlackjackPlayer player = game.Players[i];
+                                if (!player.IsHuman && !player.IsDealer)
+                                {
+                                    if (player.Balance <= 0)
+                                    {
+                                        game.Players.RemoveAt(i);
+                                    }
+                                    else
+                                    {
+                                        playerManager.PlayerBet(player, game.minBet, game.maxBet, rng);
+                                    }
                                 }
                             }
                             roundActive = true;
                         }
                     }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void DealerResponse(BlackjackPlayer player, PlayerActions playerActions)
+        {
+            try
+            {
+
             }
             catch (Exception)
             {
