@@ -111,18 +111,6 @@ namespace CardGame.BL.BlackJack
                 int hardValue = 0;
                 int softValue = 0;
 
-                //Blackjack
-                if (hardValue == 21)
-                {
-                    return PlayerActions.FlipBlackjack;
-                }
-
-                //Bust
-                if (hardValue > 21)
-                {
-
-                    return PlayerActions.FlipBust;
-                }
 
                 //Calculate hands hard value
                 foreach (BlackjackCard card in playerHand.Cards)
@@ -135,28 +123,74 @@ namespace CardGame.BL.BlackJack
                 {
                     softValue = hardValue - 10;
                     playerHand.IsSoft = true;
+
+                    //if soft value is busted then hard value must also be busted
+                    if (softValue > 21)
+                    {
+                        return PlayerActions.FlipBust;
+                    }
+                }
+
+                //Blackjack
+                if (hardValue == 21 || softValue == 21)
+                {
+                    return PlayerActions.FlipBlackjack;
+                }
+
+                //Bust
+                if (hardValue > 21 && !playerHand.IsSoft)
+                {
+                    return PlayerActions.FlipBust;
+                }
+
+                //Checks starting hand for surrender conditions
+                if (!playerHand.IsSoft && playerHand.Cards.Count == 2)
+                {
+                    if (hardValue == 16 && dealerCard.CardValue >= 11)
+                    {
+                        return PlayerActions.Surrender;
+                    }
+
+                    if (hardValue == 15 && dealerCard.CardValue == 10)
+                    {
+                        return PlayerActions.Surrender;
+                    }
                 }
 
                 //Returns action for hard hand
                 if (!playerHand.IsSoft)
                 {
-                    if (hardValue == 16 && (dealerCard.CardValue >= 11))
-                    {
-                        return PlayerActions.Surrender;
-                    }
-
                     if (hardValue <= 11) return PlayerActions.Hit;
 
-                    if ((hardValue >= 12 && hardValue <= 16) && dealerCard.CardRank >= Rank.Seven) return PlayerActions.Hit;
+                    if ((hardValue >= 12 && hardValue <= 16) && dealerCard.CardValue >= 7) return PlayerActions.Hit;
 
                     else return PlayerActions.Stand;
                 }
 
-                if (playerHand.IsSoft && !playerHand.SoftBust)
+                //Returns action for soft hand
+                if (playerHand.IsSoft)
                 {
-                    if (hardValue <= 17)
+                    if (hardValue >= 19 && hardValue <= 21)
                     {
+                        return PlayerActions.Stand;
+                    }
 
+                    if (hardValue == 18)
+                    {
+                        if (dealerCard.CardValue == 2) return PlayerActions.Stand;
+                        if (dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) return PlayerActions.DoubleDown;
+                        if (dealerCard.CardValue == 7 || dealerCard.CardValue == 8) return PlayerActions.Stand;
+                        if (dealerCard.CardValue >= 9) return PlayerActions.Hit;
+                    }
+
+                    if (hardValue == 17)
+                    {
+                        return PlayerActions.Stand;
+                    }
+
+                    if (hardValue < 17)
+                    {
+                        return PlayerActions.Hit;
                     }
                 }                
             }
