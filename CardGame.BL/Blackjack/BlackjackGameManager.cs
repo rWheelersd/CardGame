@@ -29,6 +29,7 @@ namespace CardGame.BL.BlackJack
 
         private void StartGame()
         {
+            game.DealHands();
             bool roundActive = false;
             bool gameOver = false;
             BlackjackCard dealerShownCard = new BlackjackCard();

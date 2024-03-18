@@ -18,10 +18,9 @@ namespace CardGame.BL.Models.Blackjack
         public BlackjackCard()
         {
             IsVisible = false;
-            SetValue();
         }
 
-        private void SetValue()
+        public void SetValue()
         {
             switch (CardRank)
             {

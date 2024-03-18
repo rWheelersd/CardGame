@@ -28,6 +28,12 @@ namespace CardGame.BL.Models.Blackjack
                 Players.Last().IsDealer = true;
                 Players.Last().Balance = Players[0].Balance * Players.Count;
                 Players[0].IsHuman = true;
+
+                foreach (BlackjackCard card in GameDeck.Cards) 
+                {
+                    card.SetValue();
+                }
+
                 GameDeck.ShuffleDeck(GameDeck);
             }
             catch (Exception)
@@ -43,7 +49,7 @@ namespace CardGame.BL.Models.Blackjack
             {
                 foreach (BlackjackPlayer player in Players)
                 {
-                    player.Hand = GameDeck.DealCards(_gameType, GameDeck);
+                    player.Hand = ToBlackjackHand(GameDeck.DealCards(_gameType, GameDeck));
                     player.Hand.Cards[1].IsVisible = true;
                 }
             }
@@ -52,6 +58,13 @@ namespace CardGame.BL.Models.Blackjack
 
                 throw;
             }
+        }
+
+        private BlackjackHand ToBlackjackHand(Hand<BlackjackCard> hand)
+        {
+            BlackjackHand blackjackHand = new BlackjackHand(hand.Cards.Count);
+            blackjackHand.Cards.AddRange(hand.Cards);
+            return blackjackHand;
         }
     }
 }
