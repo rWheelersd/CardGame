@@ -10,7 +10,7 @@ namespace CardGame.BL.Models.Blackjack
     public class BlackjackHand : Hand<BlackjackCard>
     {
         public bool IsSoft = false;
-        public bool SoftBust = false;
+        public bool splitBust = false;
 
         public BlackjackHand(int handSize) : base(handSize)
         {

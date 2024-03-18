@@ -15,10 +15,11 @@ namespace CardGame.BL.Models.Blackjack
     {
         public bool IsDealer = false;
         public bool IsHuman = false;
+        public bool WasSplit = false;
         public PlayerActions Actions;
         public PlayerStatus Status;
-        public BlackjackHand SplitHand;
         public BlackjackHand Hand;
+        public BlackjackHand SplitHand;
 
         public BlackjackPlayer(int balance, int playerNumber) : base(balance, playerNumber)
         {

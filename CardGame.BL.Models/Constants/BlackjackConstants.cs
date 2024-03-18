@@ -26,6 +26,8 @@ namespace CardGame.BL.Models.Constants
         }
         public enum PlayerStatus
         {
+            Active,
+            Doubled,
             Split,
             Busted,
             Held,

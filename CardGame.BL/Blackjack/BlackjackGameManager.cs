@@ -13,7 +13,7 @@ namespace CardGame.BL.BlackJack
     {
         private BlackjackGame game;
         private BlackjackPlayerManager playerManager;
-        private BlackjackHandManager handManager;
+        private Random rng = new Random();
 
         public BlackjackGameManager()
         {
@@ -62,7 +62,7 @@ namespace CardGame.BL.BlackJack
                             {
                                 if (!player.IsHuman)
                                 {
-                                    playerManager.PlayerBet(player, game.minBet, game.maxBet);
+                                    playerManager.PlayerBet(player, game.minBet, game.maxBet, rng);
                                 }
                             }
                             roundActive = true;
