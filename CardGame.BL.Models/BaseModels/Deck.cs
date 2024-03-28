@@ -7,23 +7,26 @@ using System.Threading.Tasks;
 using System.Numerics;
 using CardGame.BL.Models.Blackjack;
 using System.Reflection;
+using CardGame.BL.Models.Interfaces;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public class Deck<TCard> where TCard : Card<TCard>, new()
+    public class Deck<T> : IDeck<T> where T : ICard
     {
-        public List<TCard> Cards { get; set; }
-        public List<TCard> BurntCards { get; set; }
+        private readonly Random _rng;
+        public List<T> Cards { get; set; }
+        public List<T> BurntCards { get; set; }
 
 
         public Deck()
         {
-            Cards = new List<TCard>();
-            BurntCards = new List<TCard>();
+            _rng = new Random();
+            Cards = new List<T>();
+            BurntCards = new List<T>();
             BuildDeck();
         }
 
-        private void BuildDeck()
+        public void BuildDeck()
         {
             try
             {
@@ -31,8 +34,7 @@ namespace CardGame.BL.Models.BaseModels
                 {
                     foreach (Enum rank in Enum.GetValues(typeof(Rank)))
                     {
-                        Cards.Add(new TCard { CardRank = (Rank)rank, CardSuit = (Suit)suit, CardName = $"{rank}_of_{suit}" });
-                        
+                        Cards.Add((T)Activator.CreateInstance(typeof(T), rank, suit));
                     }
                 }
             }
@@ -42,25 +44,23 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        public List<TCard> RebuildDeck(List<TCard> gameDeck)
-        {
-            return Cards;
-        }
+        //public List<TCard> RebuildDeck(List<TCard> gameDeck)
+        //{
+        //    return Cards;
+        //}
 
-        public void ShuffleDeck(Deck<TCard> gameDeck)
+        public void ShuffleDeck()
         {
             try
             {
-                Random rng = new Random();
-                int i = gameDeck.Cards.Count;
-
-                while (i > 1)
+                int n = Cards.Count;
+                while (n > 1)
                 {
-                    i--;
-                    int n = rng.Next(i + 1);
-                    TCard card = gameDeck.Cards[n];
-                    gameDeck.Cards[n] = gameDeck.Cards[i];
-                    gameDeck.Cards[i] = card;
+                    n--;
+                    int k = _rng.Next(n + 1);
+                    T value = Cards[k];
+                    Cards[k] = Cards[n];
+                    Cards[n] = value;
                 }
             }
             catch (Exception)
@@ -70,36 +70,26 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        //public Card DealCard(Deck<TCard> gameDeck)
-        //{
-        //    return Cards;
-        //}
-
-        public Hand<TCard> DealCards(GameType gameType, Deck<TCard> gameDeck)
+        public IHand<T> DealCards(int handSize)
         {
             try
             {
-                int handSize = new int();
-                Random rng = new Random();
-                Hand<TCard> hand = new Hand<TCard>();
-
-                if (gameType == GameType.Blackjack)
+                var hand = new Hand<T>();
+                for (int i = 0; i < handSize; i++)
                 {
-                    handSize = 2;
+                    if (Cards.Any())
+                    {
+                        var card = Cards.First();
+                        hand.Cards.Add(card);
+                        BurntCards.Add(card);
+                        Cards.Remove(card);
+                    }
+                    else
+                    {
+                        // Handle empty deck scenario
+                        break;
+                    }
                 }
-
-                while (handSize > 0)
-                {
-                    int card = rng.Next(gameDeck.Cards.Count);
-                    hand.Cards.Add(gameDeck.Cards[card]);
-                    //RemoveCard(card1, gameDeck);
-                    gameDeck.BurntCards.Add(gameDeck.Cards[card]);
-                    gameDeck.Cards.RemoveAt(card);
-                    handSize--;
-                }
-
-
-
                 return hand;
             }
             catch (Exception)
@@ -108,20 +98,5 @@ namespace CardGame.BL.Models.BaseModels
                 throw;
             }
         }
-
-        //public void RemoveCard(int index, Deck<TCard> gameDeck)
-        //{
-        //    try
-        //    {
-        //        gameDeck.BurntCards.Add(gameDeck.Cards[index]);
-        //        gameDeck.Cards[index] = gameDeck.Cards[gameDeck.Cards.Count - 1];
-        //        gameDeck.Cards.Remove(gameDeck.Cards[gameDeck.Cards.Count - 1]);
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
     }
 }

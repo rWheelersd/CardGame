@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CardGame.BL.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public class Hand<TCard>
+    public class Hand<T> : IHand<T> where T : ICard
     {
-        public List<TCard> Cards { get; set; }
+        public List<T> Cards { get; set; }
+
         public Hand()
         {
-            Cards = new List<TCard>();
+            Cards = new List<T>();
         }
+
         public Hand(int handSize)
         {
-            Cards = new List<TCard>(handSize);
+            Cards = new List<T>(handSize);
         }
     }
 }

@@ -8,63 +8,64 @@ using static CardGame.BL.Models.Constants.BaseConstants;
 
 namespace CardGame.BL.Models.Blackjack
 {
-    public class BlackjackGame : Game<BlackjackPlayer, BlackjackHand, BlackjackCard>
+    public class BlackjackGame/* : Game<BlackjackPlayer, BlackjackHand, BlackjackCard>*/
     {
-        private readonly GameType _gameType = GameType.Blackjack;
-        public readonly int minBet;
-        public readonly int maxBet;
+        //    private readonly GameType _gameType = GameType.Blackjack;
+        //    public readonly int minBet;
+        //    public readonly int maxBet;
 
-        public BlackjackGame(int playerCount, int startingBalance) : base(playerCount, startingBalance)
-        {
-            this.minBet = (startingBalance * 5) / 100;
-            this.maxBet = (startingBalance * 15) / 100;
-            InitializeGame();
-        }
+        //    public BlackjackGame(int playerCount, int startingBalance) : base(playerCount, startingBalance)
+        //    {
+        //        this.minBet = (startingBalance * 5) / 100;
+        //        this.maxBet = (startingBalance * 15) / 100;
+        //        InitializeGame();
+        //    }
 
-        private void InitializeGame()
-        {
-            try
-            {
-                Players.Last().IsDealer = true;
-                Players.Last().Balance = Players[0].Balance * Players.Count;
-                Players[0].IsHuman = true;
+        //    private void InitializeGame()
+        //    {
+        //        try
+        //        {
+        //            Players.Last().IsDealer = true;
+        //            Players.Last().Balance = Players[0].Balance * Players.Count;
+        //            Players[0].IsHuman = true;
 
-                foreach (BlackjackCard card in GameDeck.Cards) 
-                {
-                    card.SetValue();
-                }
+        //            foreach (BlackjackCard card in GameDeck.Cards) 
+        //            {
+        //                card.SetValue();
+        //            }
 
-                GameDeck.ShuffleDeck(GameDeck);
-            }
-            catch (Exception)
-            { 
+        //            GameDeck.ShuffleDeck(GameDeck);
+        //        }
+        //        catch (Exception)
+        //        { 
 
-                throw;
-            }
-        }
+        //            throw;
+        //        }
+        //    }
 
-        public void DealHands()
-        {
-            try
-            {
-                foreach (BlackjackPlayer player in Players)
-                {
-                    player.Hand = ToBlackjackHand(GameDeck.DealCards(_gameType, GameDeck));
-                    player.Hand.Cards[1].IsVisible = true;
-                }
-            }
-            catch (Exception)
-            {
+        //public void DealHands()
+        //{
+        //    try
+        //    {
+        //        foreach (BlackjackPlayer player in Players)
+        //        {
+        //            maybe i can make this more generic
+        //            player.Hand = ToBlackjackHand(GameDeck.DealCards(_gameType, GameDeck));
+        //            player.Hand.Cards[1].IsVisible = true;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
-        private BlackjackHand ToBlackjackHand(Hand<BlackjackCard> hand)
-        {
-            BlackjackHand blackjackHand = new BlackjackHand(hand.Cards.Count);
-            blackjackHand.Cards.AddRange(hand.Cards);
-            return blackjackHand;
-        }
+        //    private BlackjackHand ToBlackjackHand(Hand<BlackjackCard> hand)
+        //    {
+        //        BlackjackHand blackjackHand = new BlackjackHand(hand.Cards.Count);
+        //        blackjackHand.Cards.AddRange(hand.Cards);
+        //        return blackjackHand;
+        //    }
     }
 }

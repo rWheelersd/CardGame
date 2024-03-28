@@ -1,4 +1,5 @@
 ﻿using CardGame.BL.Models.Constants;
+using CardGame.BL.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using static CardGame.BL.Models.Constants.BaseConstants;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public class Card<TCard>
+    public class Card : ICard
     {
         public string ImgPath { get; set; }
         public string CardName { get; set; }
