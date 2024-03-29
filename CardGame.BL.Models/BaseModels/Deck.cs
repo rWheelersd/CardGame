@@ -2,9 +2,7 @@
 using CardGame.BL.Models.Interfaces;
 using static CardGame.BL.Models.Constants.BaseConstants;
 
-public class Deck<TCard, THand> 
-    where TCard : Card 
-    where THand : IHand<TCard>, new()
+public class Deck<TCard, THand> where TCard : Card where THand : IHand<TCard>, new()
 {
     private readonly Random _rng;
     public List<TCard> Cards { get; set; }
@@ -44,10 +42,10 @@ public class Deck<TCard, THand>
             while (n > 1)
             {
                 n--;
-                int k = _rng.Next(n + 1);
-                TCard value = Cards[k];
-                Cards[k] = Cards[n];
-                Cards[n] = value;
+                int i = _rng.Next(n + 1);
+                TCard pCard = Cards[i];
+                Cards[i] = Cards[n];
+                Cards[n] = pCard;
             }
         }
         catch (Exception)

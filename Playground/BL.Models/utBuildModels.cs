@@ -74,9 +74,9 @@ namespace UnitTests.BL.Models
             Assert.IsTrue(blackjackGame.Players[0].Hand.Cards[0].IsVisible == true);
             Assert.IsTrue(!blackjackGame.Players.Last().IsHuman);
             Assert.IsTrue(blackjackGame.Players.Last().Balance == 25000);
-            Assert.IsTrue(blackjackGame.Deck.Cards[0] is BlackjackCard);
-            Assert.IsTrue(blackjackGame.Deck.BurntCards.Count == 10);
-            Assert.IsTrue(blackjackGame.Deck.Cards.Count == 42);
+            Assert.IsTrue(blackjackGame.GameDeck.Cards[0] is BlackjackCard);
+            Assert.IsTrue(blackjackGame.GameDeck.BurntCards.Count == 10);
+            Assert.IsTrue(blackjackGame.GameDeck.Cards.Count == 42);
             Assert.IsTrue(blackjackGame.minBet == 250);
             Assert.IsTrue(blackjackGame.maxBet == 750);
         }
