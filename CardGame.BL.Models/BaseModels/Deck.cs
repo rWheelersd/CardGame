@@ -2,7 +2,9 @@
 using CardGame.BL.Models.Interfaces;
 using static CardGame.BL.Models.Constants.BaseConstants;
 
-public class Deck<TCard, THand> where TCard : Card where THand : IHand<TCard>, new()
+public class Deck<TCard, THand> 
+    where TCard : Card 
+    where THand : IHand<TCard>, new()
 {
     private readonly Random _rng;
     public List<TCard> Cards { get; set; }
