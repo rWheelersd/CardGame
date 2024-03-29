@@ -20,11 +20,19 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
             Players.Last().IsDealer = true;
             Players.Last().Balance = Players[0].Balance * Players.Count;
             Players[0].IsHuman = true;
+            Deal();
         }
         catch (Exception)
         {
-
             throw;
+        }
+    }
+    public void Deal()
+    {
+        foreach (var player in Players)
+        {
+            player.Hand = GameDeck.DealCards(2);
+            player.Hand.Cards[0].IsVisible = true;
         }
     }
 

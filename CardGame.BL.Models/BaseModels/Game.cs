@@ -23,16 +23,6 @@ namespace CardGame.BL.Models.BaseModels
             {
                 Players.Add(new TPlayer() { Balance = startingBalance });
             }
-
-            Deal();
-        }
-
-        public void Deal()
-        {
-            foreach (var player in Players)
-            {
-                player.Hand = GameDeck.DealCards(2);
-            }
         }
     }
 }

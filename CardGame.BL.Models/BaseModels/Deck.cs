@@ -66,7 +66,7 @@ public class Deck<TCard, THand> where TCard : Card where THand : IHand<TCard>, n
                     var card = Cards.First();
                     hand.Cards.Add(card);
                     BurntCards.Add(card);
-                    Cards.Remove(card);
+                    Cards.RemoveAt(0);
                 }
                 else
                 {

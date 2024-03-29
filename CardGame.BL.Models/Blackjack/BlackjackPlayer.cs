@@ -14,13 +14,13 @@ namespace CardGame.BL.Models.Blackjack
 {
     public class BlackjackPlayer : Player<BlackjackHand>
     {
+        public string Username { get; set; }
         public bool IsDealer { get; set; }
         public bool IsHuman { get; set; }
         public bool WasSplit { get; set; }
         public PlayerActions Actions { get; set; }
         public PlayerStatus Status { get; set; }
         public BlackjackHand SplitHand { get; set; }
-        public string Username { get; set; }
 
         public BlackjackPlayer() : base(0, 0)
         {
