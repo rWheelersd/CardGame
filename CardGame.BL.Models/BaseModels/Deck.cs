@@ -43,7 +43,7 @@ public class Deck<TCard, THand> where TCard : Card where THand : IHand<TCard>, n
             {
                 n--;
                 int i = _rng.Next(n + 1);
-                TCard pCard = Cards[i];
+                TCard card = Cards[i];
                 Cards[i] = Cards[n];
                 Cards[n] = pCard;
             }
