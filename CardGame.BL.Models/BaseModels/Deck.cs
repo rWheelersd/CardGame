@@ -1,102 +1,83 @@
-﻿using static CardGame.BL.Models.Constants.BaseConstants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
-using CardGame.BL.Models.Blackjack;
-using System.Reflection;
+﻿using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Interfaces;
+using static CardGame.BL.Models.Constants.BaseConstants;
 
-namespace CardGame.BL.Models.BaseModels
+public class Deck<TCard, THand> where TCard : Card where THand : IHand<TCard>, new()
 {
-    public class Deck<T> : IDeck<T> where T : ICard
+    private readonly Random _rng;
+    public List<TCard> Cards { get; set; }
+    public List<TCard> BurntCards { get; set; }
+
+    public Deck()
     {
-        private readonly Random _rng;
-        public List<T> Cards { get; set; }
-        public List<T> BurntCards { get; set; }
+        _rng = new Random();
+        Cards = new List<TCard>();
+        BurntCards = new List<TCard>();
+        BuildDeck();
+    }
 
-
-        public Deck()
+    public void BuildDeck()
+    {
+        try
         {
-            _rng = new Random();
-            Cards = new List<T>();
-            BurntCards = new List<T>();
-            BuildDeck();
-        }
-
-        public void BuildDeck()
-        {
-            try
+            foreach (Enum suit in Enum.GetValues(typeof(Suit)))
             {
-                foreach (Enum suit in Enum.GetValues(typeof(Suit)))
+                foreach (Enum rank in Enum.GetValues(typeof(Rank)))
                 {
-                    foreach (Enum rank in Enum.GetValues(typeof(Rank)))
-                    {
-                        Cards.Add((T)Activator.CreateInstance(typeof(T), rank, suit));
-                    }
+                    Cards.Add((TCard)Activator.CreateInstance(typeof(TCard), rank, suit));
                 }
             }
-            catch (Exception)
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public void ShuffleDeck()
+    {
+        try
+        {
+            int n = Cards.Count;
+            while (n > 1)
             {
-                throw;
+                n--;
+                int k = _rng.Next(n + 1);
+                TCard value = Cards[k];
+                Cards[k] = Cards[n];
+                Cards[n] = value;
             }
         }
-
-        //public List<TCard> RebuildDeck(List<TCard> gameDeck)
-        //{
-        //    return Cards;
-        //}
-
-        public void ShuffleDeck()
+        catch (Exception)
         {
-            try
-            {
-                int n = Cards.Count;
-                while (n > 1)
-                {
-                    n--;
-                    int k = _rng.Next(n + 1);
-                    T value = Cards[k];
-                    Cards[k] = Cards[n];
-                    Cards[n] = value;
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw;
         }
+    }
 
-        public IHand<T> DealCards(int handSize)
+    public THand DealCards(int handSize)
+    {
+        try
         {
-            try
+            var hand = new THand();
+            for (int i = 0; i < handSize; i++)
             {
-                var hand = new Hand<T>();
-                for (int i = 0; i < handSize; i++)
+                if (Cards.Any())
                 {
-                    if (Cards.Any())
-                    {
-                        var card = Cards.First();
-                        hand.Cards.Add(card);
-                        BurntCards.Add(card);
-                        Cards.Remove(card);
-                    }
-                    else
-                    {
-                        // Handle empty deck scenario
-                        break;
-                    }
+                    var card = Cards.First();
+                    hand.Cards.Add(card);
+                    BurntCards.Add(card);
+                    Cards.Remove(card);
                 }
-                return hand;
+                else
+                {
+                    break;
+                }
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return hand;
+        }
+        catch (Exception)
+        {
+            throw;
         }
     }
 }

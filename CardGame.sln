@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.BL.Models", "CardG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.BL", "CardGame.BL\CardGame.BL.csproj", "{696CF197-D945-4572-BACC-D2A1727E3D17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground", "Playground\Playground.csproj", "{66DEDA4D-99DB-4838-A1C6-08259445FE8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "Playground\UnitTests.csproj", "{66DEDA4D-99DB-4838-A1C6-08259445FE8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame.UI", "CardGame.UI\CardGame.UI.csproj", "{451839A3-BFA4-4C39-935D-3FAC152B2907}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.UI", "CardGame.UI\CardGame.UI.csproj", "{451839A3-BFA4-4C39-935D-3FAC152B2907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

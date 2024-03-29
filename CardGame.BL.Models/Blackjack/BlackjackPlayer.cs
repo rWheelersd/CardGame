@@ -1,5 +1,6 @@
 ﻿using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Constants;
+using CardGame.BL.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,19 +12,8 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.Models.Blackjack
 {
-    //public class BlackjackPlayer : Player<BlackjackCard>
-    //{
-    //    public bool IsDealer = false;
-    //    public bool IsHuman = false;
-    //    public bool WasSplit = false;
-    //    public PlayerActions Actions;
-    //    public PlayerStatus Status;
-    //    public BlackjackHand Hand;
-    //    public BlackjackHand SplitHand;
+    public class BlackjackPlayer
+    {
 
-    //    public BlackjackPlayer(int balance, int playerNumber) : base(balance, playerNumber)
-    //    {
-
-    //    }
-    //}
+    }
 }

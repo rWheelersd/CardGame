@@ -8,15 +8,12 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Models.Blackjack
 {
-    public class BlackjackHand/* : IHand<BlackjackCard>*/
+    public class BlackjackHand : IHand<BlackjackCard>
     {
-        //public List<BlackjackCard> Cards { get; set; }
-        //public bool IsSoft = false;
-        //public bool splitBust = false;
-
-        //public BlackjackHand(int handSize)
-        //{
-        //    Cards = new List<BlackjackCard>(handSize);
-        //}
+        public List<BlackjackCard> Cards { get; set; }
+        public BlackjackHand()
+        {
+            Cards = new List<BlackjackCard>();
+        }
     }
 }

@@ -7,18 +7,21 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public class Hand<T> : IHand<T> where T : ICard
+    public class Hand
     {
-        public List<T> Cards { get; set; }
+        public List<Card> Cards { get; set; }
 
         public Hand()
         {
-            Cards = new List<T>();
+            Cards = new List<Card>();
         }
 
-        public Hand(int handSize)
+        public Hand(Hand hand, List<Card> communityCards)
         {
-            Cards = new List<T>(handSize);
+            //evaluation hand
+            Cards = new List<Card>(hand.Cards);
+            Cards.AddRange(communityCards);
         }
+
     }
 }

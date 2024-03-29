@@ -9,7 +9,8 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.BlackJack
 {
-    public static class BlackjackHandManager
+    public class BlackjackHandManager
     {
+
     }
 }

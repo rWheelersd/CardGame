@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Models.Interfaces
 {
-    public class IGame
+    internal interface IGame
     {
     }
 }
