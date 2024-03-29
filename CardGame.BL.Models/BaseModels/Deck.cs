@@ -45,7 +45,7 @@ public class Deck<TCard, THand> where TCard : Card where THand : IHand<TCard>, n
                 int i = _rng.Next(n + 1);
                 TCard card = Cards[i];
                 Cards[i] = Cards[n];
-                Cards[n] = pCard;
+                Cards[n] = card;
             }
         }
         catch (Exception)
