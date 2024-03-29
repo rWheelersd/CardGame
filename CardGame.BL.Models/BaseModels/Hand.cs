@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public class Hand
+    public class Hand : IHand<Card>
     {
         public List<Card> Cards { get; set; }
 

@@ -13,7 +13,7 @@ namespace CardGame.BL.Models.Blackjack
 {
     public class BlackjackCard : Card
     {
-        public bool IsVisible = false;
+        public bool IsVisible { get; set; }
 
         public BlackjackCard(Rank rank, Suit suit) : base(rank, suit)
         {

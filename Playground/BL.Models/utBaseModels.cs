@@ -66,5 +66,25 @@ namespace UnitTests.BL.Models
             Assert.IsTrue(blackjackHand.Cards[0] is BlackjackCard);
 
         }
+
+        [TestMethod]
+        public void BuildGameTest()
+        {
+            BlackjackGame blackjackGame = new BlackjackGame(5, 5000);
+
+            Assert.IsNotNull(blackjackGame);
+            Assert.IsTrue(blackjackGame is BlackjackGame);
+            Assert.IsTrue(blackjackGame.Players.Count == 5);
+            Assert.IsTrue(blackjackGame.Players[0] is BlackjackPlayer);
+            Assert.IsTrue(blackjackGame.Players[0].Balance == 5000);
+            Assert.IsTrue(blackjackGame.Players[0].Hand.Cards.Count == 2);
+            Assert.IsTrue(blackjackGame.Players[0].Hand.Cards[0] is BlackjackCard);
+            Assert.IsTrue(!blackjackGame.Players.Last().IsHuman);
+            Assert.IsTrue(blackjackGame.Players.Last().Balance == 25000);
+            Assert.IsTrue(blackjackGame.GameDeck.Cards[0] is BlackjackCard);
+            Assert.IsTrue(blackjackGame.minBet == 250);
+            Assert.IsTrue(blackjackGame.maxBet == 750);
+
+        }
     }
 }
