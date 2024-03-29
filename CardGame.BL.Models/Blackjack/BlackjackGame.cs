@@ -31,7 +31,7 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
     {
         foreach (var player in Players)
         {
-            player.Hand = GameDeck.DealCards(2);
+            player.Hand = Deck.DealCards(2);
             player.Hand.Cards[0].IsVisible = true;
         }
     }

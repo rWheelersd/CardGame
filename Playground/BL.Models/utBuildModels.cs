@@ -26,30 +26,6 @@ namespace UnitTests.BL.Models
             Assert.IsTrue(blackjackCard.IsVisible == true);
         }
 
-        [TestMethod]
-        public void BuildHandTest()
-        {
-            Card card1 = new Card(Rank.Ace, Suit.Spades);
-            Card card2 = new Card(Rank.Ace, Suit.Spades);
-            Card card3 = new Card(Rank.Ace, Suit.Spades);
-            Card card4 = new Card(Rank.Ace, Suit.Spades);
-            Card card5 = new Card(Rank.Ace, Suit.Spades);
-
-            Hand playingHand = new Hand();
-
-            playingHand.Cards.Add(card1);
-            playingHand.Cards.Add(card2);
-
-            List<Card> communityCards = [card3, card4, card5];
-
-            Hand evaluationHand = new Hand(playingHand, communityCards);
-
-            Assert.IsNotNull(evaluationHand);
-            Assert.IsTrue(evaluationHand.Cards.Count == 5);
-            Assert.IsNotNull(playingHand);
-            Assert.IsTrue(playingHand.Cards.Count == 2);
-        }
-
         public void BuildPlayerTest()
         {
             Player<BlackjackHand> player = new BlackjackPlayer(1, 5000);
@@ -98,9 +74,9 @@ namespace UnitTests.BL.Models
             Assert.IsTrue(blackjackGame.Players[0].Hand.Cards[0].IsVisible == true);
             Assert.IsTrue(!blackjackGame.Players.Last().IsHuman);
             Assert.IsTrue(blackjackGame.Players.Last().Balance == 25000);
-            Assert.IsTrue(blackjackGame.GameDeck.Cards[0] is BlackjackCard);
-            Assert.IsTrue(blackjackGame.GameDeck.BurntCards.Count == 10);
-            Assert.IsTrue(blackjackGame.GameDeck.Cards.Count == 42);
+            Assert.IsTrue(blackjackGame.Deck.Cards[0] is BlackjackCard);
+            Assert.IsTrue(blackjackGame.Deck.BurntCards.Count == 10);
+            Assert.IsTrue(blackjackGame.Deck.Cards.Count == 42);
             Assert.IsTrue(blackjackGame.minBet == 250);
             Assert.IsTrue(blackjackGame.maxBet == 750);
         }

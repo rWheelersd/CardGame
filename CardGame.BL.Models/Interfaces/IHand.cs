@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Models.Interfaces
 {
-    public interface IHand<T>
+    public interface IHand<T> where T : Card
     {
         List<T> Cards { get; set; }
     }
