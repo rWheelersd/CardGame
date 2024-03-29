@@ -1,13 +1,13 @@
 ﻿using CardGame.BL.BlackJack;
 using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Blackjack;
-using CardGame.UI.Models;
+using CardGameWeb.UI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using static CardGame.BL.Models.Constants.BaseConstants;
 
-namespace CardGame.UI.Controllers
+namespace CardGameWeb.UI.Controllers
 {
     public class GameController : Controller
     {

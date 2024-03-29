@@ -1,8 +1,8 @@
-using CardGame.UI.Models;
+using CardGameWeb.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace CardGame.UI.Controllers
+namespace CardGameWeb.UI.Controllers
 {
     public class HomeController : Controller
     {

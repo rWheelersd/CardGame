@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.BL", "CardGame.BL\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "Playground\UnitTests.csproj", "{66DEDA4D-99DB-4838-A1C6-08259445FE8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGame.UI", "CardGame.UI\CardGame.UI.csproj", "{451839A3-BFA4-4C39-935D-3FAC152B2907}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGameWeb.UI", "CardGame.UI\CardGameWeb.UI.csproj", "{451839A3-BFA4-4C39-935D-3FAC152B2907}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame.API", "CardGame.API\CardGame.API.csproj", "{835E092A-5C74-4ABE-95AC-8D50240976DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGameConsole.UI", "CardGameConsole.UI\CardGameConsole.UI.csproj", "{5111AD83-79B6-427C-983A-57933FC08167}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{835E092A-5C74-4ABE-95AC-8D50240976DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{835E092A-5C74-4ABE-95AC-8D50240976DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{835E092A-5C74-4ABE-95AC-8D50240976DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5111AD83-79B6-427C-983A-57933FC08167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5111AD83-79B6-427C-983A-57933FC08167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5111AD83-79B6-427C-983A-57933FC08167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5111AD83-79B6-427C-983A-57933FC08167}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

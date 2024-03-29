@@ -1,4 +1,4 @@
-namespace CardGame.UI.Models
+namespace CardGameWeb.UI.Models
 {
     public class ErrorViewModel
     {
