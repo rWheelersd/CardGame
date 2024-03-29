@@ -7,7 +7,7 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
     public readonly int minBet;
     public readonly int maxBet;
 
-    public BlackjackGame(int numberOfPlayers, int startingBalance) : base(numberOfPlayers, startingBalance)
+    public BlackjackGame(Guid gameId, int numberOfPlayers, int startingBalance) : base(gameId, numberOfPlayers, startingBalance)
     {
         minBet = (startingBalance * 5) / 100;
         maxBet = (startingBalance * 15) / 100;

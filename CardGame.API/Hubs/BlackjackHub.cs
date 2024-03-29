@@ -10,6 +10,10 @@ namespace CardGame.API.Hubs
         {
             _gamesManager = gamesManager;
         }
+        public async Task CreateGame(Guid gameId, Guid playerId, int betAmount)
+        {
+            await _gamesManager.CreateGame(gameId, playerId, betAmount);
+        }
 
         public async Task PlaceBet(Guid gameId, Guid playerId, int betAmount)
         {

@@ -12,6 +12,10 @@ namespace CardGame.BL.BlackJack
 {
     public class BlackjackGameManager
     {
-        
+        public BlackjackGame BlackjackGame { get; private set; }
+        public BlackjackGameManager(Guid gameId, int playerCount, int startingBalance) 
+        {
+            BlackjackGame = new BlackjackGame(gameId, playerCount, startingBalance);
+        }
     }
 }

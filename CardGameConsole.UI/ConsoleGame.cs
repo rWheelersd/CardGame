@@ -1,2 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿int playerCount;
+
+while (true)
+{
+    Console.WriteLine("Enter desired amount of opponents");
+
+    if (Int32.TryParse(Console.ReadLine(), out playerCount))
+    {
+
+    }
+    else
+    {
+        Console.WriteLine("Please enter a valid number");
+    }
+}

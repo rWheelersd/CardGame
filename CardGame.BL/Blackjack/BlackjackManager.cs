@@ -1,4 +1,5 @@
 ﻿using CardGame.BL.BlackJack;
+using CardGame.BL.Models.BaseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +10,33 @@ namespace CardGame.BL.Blackjack
 {
     public class BlackjackManager
     {
-        Dictionary<Guid, BlackjackGameManager> Games;
+        Dictionary<Guid, BlackjackGameManager> blackjackGameManagers;
 
         public BlackjackManager()
         {
-            Games = new Dictionary<Guid, BlackjackGameManager>();
+            blackjackGameManagers = new Dictionary<Guid, BlackjackGameManager>();
         }
 
-        public Guid CreateGame()
+        public Guid CreateGame(int playerCount, int startingBalance)
         {
             try
             {
                 Guid gameId = Guid.NewGuid();
-                Games.Add(gameId, new BlackjackGameManager());
+                blackjackGameManagers.Add(gameId, new BlackjackGameManager(gameId, playerCount, startingBalance));
+                return gameId;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public Guid StartGame(int playerCount, int startingBalance)
+        {
+            try
+            {
+                Guid gameId = Guid.NewGuid();
                 return gameId;
             }
             catch (Exception)
@@ -44,15 +59,30 @@ namespace CardGame.BL.Blackjack
             }
         }
 
-        public bool JoinGame(Guid gameId, Guid playerId)
+        public int JoinGame(Guid gameManagerId, Guid playerId, string username)
         {
             try
             {
-                if (Games.ContainsKey(gameId))
+                if (blackjackGameManagers.ContainsKey(gameManagerId) 
+                    && blackjackGameManagers[gameManagerId].BlackjackGame.Players.Any(p => p.IsHuman == false))
                 {
-                    
+                    blackjackGameManagers[gameManagerId]
+                        .BlackjackGame
+                        .Players.First(p  => p.IsHuman == false)
+                        .Id = playerId;
+
+
+                    blackjackGameManagers[gameManagerId].BlackjackGame
+                        .Players.First(p => p.IsHuman == false)
+                        .Username = username;
                 }
-                return false;
+
+                int availableSeats = blackjackGameManagers[gameManagerId]
+                         .BlackjackGame
+                         .Players
+                         .Count(p => p.IsHuman == false);
+
+                return availableSeats;
             }
             catch (Exception)
             {
