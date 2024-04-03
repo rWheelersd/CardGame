@@ -34,7 +34,7 @@ namespace CardGame.BL.Models.Constants
             Blackjack,
             Default
         }
-        public enum PlayerActions
+        public enum HandActions
         {
             Thinking,
             Hit,

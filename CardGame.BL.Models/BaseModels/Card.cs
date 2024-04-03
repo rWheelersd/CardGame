@@ -24,3 +24,5 @@ namespace CardGame.BL.Models.BaseModels
         }
     }
 }
+
+

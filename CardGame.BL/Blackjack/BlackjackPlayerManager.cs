@@ -12,8 +12,42 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.BlackJack
 {
-    public class BlackjackPlayerManager
+    public static class BlackjackPlayerManager
     {
-        
+        public static void PlayTurn(BlackjackPlayer blackjackPlayer, BlackjackCard dealerCard)
+        {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        internal static void PlayerBet(BlackjackPlayer currentPlayer, int minBet, int maxBet)
+        {
+            try
+            {
+                int maxCapable = maxBet;
+                Random rng = new Random();
+
+                if (currentPlayer.Balance < maxBet)
+                {
+                    maxCapable = currentPlayer.Balance;
+                }
+
+                currentPlayer.Bet = rng.Next(minBet, maxCapable + 1);
+
+                currentPlayer.Balance = currentPlayer.Balance - currentPlayer.Bet;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

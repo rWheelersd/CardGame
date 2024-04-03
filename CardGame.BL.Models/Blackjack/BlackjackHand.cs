@@ -11,6 +11,8 @@ namespace CardGame.BL.Models.Blackjack
     public class BlackjackHand : IHand<BlackjackCard>
     {
         public List<BlackjackCard> Cards { get; set; }
+        public HandActions Action { get; set; }
+
         public BlackjackHand()
         {
             Cards = new List<BlackjackCard>();
