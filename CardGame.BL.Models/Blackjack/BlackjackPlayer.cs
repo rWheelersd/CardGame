@@ -17,7 +17,7 @@ namespace CardGame.BL.Models.Blackjack
         public string Username { get; set; }
         public bool IsDealer { get; set; }
         public bool IsHuman { get; set; }
-        public bool SplitEvaluated { get; set; }
+        public bool WasSplitEvaluated { get; set; }
         public PlayerStatus Status { get; set; }
         public List<BlackjackHand> Hands {  get; set; } 
 

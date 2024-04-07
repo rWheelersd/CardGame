@@ -27,12 +27,7 @@ namespace CardGame.BL.Models.Constants
         public enum PlayerStatus
         {
             Active,
-            Doubled,
-            Split,
-            Busted,
-            Held,
-            Blackjack,
-            Default
+            Ianctive 
         }
         public enum HandActions
         {
@@ -40,8 +35,7 @@ namespace CardGame.BL.Models.Constants
             Hit,
             Stand,
             Split,
-            DoubleDown,
-            Insurance,
+            DoubleDown
             Surrender,
             FlipBust,
             FlipBlackjack
