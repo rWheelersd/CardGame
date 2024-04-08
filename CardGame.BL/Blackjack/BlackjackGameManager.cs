@@ -1,5 +1,6 @@
 ﻿using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Blackjack;
+using CardGame.BL.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static CardGame.BL.Models.Constants.BaseConstants;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
+using static System.Collections.Specialized.BitVector32;
 
 namespace CardGame.BL.BlackJack
 {
@@ -21,7 +23,9 @@ namespace CardGame.BL.BlackJack
 
         public void PlayAITurn()
         {
-            BlackjackCard dealerCard = BlackjackGame.Players.FirstOrDefault(p => p.IsDealer).Hands.First().Cards.First(c => c.IsVisible == true);
+            BlackjackCard dealerCard = BlackjackGame.Players.FirstOrDefault(p => p.IsDealer)
+                                                            .Hands.First()
+                                                            .Cards.First(c => c.IsVisible == true);
 
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
@@ -30,11 +34,27 @@ namespace CardGame.BL.BlackJack
 
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                 {
+                    //Check for split here
+                    if (BlackjackHandManager.PairCheck(blackjackPlayer.Hands[0]))
+                    {
+                        HandActions action = BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hand.Cards[0], dealerCard);
+                        if (action == HandActions.Split)
+                        {
+                            BlackjackHandManager.SplitHand(blackjackPlayer.Hands);
+                        }
+                        //there needs to be more double down logic outside of splits
+                        if (action == HandActions.DoubleDown)
+                        {
+
+                        }
+                    }
+
+
                     foreach (BlackjackHand hand in blackjackPlayer.Hands)
                     {
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
-                            BlackjackPlayerManager.PlayHands(blackjackPlayer, dealerCard);
+
                         }
                         if (hand.Action == HandActions.Surrender)
                         {
@@ -49,10 +69,6 @@ namespace CardGame.BL.BlackJack
 
                         }
                         if (hand.Action == HandActions.FlipBust)
-                        {
-
-                        }
-                        if (hand.Action == HandActions.DoubleDown)
                         {
 
                         }

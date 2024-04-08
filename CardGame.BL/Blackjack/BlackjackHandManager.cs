@@ -14,53 +14,20 @@ namespace CardGame.BL.BlackJack
 {
     public static class BlackjackHandManager
     {
-
-        public static bool EvaluateHands(List<BlackjackHand> hands, BlackjackCard dealerCard, bool splitEvaluated)
+        public static bool PairCheck(BlackjackHand hand)
         {
             try
             {
-                if (!splitEvaluated)
-                {
-                    HandActions action = EvaluateSplit(hands.FirstOrDefault().Cards.FirstOrDefault(), dealerCard);
-
-                    if (action == HandActions.Split)
-                    {
-                        SplitHand(hands);
-                        GetAction(hands, dealerCard);
-                    }
-                    if (action == HandActions.DoubleDown)
-                    {
-                        hands.First().Action = HandActions.DoubleDown;
-                    }
-                }
-
-                GetAction(hands, dealerCard);
-                splitEvaluated = true;
-                return splitEvaluated;
+                return hand.Cards[0] == hand.Cards[1];
             }
             catch (Exception)
             {
 
                 throw;
             }
-
         }
 
-        private static void SplitHand(List<BlackjackHand> hands)
-        {
-            BlackjackHand splitHand0 = new BlackjackHand();
-            BlackjackHand splitHand1 = new BlackjackHand();
-
-            splitHand0.Cards.Add(hands[0].Cards[0]);
-            splitHand1.Cards.Add(hands[0].Cards[1]);
-
-            hands.Clear();
-
-            hands.Add(splitHand0);
-            hands.Add(splitHand1);
-        }
-
-        private static HandActions EvaluateSplit(BlackjackCard playerCard, BlackjackCard dealerCard)
+        public static HandActions EvaluateSplit(BlackjackCard playerCard, BlackjackCard dealerCard)
         {
             try
             {
@@ -77,6 +44,22 @@ namespace CardGame.BL.BlackJack
                 throw;
             }
         }
+
+        public static void SplitHand(List<BlackjackHand> hands)
+        {
+            BlackjackHand splitHand0 = new BlackjackHand();
+            BlackjackHand splitHand1 = new BlackjackHand();
+
+            splitHand0.Cards.Add(hands[0].Cards[0]);
+            splitHand1.Cards.Add(hands[0].Cards[1]);
+
+            hands.Clear();
+
+            hands.Add(splitHand0);
+            hands.Add(splitHand1);
+        }
+
+        
 
         private static void GetAction(List<BlackjackHand> hands, BlackjackCard dealerCard)
         {

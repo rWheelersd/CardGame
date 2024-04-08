@@ -18,6 +18,8 @@ namespace CardGame.BL.Models.Blackjack
         public BlackjackHand()
         {
             Cards = new List<BlackjackCard>();
+            Action = HandActions.Thinking;
+            IsSoft = false;
         }
     }
 }

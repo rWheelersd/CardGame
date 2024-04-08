@@ -14,21 +14,6 @@ namespace CardGame.BL.BlackJack
 {
     public static class BlackjackPlayerManager
     {
-        public static List<BlackjackHand> PlayHands(BlackjackPlayer blackjackPlayer, BlackjackCard dealerCard)
-        {
-            try
-            {
-                blackjackPlayer.WasSplitEvaluated = BlackjackHandManager.EvaluateHands(blackjackPlayer.Hands,
-                                                                                       dealerCard,
-                                                                                       blackjackPlayer.WasSplitEvaluated);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
         internal static void PlayerBet(BlackjackPlayer currentPlayer, int minBet, int maxBet)
         {
             try
