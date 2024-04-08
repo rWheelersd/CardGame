@@ -34,7 +34,7 @@ namespace CardGame.BL.BlackJack
                     {
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
-                            BlackjackPlayerManager.PlayHands(blackjackPlayer, dealerCard)
+                            BlackjackPlayerManager.PlayHands(blackjackPlayer, dealerCard);
                         }
                         if (hand.Action == HandActions.Surrender)
                         {
@@ -42,7 +42,7 @@ namespace CardGame.BL.BlackJack
                         }
                         if (hand.Action == HandActions.Stand)
                         {
-                            blackjackPlayer.Status == PlayerStatus.
+                            
                         }
                         if (hand.Action == HandActions.FlipBlackjack)
                         {

@@ -14,13 +14,13 @@ namespace CardGame.BL.BlackJack
 {
     public static class BlackjackPlayerManager
     {
-        public List<BlackjackHand> void PlayHands(BlackjackPlayer blackjackPlayer, BlackjackCard dealerCard)
+        public static List<BlackjackHand> PlayHands(BlackjackPlayer blackjackPlayer, BlackjackCard dealerCard)
         {
             try
             {
-                blackjackPlayer.WasSplitEvaluated = BlackjackHandManager.EvaluateHands(blackjackPlayer.Hands, 
-                                                                                       dealerCard, 
-                                                                                       blackjackPlayer.WasSplitEvaluated)
+                blackjackPlayer.WasSplitEvaluated = BlackjackHandManager.EvaluateHands(blackjackPlayer.Hands,
+                                                                                       dealerCard,
+                                                                                       blackjackPlayer.WasSplitEvaluated);
             }
             catch (Exception)
             {

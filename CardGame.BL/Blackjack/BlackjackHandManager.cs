@@ -15,28 +15,28 @@ namespace CardGame.BL.BlackJack
     public static class BlackjackHandManager
     {
 
-        public bool void EvaluateHands(List<BlackjackHand> hands, BlackjackCard dealerCard, bool splitEvaluated)
+        public static bool EvaluateHands(List<BlackjackHand> hands, BlackjackCard dealerCard, bool splitEvaluated)
         {
             try
             {
                 if (!splitEvaluated)
                 {
-                    PlayerActions action = EvaluateSplit(hands.FirstOrDefault().Cards.FirstOrDefault(), dealerCard);
+                    HandActions action = EvaluateSplit(hands.FirstOrDefault().Cards.FirstOrDefault(), dealerCard);
 
-                    if (action == PlayerActions.Split)
+                    if (action == HandActions.Split)
                     {
                         SplitHand(hands);
-                        GetAction(hands);
+                        GetAction(hands, dealerCard);
                     }
-                    if (action == PlayerActions.DoubleDown)
+                    if (action == HandActions.DoubleDown)
                     {
                         hands.First().Action = HandActions.DoubleDown;
                     }
                 }
 
-                GetAction(hands);
+                GetAction(hands, dealerCard);
                 splitEvaluated = true;
-                return splitEvaluated
+                return splitEvaluated;
             }
             catch (Exception)
             {
@@ -48,10 +48,13 @@ namespace CardGame.BL.BlackJack
 
         private static void SplitHand(List<BlackjackHand> hands)
         {
-            BlackjackHand splitHand0 = new BlackjackHand().Cards.Add(hands.Cards[0]);
-            BlackjackHand splitHand1 = new BlackjackHand().Cards.Add(hands.Cards[1])
+            BlackjackHand splitHand0 = new BlackjackHand();
+            BlackjackHand splitHand1 = new BlackjackHand();
 
-            hands.RemoveAll();
+            splitHand0.Cards.Add(hands[0].Cards[0]);
+            splitHand1.Cards.Add(hands[0].Cards[1]);
+
+            hands.Clear();
 
             hands.Add(splitHand0);
             hands.Add(splitHand1);
@@ -61,11 +64,11 @@ namespace CardGame.BL.BlackJack
         {
             try
             {
-                if (playerCard.CardRank == Rank.Eight) return PlayerActions.Split;
-                if (playerCard.CardRank == Rank.Eight) return PlayerActions.Split;
-                if (playerCard.CardRank == Rank.Five && dealerCard.CardRank <= Rank.Nine) return PlayerActions.DoubleDown;
-                if (playerCard.CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) return PlayerActions.Split;
-                if (playerCard.CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) return PlayerActions.Split;
+                if (playerCard.CardRank == Rank.Eight) return HandActions.Split;
+                if (playerCard.CardRank == Rank.Eight) return HandActions.Split;
+                if (playerCard.CardRank == Rank.Five && dealerCard.CardRank <= Rank.Nine) return HandActions.DoubleDown;
+                if (playerCard.CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) return HandActions.Split;
+                if (playerCard.CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) return HandActions.Split;
                 else return HandActions.Thinking;
             }
             catch (Exception)
@@ -84,13 +87,13 @@ namespace CardGame.BL.BlackJack
                     int hardValue = 0;
                     int softValue = 0;
 
-                    foreach (BlackjackCard blackjackCard in blackjackHand)
+                    foreach (BlackjackCard blackjackCard in blackjackHand.Cards)
                     {
                         hardValue += blackjackCard.CardValue;
                     }
 
                     //Checks if hand is soft and sets a soft value
-                    if (blackjackHand.Any(c => c.CardRank == Rank.Ace))
+                    if (blackjackHand.Cards.Any(c => c.CardRank == Rank.Ace))
                     {
                         softValue = hardValue - 10;
                         blackjackHand.IsSoft = true;
@@ -109,13 +112,13 @@ namespace CardGame.BL.BlackJack
                     }
 
                     //Bust
-                    if (hardValue > 21 && !playerHand.IsSoft)
+                    if (hardValue > 21 && !blackjackHand.IsSoft)
                     {
                         blackjackHand.Action = HandActions.FlipBust; break;
                     }
 
                     //Checks starting hand for surrender conditions
-                    if (!playerHand.IsSoft && playerHand.Cards.Count == 2)
+                    if (!blackjackHand.IsSoft && blackjackHand.Cards.Count == 2)
                     {
                         if (hardValue == 16 && dealerCard.CardValue >= 11)
                         {
