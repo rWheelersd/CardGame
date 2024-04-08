@@ -56,6 +56,21 @@ public class Deck<TCard, THand>
         }
     }
 
+    public void DealCard(THand hand)
+    {
+        try
+        {
+            var card = Cards.First();
+            hand.Cards.Add(card);
+            BurntCards.Add(card);
+            Cards.RemoveAt(0);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
     public THand DealCards(int handSize)
     {
         try

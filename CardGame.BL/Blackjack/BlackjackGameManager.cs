@@ -42,10 +42,10 @@ namespace CardGame.BL.BlackJack
                         {
                             BlackjackHandManager.SplitHand(blackjackPlayer.Hands);
                         }
-                        //there needs to be more double down logic outside of splits
+                        //there needs to be more double down logic outside of splits, and this will need to move after that is done
                         if (action == HandActions.DoubleDown)
                         {
-
+                            BlackjackGame.GameDeck.DealCard(blackjackPlayer.Hands[0]);
                         }
                     }
 
@@ -54,7 +54,10 @@ namespace CardGame.BL.BlackJack
                     {
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
-
+                            if (hand.Action == HandActions.Hit)
+                            {
+                                BlackjackGame.GameDeck.DealCard(hand);
+                            }
                         }
                         if (hand.Action == HandActions.Surrender)
                         {
