@@ -21,12 +21,12 @@ namespace CardGame.BL.BlackJack
 
         public void PlayAITurn()
         {
-            BlackjackCard dealerCard = BlackjackGame.Players.FirstOrDefault(p => p.IsDealer).Hands.Cards;
+            BlackjackCard dealerCard = BlackjackGame.Players.FirstOrDefault(p => p.IsDealer).Hands.First().Cards.First(c => c.IsVisible == true);
 
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
                 //this might be out of place, go look up blackjack phases/action order
-                BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet)
+                BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                 {

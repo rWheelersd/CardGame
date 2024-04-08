@@ -35,7 +35,7 @@ namespace CardGame.BL.Models.Constants
             Hit,
             Stand,
             Split,
-            DoubleDown
+            DoubleDown,
             Surrender,
             FlipBust,
             FlipBlackjack
