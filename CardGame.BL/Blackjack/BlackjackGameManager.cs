@@ -52,16 +52,16 @@ namespace CardGame.BL.BlackJack
 
                     foreach (BlackjackHand hand in blackjackPlayer.Hands)
                     {
+
+                        //More robust double down logic needed
+                        //BlackjackHandManager.EvaluateDoubleDown(blackjackPlayer.Hands);
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
                             if (hand.Action == HandActions.Hit)
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);
                             }
-                        }
-                        if (hand.Action == HandActions.Surrender)
-                        {
-
+                            BlackjackHandManager.GetAction(hand, dealerCard);
                         }
                         if (hand.Action == HandActions.Stand)
                         {
