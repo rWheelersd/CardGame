@@ -29,6 +29,8 @@ namespace CardGame.BL.BlackJack
 
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
+                turnCounter++;
+
                 //this might be out of place, go look up blackjack phases/action order
                 BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
@@ -62,18 +64,6 @@ namespace CardGame.BL.BlackJack
                                 BlackjackGame.GameDeck.DealCard(hand);
                             }
                             BlackjackHandManager.GetAction(hand, dealerCard);
-                        }
-                        if (hand.Action == HandActions.Stand)
-                        {
-                            
-                        }
-                        if (hand.Action == HandActions.FlipBlackjack)
-                        {
-
-                        }
-                        if (hand.Action == HandActions.FlipBust)
-                        {
-
                         }
                     }
                 }

@@ -18,7 +18,7 @@ namespace CardGame.BL.BlackJack
         {
             try
             {
-                return hand.Cards[0] == hand.Cards[1];
+                return hand.Cards[0].CardRank == hand.Cards[1].CardRank;
             }
             catch (Exception)
             {
@@ -59,7 +59,7 @@ namespace CardGame.BL.BlackJack
             hands.Add(splitHand1);
         }
 
-        
+
 
         public static void GetAction(BlackjackHand blackjackHand, BlackjackCard dealerCard)
         {
@@ -78,34 +78,34 @@ namespace CardGame.BL.BlackJack
                 {
                     softValue = hardValue - 10;
                     blackjackHand.IsSoft = true;
-
-                    //if soft value is busted then hard value must also be busted
+                    
                     if (softValue > 21)
                     {
-                        blackjackHand.Action = HandActions.FlipBust; 
+                        blackjackHand.Action = HandActions.FlipBust;
+                        return; 
                     }
                 }
 
                 //Blackjack
                 if (hardValue == 21 || softValue == 21)
                 {
-                    blackjackHand.Action = HandActions.FlipBlackjack; 
+                    blackjackHand.Action = HandActions.FlipBlackjack;
+                    return;
                 }
 
                 //Bust
                 if (hardValue > 21 && !blackjackHand.IsSoft)
                 {
-                    blackjackHand.Action = HandActions.FlipBust; 
+                    blackjackHand.Action = HandActions.FlipBust;
+                    return; 
                 }
 
                 //Returns action for hard hand
-                if (blackjackHand.IsSoft)
+                if (!blackjackHand.IsSoft)
                 {
-                    if (hardValue <= 11) blackjackHand.Action = HandActions.Hit; 
-
-                    if ((hardValue >= 12 && hardValue <= 16) && dealerCard.CardValue >= 7) blackjackHand.Action = HandActions.Hit; 
-
-                    blackjackHand.Action = HandActions.Stand; 
+                    if (hardValue <= 11) blackjackHand.Action = HandActions.Hit;
+                    else if ((hardValue >= 12 && hardValue <= 16) && dealerCard.CardValue >= 7) blackjackHand.Action = HandActions.Hit;
+                    else blackjackHand.Action = HandActions.Stand;
                 }
 
                 //Returns action for soft hand
@@ -115,21 +115,18 @@ namespace CardGame.BL.BlackJack
                     {
                         blackjackHand.Action = HandActions.Stand;
                     }
-
-                    if (hardValue == 18)
+                    else if (hardValue == 18)
                     {
                         if (dealerCard.CardValue == 2) blackjackHand.Action = HandActions.Stand;
-                        if (dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) blackjackHand.Action = HandActions.DoubleDown;
-                        if (dealerCard.CardValue == 7 || dealerCard.CardValue == 8) blackjackHand.Action = HandActions.Stand;
-                        if (dealerCard.CardValue >= 9) blackjackHand.Action = HandActions.Hit;
+                        else if (dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) blackjackHand.Action = HandActions.DoubleDown;
+                        else if (dealerCard.CardValue == 7 || dealerCard.CardValue == 8) blackjackHand.Action = HandActions.Stand;
+                        else blackjackHand.Action = HandActions.Hit;
                     }
-
-                    if (hardValue == 17)
+                    else if (hardValue == 17)
                     {
                         blackjackHand.Action = HandActions.Stand;
                     }
-
-                    if (hardValue < 17)
+                    else if (hardValue < 17)
                     {
                         blackjackHand.Action = HandActions.Hit;
                     }
@@ -137,10 +134,10 @@ namespace CardGame.BL.BlackJack
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+
 
         internal static void EvaluateDoubleDown(List<BlackjackHand> hands)
         {
