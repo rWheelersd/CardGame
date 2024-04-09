@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static CardGame.BL.Models.Constants.BaseConstants;
+using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace UnitTests.BL.Managers.Blackjack
 {
@@ -39,10 +40,55 @@ namespace UnitTests.BL.Managers.Blackjack
                 TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
                 TestContext.WriteLine($"Hand pair : {BlackjackHandManager.PairCheck(hand)}\n");
 
+                TestContext.WriteLine($"**Split Check**");
+
+                if (BlackjackHandManager.PairCheck(hand))
+                {
+                    TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
+                    TestContext.WriteLine($"Dealer card is {dealerCard.CardName}");
+
+                    BlackjackHandManager.EvaluateSplit(hand.Cards[0], dealerCard);
+
+                    TestContext.WriteLine($"Hand action : {hand.Action.ToString()}\n");
+                }
+                else
+                {
+                    TestContext.WriteLine($"No pair to split\n");
+                }
+
+                TestContext.WriteLine($"**Split Test**");
+
+                if (hand.Action == HandActions.Split)
+                {
+                    TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
+                    List<BlackjackHand> listOfHands = new List<BlackjackHand>();
+                    BlackjackHand newBlackjackHand = new BlackjackHand();
+                    newBlackjackHand = hand;
+                    listOfHands.Add(newBlackjackHand);
+                    BlackjackHandManager.SplitHand(listOfHands);
+                    TestContext.WriteLine($"listOfHands has {listOfHands.Count} hands");
+
+                    foreach (BlackjackHand splitHand in listOfHands)
+                    {
+
+                        TestContext.WriteLine($"Each hand has {splitHand.Cards.Count} Card");
+                        foreach (BlackjackCard card in splitHand.Cards) 
+                        {
+                            TestContext.WriteLine($"Card is {card.CardName}");
+                        }
+                    }
+                }
+                else
+                {
+                    TestContext.WriteLine($"No pair to split\n");
+                }
+
                 TestContext.WriteLine($"**Action Check**");
                 TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
                 TestContext.WriteLine($"Dealer card is {dealerCard.CardName}");
+
                 BlackjackHandManager.GetAction(hand, dealerCard);
+
                 TestContext.WriteLine($"Hand action : {hand.Action.ToString()}\n");
                 TestContext.WriteLine($"--------------------------------------------------------\n");
             }
