@@ -22,7 +22,6 @@ namespace CardGame.BL.BlackJack
                 {
 
                     if (hand.Cards[0].CardRank == Rank.Eight) hand.Action = HandActions.Split;
-                    else if (hand.Cards[0].CardRank == Rank.Eight) hand.Action = HandActions.Split;
                     else if (hand.Cards[0].CardRank == Rank.Five && dealerCard.CardRank <= Rank.Nine) hand.Action = HandActions.DoubleDown;
                     else if (hand.Cards[0].CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
                     else if (hand.Cards[0].CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
@@ -55,68 +54,72 @@ namespace CardGame.BL.BlackJack
         {
             try
             {
-                int hardValue = 0;
-                int softValue = 0;
 
-                foreach (BlackjackCard blackjackCard in blackjackHand.Cards)
+                if (blackjackHand.HardValue == 0)
                 {
-                    hardValue += blackjackCard.CardValue;
-                }
+                    blackjackHand.HardValue += blackjackHand.Cards[0].CardValue + blackjackHand.Cards[1].CardValue;
 
-                //Checks if hand is soft and sets a soft value
-                if (blackjackHand.Cards.Any(c => c.CardRank == Rank.Ace))
-                {
-                    softValue = hardValue - 10;
-                    blackjackHand.IsSoft = true;
-                    
-                    if (softValue > 21)
+                    if (blackjackHand.Cards.Any(c => c.CardRank == Rank.Ace))
                     {
-                        blackjackHand.Action = HandActions.FlipBust;
-                        return; 
+                        blackjackHand.SoftValue = blackjackHand.HardValue - 10;
+                        blackjackHand.IsSoft = true;
                     }
+                }
+                else
+                {
+                    //if we are here it is because the hit action was take and the hand was dealt a card
+                    //so we take the lastcard in the hand and add its value
+                    blackjackHand.HardValue += blackjackHand.Cards.Last().CardValue;
                 }
 
                 //Blackjack
-                if (hardValue == 21 || softValue == 21)
+                if (blackjackHand.HardValue == 21 || blackjackHand.SoftValue == 21)
                 {
                     blackjackHand.Action = HandActions.FlipBlackjack;
                     return;
                 }
 
                 //Bust
-                if (hardValue > 21 && !blackjackHand.IsSoft)
+                if (blackjackHand.HardValue > 21 && !blackjackHand.IsSoft)
                 {
                     blackjackHand.Action = HandActions.FlipBust;
                     return; 
                 }
 
+                //Bust soft value
+                if (blackjackHand.SoftValue > 21 && blackjackHand.IsSoft)
+                {
+                    blackjackHand.Action = HandActions.FlipBust;
+                    return;
+                }
+
                 //Returns action for hard hand
                 if (!blackjackHand.IsSoft)
                 {
-                    if (hardValue <= 11) blackjackHand.Action = HandActions.Hit;
-                    else if ((hardValue >= 12 && hardValue <= 16) && dealerCard.CardValue >= 7) blackjackHand.Action = HandActions.Hit;
+                    if (blackjackHand.HardValue <= 11) blackjackHand.Action = HandActions.Hit;
+                    else if ((blackjackHand.HardValue >= 12 && blackjackHand.HardValue <= 16) && dealerCard.CardValue >= 7) blackjackHand.Action = HandActions.Hit;
                     else blackjackHand.Action = HandActions.Stand;
                 }
 
                 //Returns action for soft hand
                 if (blackjackHand.IsSoft)
                 {
-                    if (hardValue >= 19 && hardValue <= 21)
+                    if (blackjackHand.HardValue >= 19 && blackjackHand.HardValue <= 21)
                     {
                         blackjackHand.Action = HandActions.Stand;
                     }
-                    else if (hardValue == 18)
+                    else if (blackjackHand.HardValue == 18)
                     {
                         if (dealerCard.CardValue == 2) blackjackHand.Action = HandActions.Stand;
                         else if (dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) blackjackHand.Action = HandActions.DoubleDown;
                         else if (dealerCard.CardValue == 7 || dealerCard.CardValue == 8) blackjackHand.Action = HandActions.Stand;
                         else blackjackHand.Action = HandActions.Hit;
                     }
-                    else if (hardValue == 17)
+                    else if (blackjackHand.HardValue == 17)
                     {
                         blackjackHand.Action = HandActions.Stand;
                     }
-                    else if (hardValue < 17)
+                    else if (blackjackHand.HardValue < 17)
                     {
                         blackjackHand.Action = HandActions.Hit;
                     }
