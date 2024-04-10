@@ -67,10 +67,25 @@ namespace CardGame.BL.BlackJack
                 }
                 else
                 {
-                    //if we are here it is because the hit action was take and the hand was dealt a card
-                    //so we take the lastcard in the hand and add its value
-                    blackjackHand.HardValue += blackjackHand.Cards.Last().CardValue;
+                    if (blackjackHand.Cards.Last().CardRank == Rank.Ace)
+                    {
+                        if (blackjackHand.HardValue + blackjackHand.Cards.Last().CardValue > 21)
+                        {
+                            blackjackHand.HardValue += 1;
+                        }
+                        else
+                        {
+                            blackjackHand.HardValue += 11;
+                            blackjackHand.SoftValue = blackjackHand.HardValue - 10;
+                            blackjackHand.IsSoft = true;
+                        }
+                    }
+                    else
+                    {
+                        blackjackHand.HardValue += blackjackHand.Cards.Last().CardValue;
+                    }
                 }
+
 
                 //Blackjack
                 if (blackjackHand.HardValue == 21 || blackjackHand.SoftValue == 21)
