@@ -18,6 +18,7 @@ namespace CardGame.BL.BlackJack
         {
             try
             {
+                //Checks if cards are a pair, then evaluates if hand should be split or double down
                 if (hand.Cards[0].CardRank == hand.Cards[1].CardRank)
                 {
 
@@ -34,6 +35,7 @@ namespace CardGame.BL.BlackJack
             }
         }
 
+        //Creates two hands, splits the cards in the initial hands list into the new hands, clears current list and adds the new hands
         public static void SplitHand(List<BlackjackHand> hands)
         {
             BlackjackHand splitHand0 = new BlackjackHand();
@@ -53,10 +55,11 @@ namespace CardGame.BL.BlackJack
         public static void GetAction(BlackjackHand blackjackHand, BlackjackCard dealerCard)
         {
             try
-            {
-
+            { 
                 if (blackjackHand.HardValue == 0)
                 {
+                    //Calcualte the initial hand value, checks if the hand is soft by looking for a an ace, sets the soft value
+                    //if it is and set the hand to soft
                     blackjackHand.HardValue += blackjackHand.Cards[0].CardValue + blackjackHand.Cards[1].CardValue;
 
                     if (blackjackHand.Cards.Any(c => c.CardRank == Rank.Ace))
@@ -67,14 +70,17 @@ namespace CardGame.BL.BlackJack
                 }
                 else
                 {
+                    //Dealt card management
                     if (blackjackHand.Cards.Last().CardRank == Rank.Ace)
                     {
+                        //if the card was an ace and the hard value is over 21 then add the aces soft value to the hard value
                         if (blackjackHand.HardValue + blackjackHand.Cards.Last().CardValue > 21)
                         {
                             blackjackHand.HardValue += 1;
                         }
                         else
                         {
+                            //if it isnt over 21 then update both soft and hard values accordingly and ensure the handi is flagged as soft
                             blackjackHand.HardValue += 11;
                             blackjackHand.SoftValue = blackjackHand.HardValue - 10;
                             blackjackHand.IsSoft = true;
@@ -82,6 +88,7 @@ namespace CardGame.BL.BlackJack
                     }
                     else
                     {
+                        //If it isnt an ace just calculate the hard value
                         blackjackHand.HardValue += blackjackHand.Cards.Last().CardValue;
                     }
                 }
