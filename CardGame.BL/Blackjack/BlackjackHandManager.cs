@@ -14,29 +14,19 @@ namespace CardGame.BL.BlackJack
 {
     public static class BlackjackHandManager
     {
-        public static bool PairCheck(BlackjackHand hand)
+        public static void EvaluateSplit(BlackjackHand hand, BlackjackCard dealerCard)
         {
             try
             {
-                return hand.Cards[0].CardRank == hand.Cards[1].CardRank;
-            }
-            catch (Exception)
-            {
+                if (hand.Cards[0].CardRank == hand.Cards[1].CardRank)
+                {
 
-                throw;
-            }
-        }
-
-        public static HandActions EvaluateSplit(BlackjackCard playerCard, BlackjackCard dealerCard)
-        {
-            try
-            {
-                if (playerCard.CardRank == Rank.Eight) return HandActions.Split;
-                if (playerCard.CardRank == Rank.Eight) return HandActions.Split;
-                if (playerCard.CardRank == Rank.Five && dealerCard.CardRank <= Rank.Nine) return HandActions.DoubleDown;
-                if (playerCard.CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) return HandActions.Split;
-                if (playerCard.CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) return HandActions.Split;
-                else return HandActions.Thinking;
+                    if (hand.Cards[0].CardRank == Rank.Eight) hand.Action = HandActions.Split;
+                    else if (hand.Cards[0].CardRank == Rank.Eight) hand.Action = HandActions.Split;
+                    else if (hand.Cards[0].CardRank == Rank.Five && dealerCard.CardRank <= Rank.Nine) hand.Action = HandActions.DoubleDown;
+                    else if (hand.Cards[0].CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
+                    else if (hand.Cards[0].CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
+                }
             }
             catch (Exception)
             {

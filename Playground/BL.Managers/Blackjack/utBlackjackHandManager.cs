@@ -36,25 +36,14 @@ namespace UnitTests.BL.Managers.Blackjack
 
             foreach (BlackjackHand hand in testHands)
             {
-                TestContext.WriteLine($"**Pair Check**");
-                TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
-                TestContext.WriteLine($"Hand pair : {BlackjackHandManager.PairCheck(hand)}\n");
 
                 TestContext.WriteLine($"**Split Check**");
+                TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
+                TestContext.WriteLine($"Dealer card is {dealerCard.CardName}");
 
-                if (BlackjackHandManager.PairCheck(hand))
-                {
-                    TestContext.WriteLine($"Hand has {hand.Cards[0].CardName} : {hand.Cards[1].CardName}");
-                    TestContext.WriteLine($"Dealer card is {dealerCard.CardName}");
+                BlackjackHandManager.EvaluateSplit(hand, dealerCard);
 
-                    BlackjackHandManager.EvaluateSplit(hand.Cards[0], dealerCard);
-
-                    TestContext.WriteLine($"Hand action : {hand.Action.ToString()}\n");
-                }
-                else
-                {
-                    TestContext.WriteLine($"No pair to split\n");
-                }
+                TestContext.WriteLine($"Hand action : {hand.Action.ToString()}\n");
 
                 TestContext.WriteLine($"**Split Test**");
 
@@ -70,13 +59,13 @@ namespace UnitTests.BL.Managers.Blackjack
 
                     foreach (BlackjackHand splitHand in listOfHands)
                     {
-
-                        TestContext.WriteLine($"Each hand has {splitHand.Cards.Count} Card");
+                        TestContext.WriteLine($"This hand has {splitHand.Cards.Count} Card");
                         foreach (BlackjackCard card in splitHand.Cards) 
                         {
                             TestContext.WriteLine($"Card is {card.CardName}");
                         }
                     }
+                    TestContext.WriteLine($"\n");
                 }
                 else
                 {

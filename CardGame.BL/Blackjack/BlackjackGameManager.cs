@@ -36,19 +36,19 @@ namespace CardGame.BL.BlackJack
 
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                 {
-                    //Check for split here
-                    if (BlackjackHandManager.PairCheck(blackjackPlayer.Hands[0]))
+                    if (!blackjackPlayer.WasSplitEvaluated)
                     {
-                        HandActions action = BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hand.Cards[0], dealerCard);
-                        if (action == HandActions.Split)
+                        BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hands[0], dealerCard);
+                        if (blackjackPlayer.Hands[0].Action == HandActions.Split)
                         {
                             BlackjackHandManager.SplitHand(blackjackPlayer.Hands);
                         }
                         //there needs to be more double down logic outside of splits, and this will need to move after that is done
-                        if (action == HandActions.DoubleDown)
+                        if (blackjackPlayer.Hands[0].Action == HandActions.DoubleDown)
                         {
                             BlackjackGame.GameDeck.DealCard(blackjackPlayer.Hands[0]);
                         }
+                        blackjackPlayer.WasSplitEvaluated = true;
                     }
 
 
