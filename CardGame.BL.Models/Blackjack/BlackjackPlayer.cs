@@ -19,7 +19,6 @@ namespace CardGame.BL.Models.Blackjack
         public bool IsHuman { get; set; }
         public bool WasSplitEvaluated { get; set; }
         public PlayerStatus Status { get; set; }
-        public List<BlackjackHand> Hands {  get; set; } 
 
         public BlackjackPlayer() : base(0, 0)
         {

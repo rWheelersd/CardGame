@@ -37,11 +37,10 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
     {
         for (int i = 0; i < Players.Count; i++)
         {
-            Players[i].Hand = GameDeck.DealCards(2);
-            Players[i].Hand.Cards[0].IsVisible = true;
+            Players[i].Hands.Add(GameDeck.DealCards(2));
+            Players[i].Hands[0].Cards[0].IsVisible = true;
             //Temporary name handling, change when implementing signalR and DB
             Players[i].Username += i;
         }
     }
-
 }

@@ -33,8 +33,8 @@ namespace UnitTests.BL.Models
 
             Assert.IsNotNull(player);
             Assert.IsTrue(player is BlackjackPlayer);
-            Assert.IsTrue(player.Hand is BlackjackHand);
-            Assert.IsTrue(player.Hand.Cards[0] is BlackjackCard);
+            Assert.IsTrue(player.Hands[0] is BlackjackHand);
+            Assert.IsTrue(player.Hands[0].Cards[0] is BlackjackCard);
             Assert.IsTrue(player.Balance == 5000);
             Assert.IsTrue(player.NonHumanName == "Player 1");
         }
@@ -63,21 +63,22 @@ namespace UnitTests.BL.Models
         [TestMethod]
         public void BuildGameTest()
         {
-            BlackjackGame blackjackGame = new BlackjackGame(Guid.NewGuid(), 5, 5000);
+            BlackjackGame blackjackGame = new BlackjackGame(Guid.NewGuid(), 5, 1, 5000);
+            blackjackGame.StartRound();
 
             Assert.IsNotNull(blackjackGame);
             Assert.IsTrue(blackjackGame is BlackjackGame);
-            Assert.IsTrue(blackjackGame.Players.Count == 5);
+            Assert.IsTrue(blackjackGame.Players.Count == 6);
             Assert.IsTrue(blackjackGame.Players[0] is BlackjackPlayer);
             Assert.IsTrue(blackjackGame.Players[0].Balance == 5000);
-            Assert.IsTrue(blackjackGame.Players[0].Hand.Cards.Count == 2);
-            Assert.IsTrue(blackjackGame.Players[0].Hand.Cards[0] is BlackjackCard);
-            Assert.IsTrue(blackjackGame.Players[0].Hand.Cards[0].IsVisible == true);
+            Assert.IsTrue(blackjackGame.Players[0].Hands[0].Cards.Count == 2);
+            Assert.IsTrue(blackjackGame.Players[0].Hands[0].Cards[0] is BlackjackCard);
+            Assert.IsTrue(blackjackGame.Players[0].Hands[0].Cards[0].IsVisible == true);
             Assert.IsTrue(!blackjackGame.Players.Last().IsHuman);
             Assert.IsTrue(blackjackGame.Players.Last().Balance == 25000);
             Assert.IsTrue(blackjackGame.GameDeck.Cards[0] is BlackjackCard);
-            Assert.IsTrue(blackjackGame.GameDeck.BurntCards.Count == 10);
-            Assert.IsTrue(blackjackGame.GameDeck.Cards.Count == 42);
+            Assert.IsTrue(blackjackGame.GameDeck.BurntCards.Count == 12);
+            Assert.IsTrue(blackjackGame.GameDeck.Cards.Count == 40);
             Assert.IsTrue(blackjackGame.minBet == 250);
             Assert.IsTrue(blackjackGame.maxBet == 750);
         }
