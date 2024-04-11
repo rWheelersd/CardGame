@@ -19,11 +19,19 @@ namespace CardGame.BL.BlackJack
             BlackjackGame = new BlackjackGame(gameId, playerCount, humanPlayers, startingBalance);
         }
 
+        public void PlayerAction(int option)
+        {
+            /*
+             *Hit,
+             *Stand,
+             *Split,
+             *DoubleDown,
+             *Surrender
+             */
+        }
+
         public void PlayAITurn()
         {
-            BlackjackCard dealerCard = BlackjackGame.Players.FirstOrDefault(p => p.IsDealer)
-                                                            .Hands.First()
-                                                            .Cards.First(c => c.IsVisible == true);
 
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
@@ -36,7 +44,7 @@ namespace CardGame.BL.BlackJack
                 {
                     if (!blackjackPlayer.WasSplitEvaluated)
                     {
-                        BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hands[0], dealerCard);
+                        BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hands[0], BlackjackGame.dealerCard);
                         if (blackjackPlayer.Hands[0].Action == HandActions.Split)
                         {
                             BlackjackHandManager.SplitHand(blackjackPlayer.Hands);
@@ -61,7 +69,7 @@ namespace CardGame.BL.BlackJack
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);
                             }
-                            BlackjackHandManager.GetAction(hand, dealerCard);
+                            BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
                         }
                     }
                 }

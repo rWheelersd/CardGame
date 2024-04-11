@@ -16,13 +16,12 @@ bool gameReady = false;
 while (!gameReady)
 {
     int i = 1;
-    Console.WriteLine("Select game type by its number...");
+    Console.WriteLine("Select game type by its number...\n");
     foreach (Enum gameType in Enum.GetValues(typeof(GameType)))
     {
         Console.WriteLine($"{i}. {gameType.ToString()}");
         i++;
     }
-
     if (Int32.TryParse(Console.ReadLine(), out selectedGame))
     {
         switch (selectedGame)
@@ -36,13 +35,14 @@ while (!gameReady)
 
         if (!string.IsNullOrEmpty(gameChosen))
         {
-            Console.WriteLine("Enter desired amount of opponents.");
+            Console.WriteLine("\nEnter desired amount of opponents.");
 
             if (Int32.TryParse(Console.ReadLine(), out playerCount))
             {
-                Console.WriteLine("Enter desired amount of human oponnents");
+                Console.WriteLine("\nEnter desired amount of human oponnents");
                 if (Int32.TryParse(Console.ReadLine(), out humanCount) && humanCount <= playerCount)
                 {
+                    Console.WriteLine("\nEnter desired starting balance");
                     if (Int32.TryParse(Console.ReadLine(), out startingBalance))
                     {
                         Guid gameId = Guid.NewGuid();
@@ -84,8 +84,10 @@ while (!gameReady)
 
 void PlayGame()
 {
+    blackjackGameManager.BlackjackGame.StartRound();
     while (blackjackGameManager.BlackjackGame.Players.Any(p => p.Status == PlayerStatus.Active))
     {
+
         foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
         {
             if (blackjackPlayer.IsHuman)
@@ -93,10 +95,12 @@ void PlayGame()
                 //This needs better managment
                 while (true)
                 {
-                    Console.WriteLine($"Hello {blackjackPlayer.Username}");
-                    Console.WriteLine($"Your cards are {GetCards(blackjackPlayer.Hands)}");
+                    Console.WriteLine($"\nHello {blackjackPlayer.Username}");
+                    Console.WriteLine($"Your cards are...\n{GetCards(blackjackPlayer.Hands)}");
+                    Console.WriteLine($"Dealers shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}");
                     //Will want to change this to hand split dialouge if split is a possible option
                     Console.WriteLine($"Do you wish to HIT, STAND, DOUBLE DOWN");
+                    Console.ReadLine();
                     Console.WriteLine($"");
                     Console.WriteLine($"");
                     Console.WriteLine($"");
@@ -113,7 +117,7 @@ string GetCards(List<BlackjackHand> hands)
     {
         foreach(BlackjackCard card in hands[0].Cards) 
         {
-            cardNames += $"{card.CardName} : ";
+            cardNames += $"{card.CardName}\n";
         }
     }
     else

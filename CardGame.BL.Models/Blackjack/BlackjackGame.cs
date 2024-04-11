@@ -8,6 +8,7 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
 {
     public readonly int minBet;
     public readonly int maxBet;
+    public BlackjackCard dealerCard { get; set; }
 
     public BlackjackGame(Guid gameId, int numberOfPlayers, int humanPlayers, int startingBalance) : base(gameId, numberOfPlayers, startingBalance)
     {
@@ -40,7 +41,11 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
             Players[i].Hands.Add(GameDeck.DealCards(2));
             Players[i].Hands[0].Cards[0].IsVisible = true;
             //Temporary name handling, change when implementing signalR and DB
-            Players[i].Username += i;
+            Players[i].Username = $"Player {i}";
         }
+
+        dealerCard = Players.FirstOrDefault(p => p.IsDealer)
+                            .Hands.First()
+                            .Cards.First(c => c.IsVisible == true);
     }
 }
