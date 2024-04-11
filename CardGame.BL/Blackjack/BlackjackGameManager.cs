@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static CardGame.BL.Models.Constants.BaseConstants;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
-using static System.Collections.Specialized.BitVector32;
 
 namespace CardGame.BL.BlackJack
 {
@@ -16,9 +14,9 @@ namespace CardGame.BL.BlackJack
     {
         private int turnCounter = 0;
         public BlackjackGame BlackjackGame { get; private set; }
-        public BlackjackGameManager(Guid gameId, int playerCount, int startingBalance) 
+        public BlackjackGameManager(Guid gameId, int playerCount, int humanPlayers, int startingBalance) 
         {
-            BlackjackGame = new BlackjackGame(gameId, playerCount, startingBalance);
+            BlackjackGame = new BlackjackGame(gameId, playerCount, humanPlayers, startingBalance);
         }
 
         public void PlayAITurn()

@@ -22,7 +22,7 @@ namespace CardGame.BL.Blackjack
             try
             {
                 Guid gameId = Guid.NewGuid();
-                blackjackGameManagers.Add(gameId, new BlackjackGameManager(gameId, playerCount, startingBalance));
+                //blackjackGameManagers.Add(gameId, new BlackjackGameManager(gameId, playerCount, startingBalance));
                 return gameId;
             }
             catch (Exception)

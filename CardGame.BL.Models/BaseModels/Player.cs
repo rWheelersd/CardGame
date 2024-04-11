@@ -9,7 +9,7 @@ namespace CardGame.BL.Models.BaseModels
         public string NonHumanName { get; set; }
         public int Balance { get; set; }
         public int Bet { get; set; }
-        public THand Hand { get; set; }
+        //public THand Hand { get; set; }
 
         public Player(int playerNumber, int balance)
         {
