@@ -92,8 +92,7 @@ void PlayGame()
     {
         foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
         {
-            if (blackjackPlayer.IsHuman &&
-                blackjackPlayer.Status == PlayerStatus.Active)
+            if (blackjackPlayer.IsHuman)
             {
                 PlayPlayerTurn(blackjackPlayer);
             }
