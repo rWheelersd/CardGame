@@ -58,12 +58,10 @@ namespace CardGame.BL.BlackJack
 
         public void PlayAITurn()
         {
-
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
                 turnCounter++;
 
-                //this might be out of place, go look up blackjack phases/action order
                 BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
@@ -75,27 +73,23 @@ namespace CardGame.BL.BlackJack
                         {
                             BlackjackHandManager.SplitHand(blackjackPlayer.Hands);
                         }
-                        //there needs to be more double down logic outside of splits, and this will need to move after that is done
-                        if (blackjackPlayer.Hands[0].Action == HandActions.DoubleDown)
-                        {
-                            BlackjackGame.GameDeck.DealCard(blackjackPlayer.Hands[0]);
-                        }
                         blackjackPlayer.WasSplitEvaluated = true;
                     }
 
-
                     foreach (BlackjackHand hand in blackjackPlayer.Hands)
                     {
-
-                        //More robust double down logic needed
-                        //BlackjackHandManager.EvaluateDoubleDown(blackjackPlayer.Hands);
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
                             if (hand.Action == HandActions.Hit)
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);
                             }
-                            BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
+
+                            if (hand.Action != HandActions.Split && BlackjackHandManager.EvaluateDoubleDown(hand, BlackjackGame.dealerCard))
+                            {
+                                BlackjackGame.GameDeck.DealCard(hand);
+                                hand.Action = HandActions.DoubleDown;
+                            }
                         }
                     }
                 }

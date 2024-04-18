@@ -26,9 +26,7 @@ namespace CardGame.BL.BlackJack
                 //Checks if cards are a pair, then evaluates if hand should be split or double down
                 if (hand.Cards[0].CardRank == hand.Cards[1].CardRank)
                 {
-
                     if (hand.Cards[0].CardRank == Rank.Eight) hand.Action = HandActions.Split;
-                    else if (hand.Cards[0].CardRank == Rank.Five && dealerCard.CardRank <= Rank.Nine) hand.Action = HandActions.DoubleDown;
                     else if (hand.Cards[0].CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
                     else if (hand.Cards[0].CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
                 }
@@ -68,7 +66,6 @@ namespace CardGame.BL.BlackJack
                 {
                     return;
                 }
-
                 else
                 {
                     //Returns action for hard hand
@@ -171,9 +168,15 @@ namespace CardGame.BL.BlackJack
             }
         }
 
-        internal static void EvaluateDoubleDown(List<BlackjackHand> hands)
+        internal static bool EvaluateDoubleDown(BlackjackHand blackjackHand, BlackjackCard dealerCard)
         {
-            throw new NotImplementedException();
+            if ((blackjackHand.HardValue == 9 && dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) ||
+                (blackjackHand.HardValue == 10 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 9) ||
+                (blackjackHand.HardValue == 11 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 10))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
