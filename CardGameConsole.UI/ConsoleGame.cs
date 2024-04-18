@@ -93,17 +93,43 @@ void PlayGame()
             if (blackjackPlayer.IsHuman)
             {
                 //This needs better managment
-                while (true)
+                while (blackjackPlayer.Status == PlayerStatus.Active)
                 {
                     Console.WriteLine($"\nHello {blackjackPlayer.Username}");
                     Console.WriteLine($"Your cards are...\n{GetCards(blackjackPlayer.Hands)}");
                     Console.WriteLine($"Dealers shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}");
-                    //Will want to change this to hand split dialouge if split is a possible option
-                    Console.WriteLine($"Do you wish to HIT, STAND, DOUBLE DOWN");
-                    Console.ReadLine();
-                    Console.WriteLine($"");
-                    Console.WriteLine($"");
-                    Console.WriteLine($"");
+
+                    if (!blackjackPlayer.WasSplitEvaluated)
+                    {
+                        bool canBeSplit = BlackjackHandManager.CheckPair(blackjackPlayer.Hands[0]);
+                        blackjackPlayer.WasSplitEvaluated = true;
+                        if (canBeSplit)
+                        {
+                            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN, (4)SPLIT");
+                        }
+                    }
+                    if (blackjackPlayer.Hands.Count == 2)
+                    {
+                        for (int i = 0; i < blackjackPlayer.Hands.Count; i++)
+                        {
+                            while (blackjackPlayer.Hands[i].Action == HandActions.Thinking)
+                            {
+                                Console.WriteLine($"\nHello {blackjackPlayer.Username}");
+                                Console.WriteLine($"Your cards in hand {i} are...\n{GetCards(blackjackPlayer.Hands)}");
+                                Console.WriteLine($"Dealers shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}");
+                                Console.WriteLine($"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN on this hand");
+                            }
+                        }
+                    }
+
+                    Console.WriteLine($"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN");
+
+                    int choice;
+                    Int32.TryParse(Console.ReadLine(), out choice);
+                    blackjackPlayer.Status = blackjackGameManager.PlayerTurn(choice, blackjackPlayer.Hands);
+                    //Console.WriteLine($"");
+                    //Console.WriteLine($"");
+                    //Console.WriteLine($"");
                 }
             }
         }

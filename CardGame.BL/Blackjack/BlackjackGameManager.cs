@@ -19,15 +19,25 @@ namespace CardGame.BL.BlackJack
             BlackjackGame = new BlackjackGame(gameId, playerCount, humanPlayers, startingBalance);
         }
 
-        public void PlayerAction(int option)
+        public PlayerStatus PlayerTurn(int option, List<BlackjackHand> blackjackHands)
         {
-            /*
-             *Hit,
-             *Stand,
-             *Split,
-             *DoubleDown,
-             *Surrender
-             */
+            switch (option)
+            {
+                case 1: //HIT
+                    BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
+                    blackjackHands[0].Action = HandActions.Thinking;
+                    return PlayerStatus.Active;
+                case 2: //Stand
+                    return PlayerStatus.Inactive;
+                case 3: //Double Down
+                    BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
+                    return PlayerStatus.Inactive;
+                case 4: //Split
+                    BlackjackHandManager.SplitHand(blackjackHands);
+                    blackjackHands[0].Action = HandActions.Split;
+                    return PlayerStatus.Active;
+                default: throw new ArgumentOutOfRangeException(nameof(option));
+            }
         }
 
         public void PlayAITurn()

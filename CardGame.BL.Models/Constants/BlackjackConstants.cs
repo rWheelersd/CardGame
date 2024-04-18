@@ -27,7 +27,7 @@ namespace CardGame.BL.Models.Constants
         public enum PlayerStatus
         {
             Active,
-            Ianctive 
+            Inactive 
         }
         public enum HandActions
         {
@@ -36,7 +36,6 @@ namespace CardGame.BL.Models.Constants
             Stand,
             Split,
             DoubleDown,
-            Surrender,
             FlipBust,
             FlipBlackjack
         }

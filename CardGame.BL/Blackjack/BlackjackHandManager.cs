@@ -1,5 +1,6 @@
 ﻿using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Blackjack;
+using CardGame.BL.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace CardGame.BL.BlackJack
 {
     public static class BlackjackHandManager
     {
+        public static bool CheckPair(BlackjackHand hand)
+        {
+            return hand.Cards[0].CardRank == hand.Cards[1].CardRank;
+        }
         public static void EvaluateSplit(BlackjackHand hand, BlackjackCard dealerCard)
         {
             try
