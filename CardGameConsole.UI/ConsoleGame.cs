@@ -86,7 +86,6 @@ while (!gameReady)
 
 void PlayGame()
 {
-
     while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
     {
         blackjackGameManager.BlackjackGame.StartRound();
@@ -97,6 +96,7 @@ void PlayGame()
                 PlayPlayerTurn(blackjackPlayer);
             }
         }
+        blackjackGameManager.PlayAITurn();
         blackjackGameManager.ManagePayouts();
         blackjackGameManager.ResetPlayers();
     }

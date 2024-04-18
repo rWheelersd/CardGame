@@ -27,8 +27,6 @@ namespace CardGame.BL.BlackJack
                 }
 
                 currentPlayer.Bet = rng.Next(minBet, maxCapable + 1);
-
-                currentPlayer.Balance = currentPlayer.Balance - currentPlayer.Bet;
             }
             catch (Exception)
             {

@@ -4,6 +4,7 @@ using CardGame.BL.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
@@ -14,7 +15,7 @@ namespace CardGame.BL.BlackJack
     {
         private int turnCounter = 0;
         public BlackjackGame BlackjackGame { get; private set; }
-        public BlackjackGameManager(Guid gameId, int playerCount, int humanPlayers, int startingBalance) 
+        public BlackjackGameManager(Guid gameId, int playerCount, int humanPlayers, int startingBalance)
         {
             BlackjackGame = new BlackjackGame(gameId, playerCount, humanPlayers, startingBalance);
         }
@@ -107,13 +108,62 @@ namespace CardGame.BL.BlackJack
                 else
                 {
                     BlackjackGame.Players[i].Status = PlayerStatus.Active;
+                    BlackjackGame.Players[i].Hands.Clear();
+                    BlackjackGame.Players[i].Bet = 0;
                 }
             }
         }
 
         public void ManagePayouts()
         {
-            throw new NotImplementedException();
+            List<BlackjackHand> dealerHands = BlackjackGame.Players.LastOrDefault(p => p.IsDealer).Hands;
+
+            foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
+            {
+                foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
+                {
+                    foreach (BlackjackHand dealerHand in dealerHands)
+                    {
+                        CompareHands(blackjackPlayer, blackjackHand, dealerHand);
+                    }
+                }
+            }
+        }
+
+        private void CompareHands(BlackjackPlayer blackjackPlayer, BlackjackHand playerHand, BlackjackHand dealerHand)
+        {
+            if (playerHand.Action == HandActions.FlipBlackjack)
+            {
+                if (dealerHand.Action != HandActions.FlipBlackjack)
+                {
+                    blackjackPlayer.Balance += blackjackPlayer.Bet + (blackjackPlayer.Bet / 2);
+                }
+            }
+            else if (dealerHand.Action == HandActions.FlipBlackjack)
+            {
+                
+            }
+            else
+            {
+                int playerValue = playerHand.HardValue;
+                int dealerValue = dealerHand.HardValue;
+
+                if (playerValue <= 21)
+                {
+                    if ((dealerValue > 21) || (playerValue > dealerValue))
+                    {
+                        blackjackPlayer.Balance += blackjackPlayer.Bet * 2;
+                    }
+                    else if (playerValue < dealerValue)
+                    {
+                        blackjackPlayer.Balance -= blackjackPlayer.Bet;
+                    }
+                }
+                else
+                {
+                    blackjackPlayer.Balance -= blackjackPlayer.Bet;
+                }
+            }
         }
     }
 }
