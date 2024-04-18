@@ -85,5 +85,25 @@ namespace CardGame.BL.BlackJack
                 }
             }
         }
+
+        public void ResetPlayers()
+        {
+            for (int i = BlackjackGame.Players.Count - 1; i >= 0; i--)
+            {
+                if (BlackjackGame.Players[i].Balance <= 0)
+                {
+                    BlackjackGame.Players.Remove(BlackjackGame.Players[i]);
+                }
+                else
+                {
+                    BlackjackGame.Players[i].Status = PlayerStatus.Active;
+                }
+            }
+        }
+
+        public void ManagePayouts()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

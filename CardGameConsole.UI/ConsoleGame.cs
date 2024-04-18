@@ -86,10 +86,10 @@ while (!gameReady)
 
 void PlayGame()
 {
-    blackjackGameManager.BlackjackGame.StartRound();
 
     while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
     {
+        blackjackGameManager.BlackjackGame.StartRound();
         foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
         {
             if (blackjackPlayer.IsHuman)
@@ -97,9 +97,10 @@ void PlayGame()
                 PlayPlayerTurn(blackjackPlayer);
             }
         }
+        blackjackGameManager.ManagePayouts();
+        blackjackGameManager.ResetPlayers();
     }
 }
-
 void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
 {
     while (blackjackPlayer.Status == PlayerStatus.Active)
