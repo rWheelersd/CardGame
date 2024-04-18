@@ -25,17 +25,33 @@ namespace CardGame.BL.BlackJack
             {
                 case 1: //HIT
                     BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
-                    blackjackHands[0].Action = HandActions.Thinking;
-                    return PlayerStatus.Active;
+                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
+                    BlackjackHandManager.EvaluateHand(blackjackHands[0]);
+
+                    if (blackjackHands[0].Action == HandActions.FlipBust || blackjackHands[0].Action == HandActions.FlipBlackjack)
+                    {
+                        return PlayerStatus.Inactive;
+                    }
+                    else
+                    {
+                        blackjackHands[0].Action = HandActions.Thinking;
+                        return PlayerStatus.Active;
+                    }
+
                 case 2: //Stand
                     return PlayerStatus.Inactive;
+
                 case 3: //Double Down
                     BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
+                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
+                    BlackjackHandManager.EvaluateHand(blackjackHands[0]);
                     return PlayerStatus.Inactive;
+
                 case 4: //Split
                     BlackjackHandManager.SplitHand(blackjackHands);
                     blackjackHands[0].Action = HandActions.Split;
                     return PlayerStatus.Active;
+
                 default: throw new ArgumentOutOfRangeException(nameof(option));
             }
         }
