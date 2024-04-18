@@ -88,11 +88,12 @@ void PlayGame()
 {
     blackjackGameManager.BlackjackGame.StartRound();
 
-    while (blackjackGameManager.BlackjackGame.Players.Any(p => p.Status == PlayerStatus.Active))
+    while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
     {
         foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
         {
-            if (blackjackPlayer.IsHuman)
+            if (blackjackPlayer.IsHuman && 
+                blackjackGameManager.BlackjackGame.Players.Any(p => p.Status == PlayerStatus.Active))
             {
                 PlayPlayerTurn(blackjackPlayer);
             }
