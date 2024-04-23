@@ -14,7 +14,6 @@ int selectedGame;
 string gameChosen = string.Empty;
 bool gameReady = false;
 
-
 while (!gameReady)
 {
     int i = 1;
@@ -24,6 +23,7 @@ while (!gameReady)
         Console.WriteLine($"{i}. {gameType.ToString()}");
         i++;
     }
+
     if (Int32.TryParse(Console.ReadLine(), out selectedGame))
     {
         switch (selectedGame)
@@ -31,57 +31,47 @@ while (!gameReady)
             case 1:
                 gameChosen = "Blackjack";
                 break;
-            default: 
-                break;
+            default:
+                Console.WriteLine("Please enter a valid game number.");
+                continue; // Ask for game selection again
         }
 
-        if (!string.IsNullOrEmpty(gameChosen))
+        Console.WriteLine("\nEnter desired amount of opponents (Up to 9).");
+        while (!Int32.TryParse(Console.ReadLine(), out playerCount) || playerCount > 9)
         {
-            Console.WriteLine("\nEnter desired amount of opponents.");
-
-            if (Int32.TryParse(Console.ReadLine(), out playerCount))
-            {
-                Console.WriteLine("\nEnter desired amount of human oponnents");
-                if (Int32.TryParse(Console.ReadLine(), out humanCount) && humanCount <= playerCount)
-                {
-                    Console.WriteLine("\nEnter desired starting balance");
-                    if (Int32.TryParse(Console.ReadLine(), out startingBalance))
-                    {
-                        Guid gameId = Guid.NewGuid();
-
-                        switch (gameChosen)
-                        {
-                            case "Blackjack":
-                                blackjackGameManager = new BlackjackGameManager(gameId, playerCount, humanCount, startingBalance);
-                                break;
-                            default: throw new Exception("There is no possible way you couldve made it here...get out of my program.");
-                        }
-
-                        gameReady = true;
-                        PlayGame();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Please enter valid starting balance.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Please enter valid human count.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Please enter a valid number.");
-            }
+            Console.WriteLine("Please enter a valid number for player count up to 9 players.");
         }
+
+        Console.WriteLine("\nEnter desired amount of human opponents.");
+        while (!Int32.TryParse(Console.ReadLine(), out humanCount) || humanCount > playerCount)
+        {
+            Console.WriteLine($"Please enter a valid number for human count (must be less than or equal to {playerCount}).");
+        }
+
+        Console.WriteLine("\nEnter desired starting balance no more than 10000.");
+        while (!Int32.TryParse(Console.ReadLine(), out startingBalance) || startingBalance > 10000)
+        {
+            Console.WriteLine("Please enter a valid starting balance (no more than 10000).");
+        }
+
+        Guid gameId = Guid.NewGuid();
+
+        switch (gameChosen)
+        {
+            case "Blackjack":
+                blackjackGameManager = new BlackjackGameManager(gameId, playerCount, humanCount, startingBalance);
+                break;
+            default:
+                throw new Exception("There is no possible way you could've made it here... get out of my program.");
+        }
+
+        gameReady = true;
+        PlayGame();
     }
     else
     {
-        Console.WriteLine("Please enter a valid game number");
+        Console.WriteLine("Please enter a valid game number.");
     }
-
-    
 }
 
 void PlayGame()
@@ -111,13 +101,13 @@ void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
             {
                 while (blackjackHand.Action == HandActions.Thinking)
                 {
-                    DisplayDialogue(blackjackPlayer);
+                    DisplayDialogue(blackjackPlayer, blackjackHand);
                 }
             }
         }
         else
         {
-            DisplayDialogue(blackjackPlayer);
+            DisplayDialogue(blackjackPlayer, blackjackPlayer.Hands[0]);
         }
 
         int choice;
@@ -126,9 +116,12 @@ void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
     }
 }
 
-void DisplayDialogue(BlackjackPlayer blackjackPlayer)
+void DisplayDialogue(BlackjackPlayer blackjackPlayer, BlackjackHand blackjackHand)
 {
     Console.WriteLine($"\n{blackjackPlayer.Username}");
+    Console.WriteLine($"Your balance is {blackjackPlayer.Balance}");
+    Console.WriteLine($"Your hands hard value is {blackjackHand.HardValue}");
+    Console.WriteLine($"Your hands soft value is {blackjackHand.SoftValue}");
     Console.WriteLine($"Your cards are...\n{GetCards(blackjackPlayer.Hands)}");
     Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}");
 
