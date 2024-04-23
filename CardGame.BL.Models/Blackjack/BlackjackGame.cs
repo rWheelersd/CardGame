@@ -10,12 +10,10 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
     public readonly int maxBet;
     public BlackjackCard dealerCard { get; set; }
 
-    public BlackjackGame(Guid gameId, int numberOfPlayers, int humanPlayers, int startingBalance) : base(gameId, numberOfPlayers, startingBalance)
+    public BlackjackGame(Guid gameId, int numberOfPlayers, int humanPlayers, int startingBalance) : base(gameId, numberOfPlayers, humanPlayers, startingBalance)
     {
         minBet = (startingBalance * 5) / 100;
         maxBet = (startingBalance * 15) / 100;
-        SetHumans(humanPlayers);
-        AddDealer();
     }
 
     public void StartRound()

@@ -15,9 +15,11 @@ namespace CardGame.BL.Models.BaseModels
         public Deck<TCard, THand> GameDeck { get; set; }
         public List<TPlayer> Players { get; set; }
 
-        public Game(Guid gameId, int numberOfPlayers, int startingBalance)
+        public Game(Guid gameId, int numberOfPlayers, int humanPlayers, int startingBalance)
         {
             GameId = gameId;
+            SetHumans(humanPlayers);
+            AddDealer();
             GameDeck = new Deck<TCard, THand>();
             GameDeck.ShuffleDeck();
 

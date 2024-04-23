@@ -36,7 +36,7 @@ namespace UnitTests.BL.Models
             Assert.IsTrue(player.Hands[0] is BlackjackHand);
             Assert.IsTrue(player.Hands[0].Cards[0] is BlackjackCard);
             Assert.IsTrue(player.Balance == 5000);
-            Assert.IsTrue(player.NonHumanName == "Player 1");
+            Assert.IsTrue(player.Username == "Player 1");
         }
 
         [TestMethod]
