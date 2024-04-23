@@ -32,7 +32,7 @@ while (!gameReady)
                 gameChosen = "Blackjack";
                 break;
             default:
-                Console.WriteLine("Please enter a valid game number.");
+                Console.WriteLine("Please enter a valid game number. (Texas Holdem is for demo purposes, not yet and option)");
                 continue; // Ask for game selection again
         }
 
@@ -86,6 +86,7 @@ void PlayGame()
                 PlayPlayerTurn(blackjackPlayer);
             }
         }
+
         blackjackGameManager.PlayAITurn();
         blackjackGameManager.ManagePayouts();
         blackjackGameManager.ResetPlayers();

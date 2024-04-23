@@ -2,6 +2,7 @@
 using CardGame.BL.Models.Interfaces;
 using System.Collections.Generic;
 using static CardGame.BL.Models.Constants.BaseConstants;
+using CardGame.BL.Models.Blackjack;
 
 namespace CardGame.BL.Models.BaseModels
 {
@@ -25,6 +26,22 @@ namespace CardGame.BL.Models.BaseModels
             {
                 Players.Add(new TPlayer() { Balance = startingBalance });
             }
+        }
+
+        public void SetHumans(int humanPlayers)
+        {
+            for (int i = 0; i < humanPlayers; i++)
+            {
+                Players[i].IsHuman = true;
+            }
+        }
+
+        public void AddDealer()
+        {
+            TPlayer dealer = new TPlayer();
+            dealer.IsDealer = true;
+            dealer.Balance = Players[0].Balance * Players.Count;
+            Players.Add(dealer);
         }
     }
 }

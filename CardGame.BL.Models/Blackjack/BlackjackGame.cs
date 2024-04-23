@@ -18,22 +18,6 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
         AddDealer();
     }
 
-    private void SetHumans(int humanPlayers)
-    {
-        for (int i = 0; i < humanPlayers; i++)
-        {
-            Players[i].IsHuman = true;
-        }
-    }
-
-    private void AddDealer()
-    {
-        BlackjackPlayer dealer = new BlackjackPlayer();
-        dealer.IsDealer = true;
-        dealer.Balance = Players[0].Balance * Players.Count;
-        Players.Add(dealer);
-    }
-
     public void StartRound()
     {
         for (int i = 0; i < Players.Count; i++)
