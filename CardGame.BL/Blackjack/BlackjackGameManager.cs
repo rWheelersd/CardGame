@@ -125,17 +125,20 @@ namespace CardGame.BL.BlackJack
                 {
                     foreach (BlackjackHand dealerHand in dealerHands)
                     {
+                        //looping required in case of players with split hands
                         GetPayoutCondition(blackjackHand, dealerHand);
                     }
                 }
 
+                //more handling of the idea that a player may have more than one hand
+                //HOWEVER a player with more than one hand may only win or lose their bet once
                 if(blackjackPlayer.Hands.Any(h => h.WinningHand == true))
                 {
                     if (blackjackPlayer.Hands.Any(h => h.Action == HandActions.FlipBlackjack))
                     {
                         if (dealerHands.Any(h => h.Action == HandActions.FlipBlackjack))
                         {
-
+                            //if there is a push, not money is won or lost
                         }
                         else
                         {
@@ -156,6 +159,7 @@ namespace CardGame.BL.BlackJack
 
         private void GetPayoutCondition(BlackjackHand playerHand, BlackjackHand dealerHand)
         {
+            //all of this determines if a hand is a winning hand or now
             if (playerHand.Action == HandActions.FlipBlackjack)
             {
                 if (dealerHand.Action != HandActions.FlipBlackjack)
