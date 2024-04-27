@@ -38,41 +38,56 @@ namespace CardGame.BL.BlackJack
 
         public void PlayAITurn()
         {
+            //Cycle through all players in game
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
+                //Operates only on players not human or dealer
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                 {
+                    //collects there bets and incremets counter for event driven UI
                     turnCounter++;
                     BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
+                    //Evlautaes hand for split based on if already evalutaed and hand is a pair. Splits or doesnt based on BlackjackHandManager logic.
                     if (!blackjackPlayer.WasSplitEvaluated && BlackjackHandManager.CheckPair(blackjackPlayer.Hands[0]))
                     {
                         BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hands[0], BlackjackGame.dealerCard);
                         if (blackjackPlayer.Hands[0].Action == HandActions.Split)
                         {
+                            //This will split hands into the list, it will default reset hand action to thinking as its done in blackjackhand constructor
                             BlackjackHandManager.SplitHand(blackjackPlayer.Hands);
                         }
                         blackjackPlayer.WasSplitEvaluated = true;
                     }
 
+                    //Cycles through each hand in the players list of hands in case of split hand
                     foreach (BlackjackHand hand in blackjackPlayer.Hands)
                     {
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
+                            //Gets initial action on thinking status
                             if (hand.Action == HandActions.Thinking)
                             {
                                 BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
                             }
 
+                            //deals card in event BlackjackHandManager logic returns hit
                             if (hand.Action == HandActions.Hit)
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);
                             }
 
-                            if (hand.Action != HandActions.Split && BlackjackHandManager.EvaluateDoubleDown(hand, BlackjackGame.dealerCard))
+                            //deals with double down in event BlackjackHandManager logic returns so
+                            if (BlackjackHandManager.EvaluateDoubleDown(hand, BlackjackGame.dealerCard))
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);
                                 hand.Action = HandActions.DoubleDown;
+                            }
+
+                            else
+                            {
+                                //if BlackjackHandManager logic returns flipbust, flipblackjack or stand, exit the while loop to play the next player
+                                break;
                             }
                         }
                     }
