@@ -44,6 +44,9 @@ namespace CardGame.BL.BlackJack
             BlackjackHand splitHand0 = new BlackjackHand();
             BlackjackHand splitHand1 = new BlackjackHand();
 
+            splitHand0.splitHand = true;
+            splitHand1.splitHand = true;
+
             splitHand0.Cards.Add(hands[0].Cards[0]);
             splitHand1.Cards.Add(hands[0].Cards[1]);
 
@@ -60,7 +63,6 @@ namespace CardGame.BL.BlackJack
             try
             {
                 GetHandValues(blackjackHand);
-                EvaluateHand(blackjackHand);
 
                 if (blackjackHand.Action == HandActions.FlipBust || blackjackHand.Action == HandActions.FlipBlackjack)
                 {
@@ -86,7 +88,6 @@ namespace CardGame.BL.BlackJack
                         else if (blackjackHand.HardValue == 18)
                         {
                             if (dealerCard.CardValue == 2) blackjackHand.Action = HandActions.Stand;
-                            else if (dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) blackjackHand.Action = HandActions.DoubleDown;
                             else if (dealerCard.CardValue == 7 || dealerCard.CardValue == 8) blackjackHand.Action = HandActions.Stand;
                             else blackjackHand.Action = HandActions.Hit;
                         }
@@ -106,6 +107,25 @@ namespace CardGame.BL.BlackJack
                 throw;
             }
         }
+
+        internal static bool EvaluateDoubleDown(BlackjackHand blackjackHand, BlackjackCard dealerCard)
+        {
+            //Check if the hand was split
+            if (!blackjackHand.splitHand)
+            {
+                if ((blackjackHand.HardValue == 9 && dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) ||
+                    (blackjackHand.HardValue == 10 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 9) ||
+                    (blackjackHand.HardValue == 11 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 10))
+                {
+                    //Since no further actions will happens after a double down, final value will be calcuated here
+                    GetHandValues(blackjackHand);
+                    blackjackHand.Action = HandActions.DoubleDown;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         internal static void GetHandValues(BlackjackHand blackjackHand)
         {
             if (blackjackHand.HardValue == 0)
@@ -144,8 +164,9 @@ namespace CardGame.BL.BlackJack
                     blackjackHand.HardValue += blackjackHand.Cards.Last().CardValue;
                 }
             }
-        }
 
+            EvaluateHand(blackjackHand);
+        }
 
         internal static void EvaluateHand(BlackjackHand blackjackHand)
         {
@@ -166,17 +187,6 @@ namespace CardGame.BL.BlackJack
             {
                 blackjackHand.Action = HandActions.FlipBust;
             }
-        }
-
-        internal static bool EvaluateDoubleDown(BlackjackHand blackjackHand, BlackjackCard dealerCard)
-        {
-            if ((blackjackHand.HardValue == 9 && dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6) ||
-                (blackjackHand.HardValue == 10 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 9) ||
-                (blackjackHand.HardValue == 11 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 10))
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

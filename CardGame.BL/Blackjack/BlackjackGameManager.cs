@@ -44,11 +44,11 @@ namespace CardGame.BL.BlackJack
                 //Operates only on players not human or dealer
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                 {
-                    //collects there bets and incremets counter for event driven UI
+                    //Collects there bets and incremets counter for event driven UI
                     turnCounter++;
                     BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
-                    //Evlautaes hand for split based on if already evalutaed and hand is a pair. Splits or doesnt based on BlackjackHandManager logic.
+                    //Evaluates hand for split based on if already evalutaed and hand is a pair. Splits or doesnt based on BlackjackHandManager logic.
                     if (!blackjackPlayer.WasSplitEvaluated && BlackjackHandManager.CheckPair(blackjackPlayer.Hands[0]))
                     {
                         BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hands[0], BlackjackGame.dealerCard);
@@ -65,28 +65,29 @@ namespace CardGame.BL.BlackJack
                     {
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
+                            //Deals with double down in event BlackjackHandManager logic returns it
+                            if (BlackjackHandManager.EvaluateDoubleDown(hand, BlackjackGame.dealerCard))
+                            {
+                                BlackjackGame.GameDeck.DealCard(hand);
+                                break;
+                            }
+
                             //Gets initial action on thinking status
                             if (hand.Action == HandActions.Thinking)
                             {
                                 BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
                             }
 
-                            //deals card in event BlackjackHandManager logic returns hit
+                            //Deals card in event BlackjackHandManager logic returns hit, then gets the next action
                             if (hand.Action == HandActions.Hit)
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);
-                            }
-
-                            //deals with double down in event BlackjackHandManager logic returns so
-                            if (BlackjackHandManager.EvaluateDoubleDown(hand, BlackjackGame.dealerCard))
-                            {
-                                BlackjackGame.GameDeck.DealCard(hand);
-                                hand.Action = HandActions.DoubleDown;
+                                BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
                             }
 
                             else
                             {
-                                //if BlackjackHandManager logic returns flipbust, flipblackjack or stand, exit the while loop to play the next player
+                                //If BlackjackHandManager logic returns flipbust, flipblackjack or stand, exit the while loop to play the next player
                                 break;
                             }
                         }
@@ -97,6 +98,7 @@ namespace CardGame.BL.BlackJack
 
         public void ResetPlayers()
         {
+            //Resets each each property that needs to be reset prior to starting a new round
             for (int i = BlackjackGame.Players.Count - 1; i >= 0; i--)
             {
                 if (BlackjackGame.Players[i].Balance <= 0)
@@ -106,6 +108,7 @@ namespace CardGame.BL.BlackJack
                 else
                 {
                     BlackjackGame.Players[i].Status = PlayerStatus.Active;
+                    BlackjackGame.Players[i].WasSplitEvaluated = false;
                     BlackjackGame.Players[i].Hands.Clear();
                     BlackjackGame.Players[i].Bet = 0;
                 }
@@ -122,24 +125,43 @@ namespace CardGame.BL.BlackJack
                 {
                     foreach (BlackjackHand dealerHand in dealerHands)
                     {
-                        CompareHands(blackjackPlayer, blackjackHand, dealerHand);
+                        GetPayoutCondition(blackjackHand, dealerHand);
                     }
+                }
+
+                if(blackjackPlayer.Hands.Any(h => h.WinningHand == true))
+                {
+                    if (blackjackPlayer.Hands.Any(h => h.Action == HandActions.FlipBlackjack))
+                    {
+                        if (dealerHands.Any(h => h.Action == HandActions.FlipBlackjack))
+                        {
+
+                        }
+                        else
+                        {
+                            blackjackPlayer.Balance += blackjackPlayer.Bet + (blackjackPlayer.Bet / 2);
+                        }
+                    }
+                    else
+                    {
+                        blackjackPlayer.Balance += blackjackPlayer.Bet * 2;
+                    }
+                }
+                else
+                {
+                    blackjackPlayer.Balance -= blackjackPlayer.Bet;
                 }
             }
         }
 
-        private void CompareHands(BlackjackPlayer blackjackPlayer, BlackjackHand playerHand, BlackjackHand dealerHand)
+        private void GetPayoutCondition(BlackjackHand playerHand, BlackjackHand dealerHand)
         {
             if (playerHand.Action == HandActions.FlipBlackjack)
             {
                 if (dealerHand.Action != HandActions.FlipBlackjack)
                 {
-                    blackjackPlayer.Balance += blackjackPlayer.Bet + (blackjackPlayer.Bet / 2);
+                    playerHand.WinningHand = true;
                 }
-            }
-            else if (dealerHand.Action == HandActions.FlipBlackjack)
-            {
-                
             }
             else
             {
@@ -150,16 +172,16 @@ namespace CardGame.BL.BlackJack
                 {
                     if ((dealerValue > 21) || (playerValue > dealerValue))
                     {
-                        blackjackPlayer.Balance += blackjackPlayer.Bet * 2;
+                        playerHand.WinningHand = true;
                     }
                     else if (playerValue < dealerValue)
                     {
-                        blackjackPlayer.Balance -= blackjackPlayer.Bet;
+                        playerHand.WinningHand = false;
                     }
                 }
                 else
                 {
-                    blackjackPlayer.Balance -= blackjackPlayer.Bet;
+                    playerHand.WinningHand = false;
                 }
             }
         }
