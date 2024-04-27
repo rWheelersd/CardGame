@@ -2,99 +2,109 @@
 using CardGame.BL.Models.Interfaces;
 using static CardGame.BL.Models.Constants.BaseConstants;
 
-public class Deck<TCard, THand> 
-    where TCard : Card 
-    where THand : IHand<TCard>, new()
+namespace CardGame.BL.Models.BaseModels
 {
-    private readonly Random _rng;
-    public List<TCard> Cards { get; set; }
-    public List<TCard> BurntCards { get; set; }
+    /*
+     * Deck Class
+     * Deck requires generic parameter constraints as every gametype can have a cards/hands unique to itself.
+     * 
+     */
 
-    public Deck()
+    public class Deck<TCard, THand>
+    where TCard : Card
+    where THand : IHand<TCard>, new()
     {
-        _rng = new Random();
-        Cards = new List<TCard>();
-        BurntCards = new List<TCard>();
-        BuildDeck();
-    }
+        private readonly Random _rng;
+        public List<TCard> Cards { get; set; }
+        public List<TCard> BurntCards { get; set; }
 
-    public void BuildDeck()
-    {
-        try
+        public Deck()
         {
-            foreach (Enum suit in Enum.GetValues(typeof(Suit)))
+            _rng = new Random();
+            Cards = new List<TCard>();
+            BurntCards = new List<TCard>();
+            BuildDeck();
+        }
+
+        public void BuildDeck()
+        {
+            try
             {
-                foreach (Enum rank in Enum.GetValues(typeof(Rank)))
+                foreach (Enum suit in Enum.GetValues(typeof(Suit)))
                 {
-                    Cards.Add((TCard)Activator.CreateInstance(typeof(TCard), rank, suit));
+                    foreach (Enum rank in Enum.GetValues(typeof(Rank)))
+                    {
+                        Cards.Add((TCard)Activator.CreateInstance(typeof(TCard), rank, suit));
+                    }
                 }
             }
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public void ShuffleDeck()
-    {
-        try
-        {
-            int n = Cards.Count;
-            while (n > 1)
+            catch (Exception)
             {
-                n--;
-                int i = _rng.Next(n + 1);
-                TCard card = Cards[i];
-                Cards[i] = Cards[n];
-                Cards[n] = card;
+                throw;
             }
         }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
 
-    public void DealCard(THand hand)
-    {
-        try
+        public void ShuffleDeck()
         {
-            var card = Cards.First();
-            hand.Cards.Add(card);
-            BurntCards.Add(card);
-            Cards.RemoveAt(0);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public THand DealCards(int handSize)
-    {
-        try
-        {
-            var hand = new THand();
-            for (int i = 0; i < handSize; i++)
+            try
             {
-                if (Cards.Any())
+                int n = Cards.Count;
+                while (n > 1)
                 {
-                    var card = Cards.First();
-                    hand.Cards.Add(card);
-                    BurntCards.Add(card);
-                    Cards.RemoveAt(0);
-                }
-                else
-                {
-                    break;
+                    n--;
+                    int i = _rng.Next(n + 1);
+                    TCard card = Cards[i];
+                    Cards[i] = Cards[n];
+                    Cards[n] = card;
                 }
             }
-            return hand;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        catch (Exception)
+
+        public void DealCard(THand hand)
         {
-            throw;
+            try
+            {
+                var card = Cards.First();
+                hand.Cards.Add(card);
+                BurntCards.Add(card);
+                Cards.RemoveAt(0);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public THand DealCards(int handSize)
+        {
+            try
+            {
+                var hand = new THand();
+                for (int i = 0; i < handSize; i++)
+                {
+                    if (Cards.Any())
+                    {
+                        var card = Cards.First();
+                        hand.Cards.Add(card);
+                        BurntCards.Add(card);
+                        Cards.RemoveAt(0);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return hand;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
+

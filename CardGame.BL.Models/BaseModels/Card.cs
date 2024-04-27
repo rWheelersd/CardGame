@@ -10,6 +10,12 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.Models.BaseModels
 {
+    /*
+     * Card class
+     * Each card is assigned its rank, suit, and name on construction.
+     * Card class is intended to be inhereted as specific games can have
+     * card actions or properties unique to a game type.
+     */
     public class Card
     {
         public string CardName { get; set; }
