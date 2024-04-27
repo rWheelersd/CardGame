@@ -17,6 +17,7 @@ namespace CardGame.BL.Models.Blackjack
         public int CardValue { get; private set; }
         public BlackjackCard(Rank rank, Suit suit) : base(rank, suit)
         {
+            //On instantiation every card is assigned value
             SetValue(this.CardRank);
         }
 

@@ -31,7 +31,7 @@ namespace CardGame.BL.Models.BaseModels
             Players = new List<TPlayer>();
             for (int i = 1; i <= numberOfPlayers; i++)
             {
-                Players.Add(new TPlayer() { Balance = startingBalance });
+                Players.Add((TPlayer)Activator.CreateInstance(typeof(TPlayer), i, startingBalance));
             }
 
             SetHumans(humanPlayers);
