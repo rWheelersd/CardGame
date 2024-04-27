@@ -19,7 +19,7 @@ namespace CardGame.BL.BlackJack
         {
             return hand.Cards[0].CardRank == hand.Cards[1].CardRank;
         }
-        public static void EvaluateSplit(BlackjackHand hand, BlackjackCard dealerCard)
+        internal static void EvaluateSplit(BlackjackHand hand, BlackjackCard dealerCard)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace CardGame.BL.BlackJack
 
 
 
-        public static void GetAction(BlackjackHand blackjackHand, BlackjackCard dealerCard)
+        internal static void GetAction(BlackjackHand blackjackHand, BlackjackCard dealerCard)
         {
             try
             {
