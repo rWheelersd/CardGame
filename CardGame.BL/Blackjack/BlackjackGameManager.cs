@@ -25,33 +25,12 @@ namespace CardGame.BL.BlackJack
             switch (option)
             {
                 case 1: //HIT
-                    BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
-                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
-                    BlackjackHandManager.EvaluateHand(blackjackHands[0]);
-
-                    if (blackjackHands[0].Action == HandActions.FlipBust || blackjackHands[0].Action == HandActions.FlipBlackjack)
-                    {
-                        return PlayerStatus.Inactive;
-                    }
-                    else
-                    {
-                        blackjackHands[0].Action = HandActions.Thinking;
-                        return PlayerStatus.Active;
-                    }
 
                 case 2: //Stand
-                    return PlayerStatus.Inactive;
 
                 case 3: //Double Down
-                    BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
-                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
-                    BlackjackHandManager.EvaluateHand(blackjackHands[0]);
-                    return PlayerStatus.Inactive;
 
                 case 4: //Split
-                    BlackjackHandManager.SplitHand(blackjackHands);
-                    blackjackHands[0].Action = HandActions.Split;
-                    return PlayerStatus.Active;
 
                 default: throw new ArgumentOutOfRangeException(nameof(option));
             }
@@ -61,13 +40,12 @@ namespace CardGame.BL.BlackJack
         {
             foreach (BlackjackPlayer blackjackPlayer in BlackjackGame.Players)
             {
-                turnCounter++;
-
-                BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
-
                 if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                 {
-                    if (!blackjackPlayer.WasSplitEvaluated)
+                    turnCounter++;
+                    BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
+
+                    if (!blackjackPlayer.WasSplitEvaluated && BlackjackHandManager.CheckPair(blackjackPlayer.Hands[0]))
                     {
                         BlackjackHandManager.EvaluateSplit(blackjackPlayer.Hands[0], BlackjackGame.dealerCard);
                         if (blackjackPlayer.Hands[0].Action == HandActions.Split)
@@ -81,6 +59,11 @@ namespace CardGame.BL.BlackJack
                     {
                         while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
                         {
+                            if (hand.Action == HandActions.Thinking)
+                            {
+                                BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
+                            }
+
                             if (hand.Action == HandActions.Hit)
                             {
                                 BlackjackGame.GameDeck.DealCard(hand);

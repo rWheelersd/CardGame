@@ -23,7 +23,7 @@ while (!gameReady)
         Console.WriteLine($"{i}. {gameType.ToString()}");
         i++;
     }
-
+    //112
     if (Int32.TryParse(Console.ReadLine(), out selectedGame))
     {
         switch (selectedGame)
@@ -83,6 +83,31 @@ void PlayGame()
         {
             if (blackjackPlayer.IsHuman)
             {
+                if (blackjackPlayer.Bet == 0)
+                {
+                    int playerBet = 0;
+                    Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
+                    while (!Int32.TryParse(Console.ReadLine(), out playerBet) 
+                           || playerBet < blackjackGameManager.BlackjackGame.minBet
+                           || playerBet > blackjackGameManager.BlackjackGame.maxBet
+                           || playerBet > blackjackPlayer.Balance)
+                    {
+                        if (playerBet < blackjackGameManager.BlackjackGame.minBet)
+                        {
+                            Console.WriteLine("Bet cannot be smaller than minimum allowed bet, try again...");
+                        }
+                        if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
+                        {
+                            Console.WriteLine("Bet cannot be larger than maximum allowed bet, try again...");
+                        }
+                        if (playerBet > blackjackPlayer.Balance)
+                        {
+                            Console.WriteLine("Bet cannot exceed your balance, try again...");
+                        }
+                        Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
+                    }
+                    blackjackPlayer.Bet = playerBet;
+                }
                 PlayPlayerTurn(blackjackPlayer);
             }
         }
@@ -121,8 +146,6 @@ void DisplayDialogue(BlackjackPlayer blackjackPlayer, BlackjackHand blackjackHan
 {
     Console.WriteLine($"\n{blackjackPlayer.Username}");
     Console.WriteLine($"Your balance is {blackjackPlayer.Balance}");
-    Console.WriteLine($"Your hands hard value is {blackjackHand.HardValue}");
-    Console.WriteLine($"Your hands soft value is {blackjackHand.SoftValue}");
     Console.WriteLine($"Your cards are...\n{GetCards(blackjackPlayer.Hands)}");
     Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}");
 
@@ -154,4 +177,9 @@ string GetCards(List<BlackjackHand> hands)
     {
     }
     return cardNames;
+}
+
+void GetPlayerResults(BlackjackPlayer player)
+{
+    
 }

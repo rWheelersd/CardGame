@@ -18,8 +18,6 @@ namespace CardGame.BL.Models.BaseModels
         public Game(Guid gameId, int numberOfPlayers, int humanPlayers, int startingBalance)
         {
             GameId = gameId;
-            SetHumans(humanPlayers);
-            AddDealer();
             GameDeck = new Deck<TCard, THand>();
             GameDeck.ShuffleDeck();
 
@@ -28,6 +26,9 @@ namespace CardGame.BL.Models.BaseModels
             {
                 Players.Add(new TPlayer() { Balance = startingBalance });
             }
+
+            SetHumans(humanPlayers);
+            AddDealer();
         }
 
         public void SetHumans(int humanPlayers)
