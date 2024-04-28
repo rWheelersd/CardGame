@@ -23,7 +23,6 @@ while (!gameReady)
         Console.WriteLine($"{i}. {gameType.ToString()}");
         i++;
     }
-    //112
     if (Int32.TryParse(Console.ReadLine(), out selectedGame))
     {
         switch (selectedGame)
@@ -33,7 +32,7 @@ while (!gameReady)
                 break;
             default:
                 Console.WriteLine("Please enter a valid game number. (Texas Holdem is for demo purposes, not yet and option)");
-                continue; // Ask for game selection again
+                continue;
         }
 
         Console.WriteLine("\nEnter desired amount of opponents (Up to 9).");
@@ -87,28 +86,7 @@ void PlayGame()
                 {
                     if (blackjackPlayer.Bet == 0)
                     {
-                        int playerBet = 0;
-                        Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
-                        while (!Int32.TryParse(Console.ReadLine(), out playerBet)
-                               || playerBet < blackjackGameManager.BlackjackGame.minBet
-                               || playerBet > blackjackGameManager.BlackjackGame.maxBet
-                               || playerBet > blackjackPlayer.Balance)
-                        {
-                            if (playerBet < blackjackGameManager.BlackjackGame.minBet)
-                            {
-                                Console.WriteLine("Bet cannot be smaller than minimum allowed bet, try again...");
-                            }
-                            if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
-                            {
-                                Console.WriteLine("Bet cannot be larger than maximum allowed bet, try again...");
-                            }
-                            if (playerBet > blackjackPlayer.Balance)
-                            {
-                                Console.WriteLine("Bet cannot exceed your balance, try again...");
-                            }
-                            Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
-                        }
-                        blackjackPlayer.Bet = playerBet;
+                        blackjackPlayer.Bet = DisplayBettingDialouge(blackjackPlayer.Username, blackjackPlayer.Balance);
                     }
                     PlayPlayerTurn(blackjackPlayer);
                 }
@@ -133,61 +111,126 @@ void PlayGame()
 }
 void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
 {
+    int choice = 0;
     while (blackjackPlayer.Status == PlayerStatus.Active)
     {
+        DisplayOverViewDialogue(blackjackPlayer);
         if (blackjackPlayer.Hands.Count == 2)
         {
             foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
             {
-                while (blackjackHand.Action == HandActions.Thinking)
+                while (HandConditionActive(blackjackHand.Action))
                 {
-                    DisplayDialogue(blackjackPlayer, blackjackHand);
+                    choice = DisplayOptionsDialogue(blackjackPlayer);
                 }
             }
         }
-        else
+        else if(blackjackPlayer.Hands.Count == 1)
         {
-            DisplayDialogue(blackjackPlayer, blackjackPlayer.Hands[0]);
+
+            choice = DisplayOptionsDialogue(blackjackPlayer);
         }
 
-        int choice;
-        Int32.TryParse(Console.ReadLine(), out choice);
         blackjackPlayer.Status = blackjackGameManager.PlayerTurn(choice, blackjackPlayer.Hands);
     }
 }
 
-void DisplayDialogue(BlackjackPlayer blackjackPlayer, BlackjackHand blackjackHand)
+bool HandConditionActive(HandActions action)
+{
+    return action == HandActions.FlipBlackjack || action == HandActions.FlipBust || action == HandActions.Stand;
+}
+
+int DisplayBettingDialouge(string username, int balance)
+{
+    int playerBet;
+
+    Console.WriteLine($"\n{username}");
+    Console.WriteLine($"Your balance is {balance}");
+    Console.WriteLine($"Enter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}).");
+
+    while (true)
+    {
+        if (!Int32.TryParse(Console.ReadLine(), out playerBet))
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+            continue;
+        }
+
+        if (playerBet < blackjackGameManager.BlackjackGame.minBet)
+        {
+            Console.WriteLine("Bet cannot be smaller than minimum allowed bet.");
+        }
+        else if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
+        {
+            Console.WriteLine("Bet cannot be larger than maximum allowed bet.");
+        }
+        else if (playerBet > balance)
+        {
+            Console.WriteLine("Bet cannot exceed your balance.");
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return playerBet;
+}
+
+void DisplayOverViewDialogue(BlackjackPlayer blackjackPlayer)
 {
     Console.WriteLine($"\n{blackjackPlayer.Username}");
-    Console.WriteLine($"Your balance is {blackjackPlayer.Balance}");
     Console.WriteLine($"Your cards are...\n{GetCards(blackjackPlayer.Hands)}");
-    Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}");
+    Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}\n");
+}
+
+int DisplayOptionsDialogue(BlackjackPlayer blackjackPlayer)
+{
+    bool isValidInput = false;
+    int selectedOption = 0;
+    int maxOption = 2;
 
     if (!blackjackPlayer.WasSplitEvaluated)
     {
         blackjackPlayer.WasSplitEvaluated = true;
-        Console.WriteLine(BlackjackHandManager.CheckPair(blackjackPlayer.Hands[0]) ?
-            $"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN, (4)SPLIT"
-            :
-            $"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN");
-    }
-    else
-    {
-        if (blackjackHand.splitHand)
+        if (BlackjackHandManager.CheckPair(blackjackPlayer.Hands[0]))
         {
-            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND");
-        }
-        else if (!blackjackHand.splitHand && blackjackHand.Cards.Count == 2)
-        {
-            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN");
+            Console.WriteLine("Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN, (4)SPLIT");
+            maxOption = 4;
         }
         else
         {
-            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND");
+            Console.WriteLine("Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN");
+            maxOption = 3;
         }
     }
-}
+    else
+    {
+        if (blackjackPlayer.Hands.Count == 1 && blackjackPlayer.Hands[0].Cards.Count > 2)
+        {
+            Console.WriteLine("Do you wish to (1)HIT, (2)STAND");
+            maxOption = 2;
+        }
+    }
 
+    while (!isValidInput)
+    {
+        Console.Write("Enter your choice: ");
+        string input = Console.ReadLine();
+
+        if (int.TryParse(input, out selectedOption))
+        {
+            isValidInput = selectedOption >= 1 && selectedOption <= maxOption;
+        }
+
+        if (!isValidInput)
+        {
+            Console.WriteLine("Invalid input. Please enter a valid option.");
+        }
+    }
+
+    return selectedOption;
+}
 string GetCards(List<BlackjackHand> hands)
 {
     string cardNames = string.Empty; ;
@@ -202,9 +245,4 @@ string GetCards(List<BlackjackHand> hands)
     {
     }
     return cardNames;
-}
-
-void GetPlayerResults(BlackjackPlayer player)
-{
-    
 }
