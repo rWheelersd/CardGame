@@ -61,28 +61,28 @@ namespace CardGame.BL.BlackJack
                     }
 
                     //Cycles through each hand in the players list of hands in case of split hand
-                    foreach (BlackjackHand hand in blackjackPlayer.Hands)
+                    foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
                     {
-                        while (hand.Action == HandActions.Thinking || hand.Action == HandActions.Hit)
+                        while (blackjackHand.Action == HandActions.Thinking || blackjackHand.Action == HandActions.Hit)
                         {
                             //Deals with double down in event BlackjackHandManager logic returns it
-                            if (BlackjackHandManager.EvaluateDoubleDown(hand, BlackjackGame.dealerCard))
+                            if (BlackjackHandManager.EvaluateDoubleDown(blackjackHand, BlackjackGame.dealerCard))
                             {
-                                BlackjackGame.GameDeck.DealCard(hand);
+                                BlackjackGame.GameDeck.DealCard(blackjackHand);
                                 break;
                             }
 
                             //Gets initial action on thinking status
-                            if (hand.Action == HandActions.Thinking)
+                            if (blackjackHand.Action == HandActions.Thinking)
                             {
-                                BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
+                                BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
                             }
 
                             //Deals card in event BlackjackHandManager logic returns hit, then gets the next action
-                            if (hand.Action == HandActions.Hit)
+                            if (blackjackHand.Action == HandActions.Hit)
                             {
-                                BlackjackGame.GameDeck.DealCard(hand);
-                                BlackjackHandManager.GetAction(hand, BlackjackGame.dealerCard);
+                                BlackjackGame.GameDeck.DealCard(blackjackHand);
+                                BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
                             }
 
                             else
@@ -93,10 +93,33 @@ namespace CardGame.BL.BlackJack
                         }
                     }
                 }
+                else if(!blackjackPlayer.IsHuman && blackjackPlayer.IsDealer)
+                {
+                    while (blackjackPlayer.Hands[0].Action == HandActions.Thinking || blackjackPlayer.Hands[0].Action == HandActions.Hit)
+                    {
+                        //Gets initial action on thinking status
+                        if (blackjackPlayer.Hands[0].Action == HandActions.Thinking)
+                        {
+                            BlackjackHandManager.HandleDealer(blackjackPlayer.Hands[0]);
+                        }
+
+                        //Deals card in event BlackjackHandManager logic returns hit, then gets the next action
+                        if (blackjackPlayer.Hands[0].Action == HandActions.Hit)
+                        {
+                            BlackjackGame.GameDeck.DealCard(blackjackPlayer.Hands[0]);
+                            BlackjackHandManager.HandleDealer(blackjackPlayer.Hands[0]);
+                        }
+
+                        else
+                        {
+                            //If BlackjackHandManager logic returns flipbust, flipblackjack or stand, exit the while loop to play the next player
+                            break;
+                        }
+                    }
+                }
             }
         }
-
-        public void ResetPlayers()
+        public void ResetGame()
         {
             //Resets each each property that needs to be reset prior to starting a new round
             for (int i = BlackjackGame.Players.Count - 1; i >= 0; i--)
@@ -110,9 +133,11 @@ namespace CardGame.BL.BlackJack
                     BlackjackGame.Players[i].Status = PlayerStatus.Active;
                     BlackjackGame.Players[i].WasSplitEvaluated = false;
                     BlackjackGame.Players[i].Hands.Clear();
+                    BlackjackGame.Players[i].Hands = new List<BlackjackHand>();
                     BlackjackGame.Players[i].Bet = 0;
                 }
             }
+            BlackjackGame.GameDeck.ResetDeck();
         }
 
         public void ManagePayouts()
@@ -125,20 +150,20 @@ namespace CardGame.BL.BlackJack
                 {
                     foreach (BlackjackHand dealerHand in dealerHands)
                     {
-                        //looping required in case of players with split hands
+                        //Looping required in case of players with split hands
                         GetPayoutCondition(blackjackHand, dealerHand);
                     }
                 }
 
-                //more handling of the idea that a player may have more than one hand
-                //HOWEVER a player with more than one hand may only win or lose their bet once
-                if(blackjackPlayer.Hands.Any(h => h.WinningHand == true))
+                //More handling of the idea that a player may have more than one hand
+                //because a player with more than one hand may only win or lose their bet once
+                if (blackjackPlayer.Hands.Any(h => h.WinningHand == true))
                 {
                     if (blackjackPlayer.Hands.Any(h => h.Action == HandActions.FlipBlackjack))
                     {
                         if (dealerHands.Any(h => h.Action == HandActions.FlipBlackjack))
                         {
-                            //if there is a push, not money is won or lost
+                            //If there is a push, not money is won or lost
                         }
                         else
                         {
@@ -159,7 +184,7 @@ namespace CardGame.BL.BlackJack
 
         private void GetPayoutCondition(BlackjackHand playerHand, BlackjackHand dealerHand)
         {
-            //all of this determines if a hand is a winning hand or now
+            //All of this determines if a hand is a winning hand or now
             if (playerHand.Action == HandActions.FlipBlackjack)
             {
                 if (dealerHand.Action != HandActions.FlipBlackjack)

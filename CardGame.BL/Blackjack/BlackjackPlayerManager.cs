@@ -36,7 +36,7 @@ namespace CardGame.BL.BlackJack
             }
         }
 
-        public static void GetPlayerResults(List<BlackjackPlayer> blackjackPlayers)
+        public static List<string> GetPlayerResults(List<BlackjackPlayer> blackjackPlayers)
         {
             List<string> results = new List<string>();
 
@@ -68,6 +68,8 @@ namespace CardGame.BL.BlackJack
                     handCount++;
                 }
             }
+
+            return results;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Interfaces;
+using System.Collections.Generic;
 using static CardGame.BL.Models.Constants.BaseConstants;
 
 namespace CardGame.BL.Models.BaseModels
@@ -24,9 +25,10 @@ namespace CardGame.BL.Models.BaseModels
             Cards = new List<TCard>();
             BurntCards = new List<TCard>();
             BuildDeck();
+            ShuffleCards(Cards);
         }
 
-        public void BuildDeck()
+        private void BuildDeck()
         {
             try
             {
@@ -46,7 +48,7 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        public void ShuffleDeck()
+        private void ShuffleCards(List<TCard> cards)
         {
             try
             {
@@ -79,6 +81,10 @@ namespace CardGame.BL.Models.BaseModels
                 //Adds the first card of the deck to the hand passed in
                 //Adds it to the burnt pile
                 //Removes that card from the deck
+                if (Cards.Count <= 0)
+                {
+                    ResetDeck();
+                }
                 var card = Cards.First();
                 hand.Cards.Add(card);
                 BurntCards.Add(card);
@@ -94,6 +100,11 @@ namespace CardGame.BL.Models.BaseModels
         {
             try
             {
+                if (Cards.Count <= 0)
+                {
+                    ResetDeck();
+                }
+
                 //Deals a hand given the hand size, doing exactly what DealCard does in interation
                 var hand = new THand();
                 for (int i = 0; i < handSize; i++)
@@ -111,6 +122,20 @@ namespace CardGame.BL.Models.BaseModels
                     }
                 }
                 return hand;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void ResetDeck()
+        {
+            try
+            {
+                ShuffleCards(BurntCards);
+                Cards.AddRange(BurntCards);
+                BurntCards.Clear();
             }
             catch (Exception)
             {

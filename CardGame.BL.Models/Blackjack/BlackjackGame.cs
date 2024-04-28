@@ -28,7 +28,15 @@ public class BlackjackGame : Game<BlackjackCard, BlackjackHand, BlackjackPlayer>
             Players[i].Hands.Add(GameDeck.DealCards(2));
             Players[i].Hands[0].Cards[0].IsVisible = true;
             //Temporary name handling, change when implementing signalR and DB
-            Players[i].Username = $"Player {i}";
+            if (Players[i].IsDealer)
+            {
+                Players[i].Username = $"Dealer";
+            }
+            else
+            {
+
+                Players[i].Username = $"Player {i}";
+            }
         }
 
         dealerCard = Players.FirstOrDefault(p => p.IsDealer)

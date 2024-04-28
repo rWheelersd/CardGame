@@ -26,7 +26,6 @@ namespace CardGame.BL.Models.BaseModels
         {
             GameId = gameId;
             GameDeck = new Deck<TCard, THand>();
-            GameDeck.ShuffleDeck();
 
             Players = new List<TPlayer>();
             for (int i = 1; i <= numberOfPlayers; i++)
@@ -50,7 +49,6 @@ namespace CardGame.BL.Models.BaseModels
         {
             TPlayer dealer = new TPlayer();
             dealer.IsDealer = true;
-            dealer.Balance = Players[0].Balance * Players.Count;
             Players.Add(dealer);
         }
     }

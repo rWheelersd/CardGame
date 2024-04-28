@@ -76,45 +76,60 @@ while (!gameReady)
 
 void PlayGame()
 {
-    while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
+    try
     {
-        blackjackGameManager.BlackjackGame.StartRound();
-        foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
+        while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
         {
-            if (blackjackPlayer.IsHuman)
+            blackjackGameManager.BlackjackGame.StartRound();
+            foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
             {
-                if (blackjackPlayer.Bet == 0)
+                if (blackjackPlayer.IsHuman)
                 {
-                    int playerBet = 0;
-                    Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
-                    while (!Int32.TryParse(Console.ReadLine(), out playerBet) 
-                           || playerBet < blackjackGameManager.BlackjackGame.minBet
-                           || playerBet > blackjackGameManager.BlackjackGame.maxBet
-                           || playerBet > blackjackPlayer.Balance)
+                    if (blackjackPlayer.Bet == 0)
                     {
-                        if (playerBet < blackjackGameManager.BlackjackGame.minBet)
-                        {
-                            Console.WriteLine("Bet cannot be smaller than minimum allowed bet, try again...");
-                        }
-                        if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
-                        {
-                            Console.WriteLine("Bet cannot be larger than maximum allowed bet, try again...");
-                        }
-                        if (playerBet > blackjackPlayer.Balance)
-                        {
-                            Console.WriteLine("Bet cannot exceed your balance, try again...");
-                        }
+                        int playerBet = 0;
                         Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
+                        while (!Int32.TryParse(Console.ReadLine(), out playerBet)
+                               || playerBet < blackjackGameManager.BlackjackGame.minBet
+                               || playerBet > blackjackGameManager.BlackjackGame.maxBet
+                               || playerBet > blackjackPlayer.Balance)
+                        {
+                            if (playerBet < blackjackGameManager.BlackjackGame.minBet)
+                            {
+                                Console.WriteLine("Bet cannot be smaller than minimum allowed bet, try again...");
+                            }
+                            if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
+                            {
+                                Console.WriteLine("Bet cannot be larger than maximum allowed bet, try again...");
+                            }
+                            if (playerBet > blackjackPlayer.Balance)
+                            {
+                                Console.WriteLine("Bet cannot exceed your balance, try again...");
+                            }
+                            Console.WriteLine($"\nEnter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}.");
+                        }
+                        blackjackPlayer.Bet = playerBet;
                     }
-                    blackjackPlayer.Bet = playerBet;
+                    PlayPlayerTurn(blackjackPlayer);
                 }
-                PlayPlayerTurn(blackjackPlayer);
             }
-        }
+            blackjackGameManager.PlayAITurn();
+            blackjackGameManager.ManagePayouts();
 
-        blackjackGameManager.PlayAITurn();
-        blackjackGameManager.ManagePayouts();
-        blackjackGameManager.ResetPlayers();
+            List<string> results = BlackjackPlayerManager.GetPlayerResults(blackjackGameManager.BlackjackGame.Players);
+
+            foreach (string result in results)
+            {
+                Console.WriteLine(result);
+            }
+
+            blackjackGameManager.ResetGame();
+        }
+    }
+    catch (Exception ex)
+    {
+
+        throw ex;
     }
 }
 void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
