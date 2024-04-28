@@ -145,6 +145,7 @@ namespace CardGame.BL.BlackJack
 
         internal static bool EvaluateDoubleDown(BlackjackHand blackjackHand, BlackjackCard dealerCard)
         {
+            //Double down conditions
             if ((blackjackHand.HardValue == 9 && dealerCard.CardValue >= 3 && dealerCard.CardValue <= 6)
                     || (blackjackHand.HardValue == 10 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 9)
                     || (blackjackHand.HardValue == 11 && dealerCard.CardValue >= 2 && dealerCard.CardValue <= 10))

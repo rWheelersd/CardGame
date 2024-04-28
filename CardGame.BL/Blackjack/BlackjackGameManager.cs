@@ -68,7 +68,9 @@ namespace CardGame.BL.BlackJack
                             //Deals with double down in event BlackjackHandManager logic returns it
                             if (BlackjackHandManager.EvaluateDoubleDown(blackjackHand, BlackjackGame.dealerCard))
                             {
+                                blackjackPlayer.Bet *= 2;
                                 BlackjackGame.GameDeck.DealCard(blackjackHand);
+                                BlackjackHandManager.GetHandValues(blackjackHand);
                                 break;
                             }
 
@@ -163,7 +165,7 @@ namespace CardGame.BL.BlackJack
                     {
                         if (dealerHands.Any(h => h.Action == HandActions.FlipBlackjack))
                         {
-                            //If there is a push, not money is won or lost
+                            //If there is a push, no money is won or lost
                         }
                         else
                         {
@@ -184,7 +186,7 @@ namespace CardGame.BL.BlackJack
 
         private void GetPayoutCondition(BlackjackHand playerHand, BlackjackHand dealerHand)
         {
-            //All of this determines if a hand is a winning hand or now
+            //All of this determines if a hand is a winning hand or not
             if (playerHand.Action == HandActions.FlipBlackjack)
             {
                 if (dealerHand.Action != HandActions.FlipBlackjack)
