@@ -38,9 +38,9 @@ namespace CardGame.BL.BlackJack
             }
         }
 
-        //Creates two hands, splits the cards in the initial hands list into the new hands, clears current list and adds the new hands
         public static void SplitHand(List<BlackjackHand> hands)
         {
+            //Creates two hands, splits the cards in the initial hands list into the new hands, clears current list and adds the new hands
             BlackjackHand splitHand0 = new BlackjackHand();
             BlackjackHand splitHand1 = new BlackjackHand();
 
@@ -109,7 +109,7 @@ namespace CardGame.BL.BlackJack
         internal static void HandleDealer(BlackjackHand blackjackHand)
         {
             GetHandValues(blackjackHand);
-
+            //Dealer handling, essentially if dealers doesnt have a score of 17+ they must hit
             if (blackjackHand.Action == HandActions.FlipBust || blackjackHand.Action == HandActions.FlipBlackjack)
             {
                 return;
