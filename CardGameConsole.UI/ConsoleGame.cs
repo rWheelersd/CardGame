@@ -128,8 +128,7 @@ void PlayGame()
     }
     catch (Exception ex)
     {
-
-        throw ex;
+            throw ex;
     }
 }
 void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
@@ -174,7 +173,18 @@ void DisplayDialogue(BlackjackPlayer blackjackPlayer, BlackjackHand blackjackHan
     }
     else
     {
-        Console.WriteLine($"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN");
+        if (blackjackHand.splitHand)
+        {
+            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND");
+        }
+        else if (!blackjackHand.splitHand && blackjackHand.Cards.Count == 2)
+        {
+            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND, (3)DOUBLE DOWN");
+        }
+        else
+        {
+            Console.WriteLine($"Do you wish to (1)HIT, (2)STAND");
+        }
     }
 }
 

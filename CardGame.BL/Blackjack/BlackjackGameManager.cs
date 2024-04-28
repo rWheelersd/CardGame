@@ -22,15 +22,40 @@ namespace CardGame.BL.BlackJack
 
         public PlayerStatus PlayerTurn(int option, List<BlackjackHand> blackjackHands)
         {
+            //Gets initial hand value, i dont like how this is done. Return to figure out a better way to do this later
+            if (blackjackHands[0].HardValue == 0)
+            {
+                BlackjackHandManager.GetHandValues(blackjackHands[0]);
+            }
+
             switch (option)
             {
                 case 1: //HIT
+                    BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
+                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
+                    if (blackjackHands[0].Action != HandActions.FlipBust && blackjackHands[0].Action != HandActions.FlipBlackjack)
+                    {
+                        return PlayerStatus.Active;
+                    }
+                    else
+                    {
+                        return PlayerStatus.Inactive;
+                    }
 
                 case 2: //Stand
+                    blackjackHands[0].Action = HandActions.Stand;
+                    return PlayerStatus.Inactive;
 
                 case 3: //Double Down
+                    BlackjackGame.GameDeck.DealCard(blackjackHands[0]);
+                    blackjackHands[0].Action = HandActions.Stand;
+                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
+                    return PlayerStatus.Inactive;
+                    break;
 
                 case 4: //Split
+                    BlackjackHandManager.SplitHand(blackjackHands);
+                    return PlayerStatus.Active;
 
                 default: throw new ArgumentOutOfRangeException(nameof(option));
             }
@@ -126,7 +151,7 @@ namespace CardGame.BL.BlackJack
             //Resets each each property that needs to be reset prior to starting a new round
             for (int i = BlackjackGame.Players.Count - 1; i >= 0; i--)
             {
-                if (BlackjackGame.Players[i].Balance <= 0)
+                if (BlackjackGame.Players[i].Balance <= 0 && !BlackjackGame.Players[i].IsDealer)
                 {
                     BlackjackGame.Players.Remove(BlackjackGame.Players[i]);
                 }
@@ -135,7 +160,6 @@ namespace CardGame.BL.BlackJack
                     BlackjackGame.Players[i].Status = PlayerStatus.Active;
                     BlackjackGame.Players[i].WasSplitEvaluated = false;
                     BlackjackGame.Players[i].Hands.Clear();
-                    BlackjackGame.Players[i].Hands = new List<BlackjackHand>();
                     BlackjackGame.Players[i].Bet = 0;
                 }
             }

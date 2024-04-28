@@ -64,6 +64,7 @@ namespace CardGame.BL.BlackJack
 
                 if (blackjackHand.Action == HandActions.FlipBust || blackjackHand.Action == HandActions.FlipBlackjack)
                 {
+                    //exits method if busted or blackjack is scored
                     return;
                 }
                 else
@@ -165,13 +166,9 @@ namespace CardGame.BL.BlackJack
                 {
                     //Calcualte the initial hand value, checks if the hand is soft by looking for a an ace, sets the soft value
                     //if it is and set the hand to soft
-                    if(blackjackHand.splitHand)
+                    foreach (BlackjackCard blackjackCard in blackjackHand.Cards)
                     {
-                        blackjackHand.HardValue += blackjackHand.Cards[0].CardValue;
-                    }
-                    else
-                    {
-                        blackjackHand.HardValue += blackjackHand.Cards[0].CardValue + blackjackHand.Cards[1].CardValue;
+                        blackjackHand.HardValue += blackjackCard.CardValue;
                     }
 
                     if (blackjackHand.Cards.Any(c => c.CardRank == Rank.Ace))
