@@ -14,17 +14,21 @@ int selectedGame;
 string gameChosen = string.Empty;
 bool gameReady = false;
 
+//Console loops until game and conditions are specified
 while (!gameReady)
 {
+    //Iterator count for listing games
     int i = 1;
     Console.WriteLine("Select game type by its number...\n");
     foreach (Enum gameType in Enum.GetValues(typeof(GameType)))
     {
+        //Lists out gametypes from available in enumeration
         Console.WriteLine($"{i}. {gameType.ToString()}");
         i++;
     }
     if (Int32.TryParse(Console.ReadLine(), out selectedGame))
     {
+        //If the entry is valid it will assign the chosen game. If there is no valid case then user will be told so and the parent loop will be reiterated
         switch (selectedGame)
         {
             case 1:
@@ -35,6 +39,7 @@ while (!gameReady)
                 continue;
         }
 
+        //Required parameters for a generic game to be instantiated, this might be to be more refined to accomdate more specific game types if there are more specific requirements
         Console.WriteLine("\nEnter desired amount of opponents (Up to 9).");
         while (!Int32.TryParse(Console.ReadLine(), out playerCount) || playerCount > 9)
         {
@@ -52,9 +57,9 @@ while (!gameReady)
         {
             Console.WriteLine("Please enter a valid starting balance (no more than 10000).");
         }
-
+        
         Guid gameId = Guid.NewGuid();
-
+        //Chosen game will be instantiated
         switch (gameChosen)
         {
             case "Blackjack":
@@ -63,7 +68,7 @@ while (!gameReady)
             default:
                 throw new Exception("There is no possible way you could've made it here... get out of my program.");
         }
-
+        //Loop will be killed and game will be started
         gameReady = true;
         PlayGame();
     }
@@ -77,6 +82,7 @@ void PlayGame()
 {
     try
     {
+        //Loops while there are still players to play the game
         while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
         {
             blackjackGameManager.BlackjackGame.StartRound();
@@ -137,9 +143,11 @@ void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
 
 bool HandConditionActive(HandActions action)
 {
+    //I think this looks nicer than having a super loaded condition block, might use this more often
     return action == HandActions.FlipBlackjack || action == HandActions.FlipBust || action == HandActions.Stand;
 }
 
+//Betting dialouge will collect a user bet restricted to min, max, and balance
 int DisplayBettingDialouge(string username, int balance)
 {
     int playerBet;
@@ -150,6 +158,7 @@ int DisplayBettingDialouge(string username, int balance)
 
     while (true)
     {
+        //Some input validtion ensuring bet is an int and so fourth
         if (!Int32.TryParse(Console.ReadLine(), out playerBet))
         {
             Console.WriteLine("Invalid input. Please enter a valid number.");
@@ -177,6 +186,7 @@ int DisplayBettingDialouge(string username, int balance)
     return playerBet;
 }
 
+//Display username, hand and dealers shown card
 void DisplayOverViewDialogue(BlackjackPlayer blackjackPlayer)
 {
     Console.WriteLine($"\n{blackjackPlayer.Username}");
@@ -184,12 +194,16 @@ void DisplayOverViewDialogue(BlackjackPlayer blackjackPlayer)
     Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}\n");
 }
 
+//Gets the user input for what they want to do with their hand
 int DisplayOptionsDialogue(BlackjackPlayer blackjackPlayer)
 {
+    //Used for validation and maxOption is used to restrict user option entry to follow game rules
     bool isValidInput = false;
     int selectedOption = 0;
     int maxOption = 2;
 
+    //If the player wasnt split evaluated, assume this is the players first action
+    //There for evaluate if it can be split, if it can be show option to split, if not show regular first move options
     if (!blackjackPlayer.WasSplitEvaluated)
     {
         blackjackPlayer.WasSplitEvaluated = true;
@@ -206,20 +220,20 @@ int DisplayOptionsDialogue(BlackjackPlayer blackjackPlayer)
     }
     else
     {
-        if (blackjackPlayer.Hands.Count == 1 && blackjackPlayer.Hands[0].Cards.Count > 2)
-        {
-            Console.WriteLine("Do you wish to (1)HIT, (2)STAND");
-            maxOption = 2;
-        }
+        //If player has played their first turn and have reason to be here, meaning they have split
+        //or hit and have not busted, the only two options that should be available are displayed
+        Console.WriteLine("Do you wish to (1)HIT, (2)STAND");
+        maxOption = 2;
     }
 
     while (!isValidInput)
     {
+        //Collects and stores user choice input
         Console.Write("Enter your choice: ");
         string input = Console.ReadLine();
-
         if (int.TryParse(input, out selectedOption))
         {
+            //If the selected option is between 1 and the allowed options, then option is valid and loop will exit
             isValidInput = selectedOption >= 1 && selectedOption <= maxOption;
         }
 
@@ -231,6 +245,7 @@ int DisplayOptionsDialogue(BlackjackPlayer blackjackPlayer)
 
     return selectedOption;
 }
+
 string GetCards(List<BlackjackHand> hands)
 {
     string cardNames = string.Empty; ;
