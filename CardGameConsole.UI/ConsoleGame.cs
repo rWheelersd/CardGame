@@ -120,20 +120,34 @@ void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
     int choice = 0;
     while (blackjackPlayer.Status == PlayerStatus.Active)
     {
-        DisplayOverViewDialogue(blackjackPlayer);
         if (blackjackPlayer.Hands.Count == 2)
         {
+            //Players with split hands are dealt with here
+            int handNumber = 0;
             foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
             {
-                while (HandConditionActive(blackjackHand.Action))
+                //Every hand is handled until it conditions are met
+                while (!HandConditionActive(blackjackHand.Action))
                 {
+                    Console.WriteLine($"\n--------");
+                    Console.WriteLine($"Hand {handNumber+1}");
+                    Console.WriteLine($"--------");
+                    DisplayOverViewDialogue(blackjackPlayer.Username, blackjackPlayer.Hands[handNumber]);
                     choice = DisplayOptionsDialogue(blackjackPlayer);
+
+                    //a new list is instantiated and the reference to the hand in progress is added so the operation of choice can be processed on it
+                    List<BlackjackHand> blackjackHands = [blackjackHand];
+
+                    _ = blackjackGameManager.PlayerTurn(choice, blackjackHands);
                 }
+                handNumber++;
             }
+            //I dont think this is needed, but its here for consistency
+            blackjackPlayer.Status = PlayerStatus.Inactive;
         }
         else if(blackjackPlayer.Hands.Count == 1)
         {
-
+            DisplayOverViewDialogue(blackjackPlayer.Username, blackjackPlayer.Hands[0]);
             choice = DisplayOptionsDialogue(blackjackPlayer);
         }
 
@@ -144,7 +158,7 @@ void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
 bool HandConditionActive(HandActions action)
 {
     //I think this looks nicer than having a super loaded condition block, might use this more often
-    return action == HandActions.FlipBlackjack || action == HandActions.FlipBust || action == HandActions.Stand;
+    return (action == HandActions.FlipBlackjack || action == HandActions.FlipBust || action == HandActions.Stand);
 }
 
 //Betting dialouge will collect a user bet restricted to min, max, and balance
@@ -187,10 +201,10 @@ int DisplayBettingDialouge(string username, int balance)
 }
 
 //Display username, hand and dealers shown card
-void DisplayOverViewDialogue(BlackjackPlayer blackjackPlayer)
+void DisplayOverViewDialogue(string username, BlackjackHand blackjackHand)
 {
-    Console.WriteLine($"\n{blackjackPlayer.Username}");
-    Console.WriteLine($"Your cards are...\n{GetCards(blackjackPlayer.Hands)}");
+    Console.WriteLine($"\n{username}");
+    Console.WriteLine($"Your cards are...\n{GetCards(blackjackHand)}");
     Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}\n");
 }
 
@@ -246,18 +260,12 @@ int DisplayOptionsDialogue(BlackjackPlayer blackjackPlayer)
     return selectedOption;
 }
 
-string GetCards(List<BlackjackHand> hands)
+string GetCards(BlackjackHand hand)
 {
     string cardNames = string.Empty; ;
-    if (hands.Count == 1)
-    {
-        foreach(BlackjackCard card in hands[0].Cards) 
+    foreach(BlackjackCard card in hand.Cards) 
         {
             cardNames += $"{card.CardName}\n";
         }
-    }
-    else
-    {
-    }
     return cardNames;
 }
