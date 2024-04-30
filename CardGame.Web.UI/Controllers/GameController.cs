@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CardGame.BL.Models.BaseModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardGame.Web.UI.Controllers
@@ -8,7 +9,9 @@ namespace CardGame.Web.UI.Controllers
         // GET: GameController
         public ActionResult PlayGame()
         {
-            return View();
+            BlackjackGame blackjackGame = new BlackjackGame(new Guid(), 5, 1, 1000);
+            blackjackGame.StartRound();
+            return View(blackjackGame);
         }
 
         // GET: GameController/Details/5

@@ -1,7 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{}
+﻿@model BlackjackGame
 
+@{
+    ViewData["Title"] = "PlayGame";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (var card in Model.Players[0].Hands[0].Cards)
+{
+    if (card.IsVisible)
+    {
+        <img src="~/img/cards/@card.ImageName" />
+    }
+}
 
 <script src="~/js/images.js" asp-append-version="true"></script>
