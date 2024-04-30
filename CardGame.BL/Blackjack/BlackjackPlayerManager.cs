@@ -36,6 +36,7 @@ namespace CardGame.BL.BlackJack
             }
         }
 
+        //Collects results for display
         public static List<string> GetPlayerResults(List<BlackjackPlayer> blackjackPlayers)
         {
             List<string> results = new List<string>();
