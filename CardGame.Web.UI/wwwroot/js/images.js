@@ -11,12 +11,10 @@ gameContainer.appendChild(img);
 
 function resizeImage() {
     //gets the dimensions of the parent element
-    var containerHeight = parent.innerHeight;
-    var containerWidth = parent.innerWidth;
+    var containerWidth = window.innerWidth;
     //gets the aspect ratio so the image mantains it proportions
     var aspectRatio = img.width / img.height;
     //gets a max height and width in relatedion to the parent element
-    var maxHeight = containerHeight * 0.85;
     var maxWidth = containerWidth * 0.85;
     //gets the new image dimensions within its original aspect ratio
     var newHeight = newWidth / aspectRatio;

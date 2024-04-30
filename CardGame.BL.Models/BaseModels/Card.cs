@@ -19,6 +19,7 @@ namespace CardGame.BL.Models.BaseModels
     public class Card
     {
         public string CardName { get; set; }
+        //public string ImagePath { get; private set; }
         public Rank CardRank { get; set; }
         public Suit CardSuit { get; set; }
 
@@ -26,7 +27,8 @@ namespace CardGame.BL.Models.BaseModels
         {
             CardRank = rank;
             CardSuit = suit;
-            CardName = $"{CardRank} of {CardSuit}";
+            CardName = $"{rank} of {suit}";
+            //ImagePath = $"../../img/cards/{rank}_of_{suit}".ToLower();
         }
     }
 }
