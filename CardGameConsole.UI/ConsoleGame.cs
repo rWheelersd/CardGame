@@ -85,7 +85,7 @@ void PlayGame()
         while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
         {
             blackjackGameManager.BlackjackGame.StartRound();
-            blackjackGameManager.PlayAITurn();
+            blackjackGameManager.PlayAITurns();
             blackjackGameManager.ManagePayouts();
 
             List<string> results = BlackjackPlayerManager.GetPlayerResults(blackjackGameManager.BlackjackGame.Players);
