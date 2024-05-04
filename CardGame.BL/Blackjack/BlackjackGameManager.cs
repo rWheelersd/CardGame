@@ -54,7 +54,7 @@ namespace CardGame.BL.BlackJack
                     break;
 
                 case 4: //Split
-                    //SplitHand(blackjackHands);
+                    BlackjackHandManager.SplitHand(blackjackHands, blackjackHands[0]);
                     return PlayerStatus.Active;
 
                 default: throw new ArgumentOutOfRangeException(nameof(option));
@@ -82,15 +82,31 @@ namespace CardGame.BL.BlackJack
                         {
                             foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
                             {
-                                if (blackjackHand.WasSplitEvaluated && blackjackHand.IsHandActive())
+                                if (blackjackHand.WasSplitEvaluated && blackjackHand.IsHandResolved())
                                 {//The hand will have at least 2 cards, is split evalauted and is active
                                  //Plays the hand to completion
-                                    while (blackjackHand.IsHandActive())
+                                    while (blackjackHand.Action == HandActions.Thinking || blackjackHand.Action == HandActions.Hit)
                                     {
-                                        BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
+                                        //Deals with double down in event BlackjackHandManager logic returns it
+                                        if (BlackjackHandManager.EvaluateDoubleDown(blackjackHand, BlackjackGame.dealerCard))
+                                        {
+                                            BlackjackGame.GameDeck.DealCard(blackjackHand);
+                                            break;
+                                        }
+                                        //Gets initial action on thinking status
+                                        if (blackjackHand.Action == HandActions.Thinking)
+                                        {
+                                            BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
+                                        }
+                                        //Deals card in event BlackjackHandManager logic returns hit, then gets the next action
+                                        if (blackjackHand.Action == HandActions.Hit)
+                                        {
+                                            BlackjackGame.GameDeck.DealCard(blackjackHand);
+                                            BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
+                                        }
                                     }
                                 }
-                                else if (!blackjackHand.WasSplitEvaluated && blackjackHand.IsHandActive())
+                                else if (!blackjackHand.WasSplitEvaluated && blackjackHand.IsHandResolved())
                                 {//The hand will have 2 or less cardS, is not split evaluated, and is active
 
                                     //If hands only has one card from a split, the only logical action would be hit
@@ -115,9 +131,33 @@ namespace CardGame.BL.BlackJack
                             }
 
                             handsSplitEvaluated = blackjackPlayer.Hands.Any(h => !h.WasSplitEvaluated);
-                            handsResolved = blackjackPlayer.Hands.Any(h => h.IsHandActive());
+                            handsResolved = blackjackPlayer.Hands.Any(h => !h.IsHandResolved());
 
-                        } while (handsSplitEvaluated && handsResolved);
+                        } while (handsSplitEvaluated == false && handsResolved == false);
+                    }
+                    else if (!blackjackPlayer.IsHuman && blackjackPlayer.IsDealer)
+                    {
+                        while (blackjackPlayer.Hands[0].Action == HandActions.Thinking || blackjackPlayer.Hands[0].Action == HandActions.Hit)
+                        {
+                            //Gets initial action on thinking status
+                            if (blackjackPlayer.Hands[0].Action == HandActions.Thinking)
+                            {
+                                BlackjackHandManager.HandleDealer(blackjackPlayer.Hands[0]);
+                            }
+
+                            //Deals card in event BlackjackHandManager logic returns hit, then gets the next action
+                            if (blackjackPlayer.Hands[0].Action == HandActions.Hit)
+                            {
+                                BlackjackGame.GameDeck.DealCard(blackjackPlayer.Hands[0]);
+                                BlackjackHandManager.HandleDealer(blackjackPlayer.Hands[0]);
+                            }
+
+                            else
+                            {
+                                //If BlackjackHandManager logic returns flipbust, flipblackjack or stand, exit the while loop to play the next player
+                                break;
+                            }
+                        }
                     }
                 }
             }

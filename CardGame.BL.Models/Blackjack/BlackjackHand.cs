@@ -32,7 +32,7 @@ namespace CardGame.BL.Models.Blackjack
             HardValue = 0;
         }
 
-        public bool IsHandActive()
+        public bool IsHandResolved()
         {
            return Action != HandActions.FlipBlackjack || Action != HandActions.FlipBust || Action != HandActions.Stand;
         }

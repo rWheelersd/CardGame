@@ -17,6 +17,7 @@ namespace CardGame.BL.BlackJack
     {
         public static bool CheckPair(BlackjackHand blackjackHand)
         {
+            blackjackHand.WasSplitEvaluated = true;
             return blackjackHand.Cards[0].CardRank == blackjackHand.Cards[1].CardRank;
         }
         internal static void EvaluateSplit(BlackjackHand blackjackHand, BlackjackCard dealerCard)

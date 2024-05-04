@@ -70,7 +70,7 @@ while (!gameReady)
         }
         //Loop will be killed and game will be started
         gameReady = true;
-        //PlayGame();
+        PlayGame();
     }
     else
     {
@@ -78,43 +78,31 @@ while (!gameReady)
     }
 }
 
-//void PlayGame()
-//{
-//    try
-//    {
-//        //Loops while there are still players to play the game
-//        while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
-//        {
-//            blackjackGameManager.BlackjackGame.StartRound();
-//            foreach (BlackjackPlayer blackjackPlayer in blackjackGameManager.BlackjackGame.Players)
-//            {
-//                if (blackjackPlayer.IsHuman)
-//                {
-//                    if (blackjackPlayer.Bet == 0)
-//                    {
-//                        blackjackPlayer.Bet = DisplayBettingDialouge(blackjackPlayer.Username, blackjackPlayer.Balance);
-//                    }
-//                    PlayPlayerTurn(blackjackPlayer);
-//                }
-//            }
-//            blackjackGameManager.PlayAITurn();
-//            blackjackGameManager.ManagePayouts();
+void PlayGame()
+{
+    try
+    {
+        while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
+        {
+            blackjackGameManager.BlackjackGame.StartRound();
+            blackjackGameManager.PlayAITurn();
+            blackjackGameManager.ManagePayouts();
 
-//            List<string> results = BlackjackPlayerManager.GetPlayerResults(blackjackGameManager.BlackjackGame.Players);
+            List<string> results = BlackjackPlayerManager.GetPlayerResults(blackjackGameManager.BlackjackGame.Players);
 
-//            foreach (string result in results)
-//            {
-//                Console.WriteLine(result);
-//            }
+            foreach (string result in results)
+            {
+                Console.WriteLine(result);
+            }
 
-//            blackjackGameManager.ResetGame();
-//        }
-//    }
-//    catch (Exception ex)
-//    {
-//            throw ex;
-//    }
-//}
+            blackjackGameManager.ResetGame();
+        }
+    }
+    catch (Exception ex)
+    {
+            throw ex;
+    }
+}
 
 //void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
 //{
@@ -194,111 +182,111 @@ while (!gameReady)
 //    return selectedOption;
 //}
 
-////Display username, hand and dealers shown card
-//void DisplayOverViewDialogue(string username, BlackjackHand blackjackHand, int handNumber)
+//Display username, hand and dealers shown card
+void DisplayOverViewDialogue(string username, BlackjackHand blackjackHand, int handNumber)
+{
+    Console.WriteLine($"\n{username}");
+    Console.WriteLine($"Hand {handNumber + 1}");
+    Console.WriteLine($"Your cards are...\n{GetCards(blackjackHand)}");
+    Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}\n");
+}
+
+//void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
 //{
-//    Console.WriteLine($"\n{username}");
-//    Console.WriteLine($"Hand {handNumber + 1}");
-//    Console.WriteLine($"Your cards are...\n{GetCards(blackjackHand)}");
-//    Console.WriteLine($"Dealer's shown card is...\n{blackjackGameManager.BlackjackGame.dealerCard.CardName}\n");
-//}
-
-////void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
-////{
-////    int choice = 0;
-////    while (blackjackPlayer.Status == PlayerStatus.Active)
-////    {
-////        if (blackjackPlayer.Hands.Count == 2)
-////        {
-////            //Players with split hands are dealt with here
-////            int handNumber = 0;
-////            foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
-////            {
-////                //Every hand is handled until it conditions are met
-////                while (!HandConditionActive(blackjackHand.Action))
-////                {
-////                    Console.WriteLine($"\n--------");
-////                    Console.WriteLine($"Hand {handNumber+1}");
-////                    Console.WriteLine($"--------");
-////                    DisplayOverViewDialogue(blackjackPlayer.Username, blackjackPlayer.Hands[handNumber]);
-////                    choice = DisplayOptionsDialogue(blackjackPlayer);
-
-////                    //a new list is instantiated and the reference to the hand in progress is added so the operation of choice can be processed on it
-////                    List<BlackjackHand> blackjackHands = [blackjackHand];
-
-////                    _ = blackjackGameManager.PlayerTurn(choice, blackjackHands);
-////                }
-////                handNumber++;
-////            }
-////            //I dont think this is needed, but its here for consistency
-////            blackjackPlayer.Status = PlayerStatus.Inactive;
-////        }
-////        else if(blackjackPlayer.Hands.Count == 1)
-////        {
-////            DisplayOverViewDialogue(blackjackPlayer.Username, blackjackPlayer.Hands[0]);
-////            choice = DisplayOptionsDialogue(blackjackPlayer);
-////        }
-
-////        blackjackPlayer.Status = blackjackGameManager.PlayerTurn(choice, blackjackPlayer.Hands);
-////    }
-////}
-
-//bool HandConditionActive(HandActions action)
-//{
-//    //I think this looks nicer than having a super loaded condition block, might use this more often
-//    return (action == HandActions.FlipBlackjack || action == HandActions.FlipBust || action == HandActions.Stand);
-//}
-
-////Betting dialouge will collect a user bet restricted to min, max, and balance
-//int DisplayBettingDialouge(string username, int balance)
-//{
-//    int playerBet;
-
-//    Console.WriteLine($"\n{username}");
-//    Console.WriteLine($"Your balance is {balance}");
-//    Console.WriteLine($"Enter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}).");
-
-//    while (true)
+//    int choice = 0;
+//    while (blackjackPlayer.Status == PlayerStatus.Active)
 //    {
-//        //Some input validtion ensuring bet is an int and so fourth
-//        if (!Int32.TryParse(Console.ReadLine(), out playerBet))
+//        if (blackjackPlayer.Hands.Count == 2)
 //        {
-//            Console.WriteLine("Invalid input. Please enter a valid number.");
-//            continue;
+//            //Players with split hands are dealt with here
+//            int handNumber = 0;
+//            foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
+//            {
+//                //Every hand is handled until it conditions are met
+//                while (!HandConditionActive(blackjackHand.Action))
+//                {
+//                    Console.WriteLine($"\n--------");
+//                    Console.WriteLine($"Hand {handNumber+1}");
+//                    Console.WriteLine($"--------");
+//                    DisplayOverViewDialogue(blackjackPlayer.Username, blackjackPlayer.Hands[handNumber]);
+//                    choice = DisplayOptionsDialogue(blackjackPlayer);
+
+//                    //a new list is instantiated and the reference to the hand in progress is added so the operation of choice can be processed on it
+//                    List<BlackjackHand> blackjackHands = [blackjackHand];
+
+//                    _ = blackjackGameManager.PlayerTurn(choice, blackjackHands);
+//                }
+//                handNumber++;
+//            }
+//            //I dont think this is needed, but its here for consistency
+//            blackjackPlayer.Status = PlayerStatus.Inactive;
+//        }
+//        else if(blackjackPlayer.Hands.Count == 1)
+//        {
+//            DisplayOverViewDialogue(blackjackPlayer.Username, blackjackPlayer.Hands[0]);
+//            choice = DisplayOptionsDialogue(blackjackPlayer);
 //        }
 
-//        if (playerBet < blackjackGameManager.BlackjackGame.minBet)
-//        {
-//            Console.WriteLine("Bet cannot be smaller than minimum allowed bet.");
-//        }
-//        else if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
-//        {
-//            Console.WriteLine("Bet cannot be larger than maximum allowed bet.");
-//        }
-//        else if (playerBet > balance)
-//        {
-//            Console.WriteLine("Bet cannot exceed your balance.");
-//        }
-//        else
-//        {
-//            break;
-//        }
+//        blackjackPlayer.Status = blackjackGameManager.PlayerTurn(choice, blackjackPlayer.Hands);
 //    }
-
-//    return playerBet;
 //}
 
+bool HandConditionActive(HandActions action)
+{
+    //I think this looks nicer than having a super loaded condition block, might use this more often
+    return (action == HandActions.FlipBlackjack || action == HandActions.FlipBust || action == HandActions.Stand);
+}
+
+//Betting dialouge will collect a user bet restricted to min, max, and balance
+int DisplayBettingDialouge(string username, int balance)
+{
+    int playerBet;
+
+    Console.WriteLine($"\n{username}");
+    Console.WriteLine($"Your balance is {balance}");
+    Console.WriteLine($"Enter Bet (Minimum of {blackjackGameManager.BlackjackGame.minBet} and maximum of {blackjackGameManager.BlackjackGame.maxBet}).");
+
+    while (true)
+    {
+        //Some input validtion ensuring bet is an int and so fourth
+        if (!Int32.TryParse(Console.ReadLine(), out playerBet))
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+            continue;
+        }
+
+        if (playerBet < blackjackGameManager.BlackjackGame.minBet)
+        {
+            Console.WriteLine("Bet cannot be smaller than minimum allowed bet.");
+        }
+        else if (playerBet > blackjackGameManager.BlackjackGame.maxBet)
+        {
+            Console.WriteLine("Bet cannot be larger than maximum allowed bet.");
+        }
+        else if (playerBet > balance)
+        {
+            Console.WriteLine("Bet cannot exceed your balance.");
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return playerBet;
+}
 
 
-////Gets the user input for what they want to do with their hand
+
+//Gets the user input for what they want to do with their hand
 
 
-//string GetCards(BlackjackHand hand)
-//{
-//    string cardNames = string.Empty; ;
-//    foreach(BlackjackCard card in hand.Cards) 
-//        {
-//            cardNames += $"{card.CardName}\n";
-//        }
-//    return cardNames;
-//}
+string GetCards(BlackjackHand hand)
+{
+    string cardNames = string.Empty; ;
+    foreach(BlackjackCard card in hand.Cards) 
+        {
+            cardNames += $"{card.CardName}\n";
+        }
+    return cardNames;
+}
