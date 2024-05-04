@@ -71,7 +71,7 @@ namespace CardGame.BL.BlackJack
                     //Operates only on players not human or dealer
                     if (!blackjackPlayer.IsHuman && !blackjackPlayer.IsDealer)
                     {
-                        //Collects there bets and incremets counter for event driven UI
+                        //Collects their bets and incremets counter for event driven UI
                         turnCounter++;
                         BlackjackPlayerManager.PlayerBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
@@ -82,7 +82,7 @@ namespace CardGame.BL.BlackJack
                         {
                             foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
                             {
-                                if (blackjackHand.WasSplitEvaluated || blackjackHand.IsHandActive())
+                                if (blackjackHand.WasSplitEvaluated && blackjackHand.IsHandActive())
                                 {//The hand will have at least 2 cards, is split evalauted and is active
                                  //Plays the hand to completion
                                     while (blackjackHand.IsHandActive())
@@ -90,7 +90,7 @@ namespace CardGame.BL.BlackJack
                                         BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
                                     }
                                 }
-                                else if (!blackjackHand.WasSplitEvaluated || blackjackHand.IsHandActive())
+                                else if (!blackjackHand.WasSplitEvaluated && blackjackHand.IsHandActive())
                                 {//The hand will have 2 or less cardS, is not split evaluated, and is active
 
                                     //If hands only has one card from a split, the only logical action would be hit
