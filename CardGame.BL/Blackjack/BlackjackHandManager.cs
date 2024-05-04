@@ -15,20 +15,20 @@ namespace CardGame.BL.BlackJack
 {
     public static class BlackjackHandManager
     {
-        public static bool CheckPair(BlackjackHand hand)
+        public static bool CheckPair(BlackjackHand blackjackHand)
         {
-            return hand.Cards[0].CardRank == hand.Cards[1].CardRank;
+            return blackjackHand.Cards[0].CardRank == blackjackHand.Cards[1].CardRank;
         }
-        internal static void EvaluateSplit(BlackjackHand hand, BlackjackCard dealerCard)
+        internal static void EvaluateSplit(BlackjackHand blackjackHand, BlackjackCard dealerCard)
         {
             try
             {
                 //Checks if cards are a pair, then evaluates if hand should be split or double down
-                if (hand.Cards[0].CardRank == hand.Cards[1].CardRank)
+                if (blackjackHand.Cards[0].CardRank == blackjackHand.Cards[1].CardRank)
                 {
-                    if (hand.Cards[0].CardRank == Rank.Eight) hand.Action = HandActions.Split;
-                    else if (hand.Cards[0].CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
-                    else if (hand.Cards[0].CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) hand.Action = HandActions.Split;
+                    if (blackjackHand.Cards[0].CardRank == Rank.Eight) blackjackHand.Action = HandActions.Split;
+                    else if (blackjackHand.Cards[0].CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) blackjackHand.Action = HandActions.Split;
+                    else if (blackjackHand.Cards[0].CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) blackjackHand.Action = HandActions.Split;
                 }
             }
             catch (Exception)
@@ -38,22 +38,27 @@ namespace CardGame.BL.BlackJack
             }
         }
 
-        public static void SplitHand(List<BlackjackHand> hands)
+        public static void SplitHand(List<BlackjackHand> blackJackHands, BlackjackHand blackjackHand)
         {
-            //Creates two hands, splits the cards in the initial hands list into the new hands, clears current list and adds the new hands
-            BlackjackHand splitHand0 = new BlackjackHand();
-            BlackjackHand splitHand1 = new BlackjackHand();
+            try
+            {
+                //Creates two hands, splits the cards in the initial hands list into the new hands, clears current list and adds the new hands
+                BlackjackHand splitHand0 = new BlackjackHand();
+                BlackjackHand splitHand1 = new BlackjackHand();
 
-            splitHand0.splitHand = true;
-            splitHand1.splitHand = true;
+                splitHand0.Cards.Add(blackjackHand.Cards[0]);
+                splitHand1.Cards.Add(blackjackHand.Cards[1]);
 
-            splitHand0.Cards.Add(hands[0].Cards[0]);
-            splitHand1.Cards.Add(hands[0].Cards[1]);
+                blackJackHands.RemoveAll(h => h.handId == blackjackHand.handId);
 
-            hands.Clear();
+                blackJackHands.Add(splitHand0);
+                blackJackHands.Add(splitHand1);
+            }
+            catch (Exception)
+            {
 
-            hands.Add(splitHand0);
-            hands.Add(splitHand1);
+                throw;
+            }
         }
 
         internal static void GetAction(BlackjackHand blackjackHand, BlackjackCard dealerCard)
