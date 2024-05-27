@@ -1,11 +1,12 @@
 ﻿using CardGame.BL.BlackJack;
+using CardGame.BL.Interfaces;
 using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Blackjack;
 using System.Numerics;
 using static CardGame.BL.Models.Constants.BaseConstants;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
 
-BlackjackGameManager blackjackGameManager;
+IGameManager gameManager;
 
 int playerCount;
 int humanCount;
@@ -63,7 +64,7 @@ while (!gameReady)
         switch (gameChosen)
         {
             case "Blackjack":
-                blackjackGameManager = new BlackjackGameManager(gameId, playerCount, humanCount, startingBalance);
+                gameManager = new BlackjackGameManager(gameId, playerCount, humanCount, startingBalance);
                 break;
             default:
                 throw new Exception("There is no possible way you could've made it here... get out of my program.");
@@ -84,6 +85,14 @@ void PlayGame()
     {
         while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
         {
+            for (int i = 0; i < blackjackGameManager.BlackjackGame.Players.Count; i++)
+            {
+                if (blackjackGameManager.BlackjackGame.Players[i].IsHuman)
+                {
+                    PlayPlayerTurn(blackjackGameManager.BlackjackGame.Players[i]);
+                }
+            }
+
             blackjackGameManager.BlackjackGame.StartRound();
             blackjackGameManager.PlayAITurns();
             blackjackGameManager.ManagePayouts();
@@ -104,32 +113,32 @@ void PlayGame()
     }
 }
 
-//void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
-//{
-//    int choice = 0;
-//    while (blackjackPlayer.Status == PlayerStatus.Active)
-//    {
-//        if (!blackjackPlayer.WasSplitEvaluated)
-//        {
-//            DisplayOptionsDialogue(blackjackPlayer);
-//        }
-//        else if(blackjackPlayer.WasSplitEvaluated)
-//        {
-//            int handNumber = 0;
-//            foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
-//            {
-//                while (!HandConditionActive(blackjackHand.Action))
-//                {
-//                    DisplayOverViewDialogue(blackjackPlayer.Username, blackjackHand, handNumber);
-//                    choice = DisplayOptionsDialogue(blackjackPlayer);
-//                }
-//                handNumber++;
-//            }
-//        }
+void PlayPlayerTurn(BlackjackPlayer blackjackPlayer)
+{
+    int choice = 0;
+    while (blackjackPlayer.Status == PlayerStatus.Active)
+    {
+        if (!blackjackPlayer.WasSplitEvaluated)
+        {
+            DisplayOptionsDialogue(blackjackPlayer);
+        }
+        else if (blackjackPlayer.WasSplitEvaluated)
+        {
+            int handNumber = 0;
+            foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
+            {
+                while (!HandConditionActive(blackjackHand.Action))
+                {
+                    DisplayOverViewDialogue(blackjackPlayer.Username, blackjackHand, handNumber);
+                    choice = DisplayOptionsDialogue(blackjackPlayer);
+                }
+                handNumber++;
+            }
+        }
 
-//        blackjackPlayer.Status = blackjackGameManager.PlayerTurn(choice, blackjackPlayer.Hands);
-//    }
-//}
+        blackjackPlayer.Status = blackjackGameManager.PlayerTurn(choice, blackjackPlayer.Hands);
+    }
+}
 
 //int DisplayOptionsDialogue(BlackjackPlayer blackjackPlayer)
 //{

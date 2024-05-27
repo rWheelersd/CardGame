@@ -12,7 +12,7 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.BlackJack
 {
-    public static class BlackjackPlayerManager
+    internal static class BlackjackPlayerManager
     {
         internal static void PlayerBet(BlackjackPlayer currentPlayer, int minBet, int maxBet)
         {

@@ -1,4 +1,5 @@
-﻿using CardGame.BL.Models.BaseModels;
+﻿using CardGame.BL.Interfaces;
+using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Blackjack;
 using CardGame.BL.Models.Interfaces;
 using System;
@@ -11,7 +12,7 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.BlackJack
 {
-    public class BlackjackGameManager
+    public class BlackjackGameManager : IGameManager
     {
         private int turnCounter = 0;
         public BlackjackGame BlackjackGame { get; private set; }
@@ -82,7 +83,7 @@ namespace CardGame.BL.BlackJack
                 throw;
             }
         }
-        //the bug starts here. logic is flawed. 
+
         private void PlayAIPlayerTurn(BlackjackPlayer blackjackPlayer)
         {
             bool allHandsSplitEvaluated = false;

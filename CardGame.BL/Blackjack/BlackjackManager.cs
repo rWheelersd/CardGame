@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CardGame.BL.Blackjack
 {
-    public class BlackjackManager
+    internal class BlackjackManager
     {
         Dictionary<Guid, BlackjackGameManager> blackjackGameManagers;
 

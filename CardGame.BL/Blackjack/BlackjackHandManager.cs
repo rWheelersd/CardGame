@@ -13,7 +13,7 @@ using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.BlackJack
 {
-    public static class BlackjackHandManager
+    internal static class BlackjackHandManager
     {
         public static bool CheckPair(BlackjackHand blackjackHand)
         {
