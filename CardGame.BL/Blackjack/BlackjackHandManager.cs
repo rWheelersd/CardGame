@@ -28,6 +28,7 @@ namespace CardGame.BL.BlackJack
                 if (blackjackHand.Cards[0].CardRank == blackjackHand.Cards[1].CardRank)
                 {
                     if (blackjackHand.Cards[0].CardRank == Rank.Eight) blackjackHand.Action = HandActions.Split;
+                    else if (blackjackHand.Cards[0].CardRank == Rank.Ace) blackjackHand.Action = HandActions.Split;
                     else if (blackjackHand.Cards[0].CardRank == Rank.Three && (dealerCard.CardRank >= Rank.Four && dealerCard.CardRank >= Rank.Seven)) blackjackHand.Action = HandActions.Split;
                     else if (blackjackHand.Cards[0].CardRank == Rank.Two && (dealerCard.CardRank >= Rank.Three && dealerCard.CardRank >= Rank.Seven)) blackjackHand.Action = HandActions.Split;
                 }
