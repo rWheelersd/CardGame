@@ -82,7 +82,7 @@ namespace CardGame.BL.BlackJack
                 throw;
             }
         }
-
+        //the bug starts here. logic is flawed. 
         private void PlayAIPlayerTurn(BlackjackPlayer blackjackPlayer)
         {
             bool allHandsSplitEvaluated = false;
