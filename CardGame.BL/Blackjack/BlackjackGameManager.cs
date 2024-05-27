@@ -90,8 +90,10 @@ namespace CardGame.BL.BlackJack
 
             do
             {
-                foreach (BlackjackHand blackjackHand in blackjackPlayer.Hands)
+                for (int i = 0; i < blackjackPlayer.Hands.Count; i++)
                 {
+                    BlackjackHand blackjackHand = blackjackPlayer.Hands[i];
+
                     if (blackjackHand.WasSplitEvaluated && !blackjackHand.IsHandResolved())
                     {
                         PlaySplitEvaluatedHand(blackjackHand);
@@ -106,8 +108,8 @@ namespace CardGame.BL.BlackJack
                 allHandsResolved = blackjackPlayer.Hands.All(h => h.IsHandResolved());
 
             } while (!allHandsSplitEvaluated || !allHandsResolved);
-            
         }
+
         private void PlaySplitEvaluatedHand(BlackjackHand blackjackHand)
         {
             while (blackjackHand.Action == HandActions.Thinking || blackjackHand.Action == HandActions.Hit)
@@ -140,13 +142,14 @@ namespace CardGame.BL.BlackJack
             {
                 BlackjackGame.GameDeck.DealCard(blackjackHand);
             }
-            bool wasPair = BlackjackHandManager.CheckPair(blackjackHand);
-            if (wasPair)
+            bool isPair = BlackjackHandManager.CheckPair(blackjackHand);
+            if (isPair)
             {
                 BlackjackHandManager.EvaluateSplit(blackjackHand, BlackjackGame.dealerCard);
                 if (blackjackHand.Action == HandActions.Split)
                 {
                     BlackjackHandManager.SplitHand(blackjackPlayer.Hands, blackjackHand);
+                    return;
                 }
             }
             blackjackHand.WasSplitEvaluated = true;
