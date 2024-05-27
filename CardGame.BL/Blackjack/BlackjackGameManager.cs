@@ -102,13 +102,12 @@ namespace CardGame.BL.BlackJack
                     }
                 }
 
-                allHandsSplitEvaluated = blackjackPlayer.Hands.Any(h => !h.WasSplitEvaluated);
-                allHandsResolved = blackjackPlayer.Hands.Any(h => h.IsHandResolved());
+                allHandsSplitEvaluated = blackjackPlayer.Hands.All(h => h.WasSplitEvaluated);
+                allHandsResolved = blackjackPlayer.Hands.All(h => h.IsHandResolved());
 
-            } while (allHandsSplitEvaluated && allHandsResolved);
+            } while (!allHandsSplitEvaluated || !allHandsResolved);
             
         }
-
         private void PlaySplitEvaluatedHand(BlackjackHand blackjackHand)
         {
             while (blackjackHand.Action == HandActions.Thinking || blackjackHand.Action == HandActions.Hit)
@@ -126,7 +125,7 @@ namespace CardGame.BL.BlackJack
                     BlackjackHandManager.GetAction(blackjackHand, BlackjackGame.dealerCard);
                 }
 
-                ///Deals card in event BlackjackHandManager logic returns hit, then gets the next action
+                //Deals card in event BlackjackHandManager logic returns hit, then gets the next action
                 if (blackjackHand.Action == HandActions.Hit)
                 {
                     BlackjackGame.GameDeck.DealCard(blackjackHand);
@@ -150,6 +149,7 @@ namespace CardGame.BL.BlackJack
                     BlackjackHandManager.SplitHand(blackjackPlayer.Hands, blackjackHand);
                 }
             }
+            blackjackHand.WasSplitEvaluated = true;
         }
 
         private void PlayDealerTurn(BlackjackPlayer blackjackPlayer)

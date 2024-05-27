@@ -34,7 +34,7 @@ namespace CardGame.BL.Models.Blackjack
 
         public bool IsHandResolved()
         {
-           return Action == HandActions.FlipBlackjack || Action == HandActions.FlipBust || Action == HandActions.Stand;
+           return Action == HandActions.FlipBlackjack || Action == HandActions.FlipBust || Action == HandActions.Stand || Action == HandActions.DoubleDown;
         }
     }
 }
