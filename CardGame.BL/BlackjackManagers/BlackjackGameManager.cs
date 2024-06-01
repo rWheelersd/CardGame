@@ -70,7 +70,6 @@ namespace CardGame.BL.BlackjackManagers
                     blackjackHands[0].SetAction(HandActions.Stand);
                     BlackjackHandManager.GetHandValues(blackjackHands[0]);
                     return PlayerStatus.Inactive;
-                    break;
 
                 case 4: //Split
                     BlackjackHandManager.SplitHand(blackjackHands, blackjackHands[0]);
