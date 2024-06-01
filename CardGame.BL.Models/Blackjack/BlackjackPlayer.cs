@@ -23,6 +23,12 @@ namespace CardGame.BL.Models.Blackjack
 
         public BlackjackPlayer(int playerNumber, int balance) : base(playerNumber, balance)
         {
+
+        }
+
+        public void SetPlayerStatus(PlayerStatus status)
+        {
+            this.Status = status;
         }
     }
 }

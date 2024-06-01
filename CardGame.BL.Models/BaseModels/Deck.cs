@@ -11,19 +11,18 @@ namespace CardGame.BL.Models.BaseModels
      * So in order to beable to deal cards/hands to a specific gametype/hand it must remain entirely generic.
      */
 
-    public class Deck<TCard, THand>
-    where TCard : Card
-    where THand : IHand<TCard>, new()
+    public class Deck<THand>
+    where THand : IHand<Card>, new()
     {
         private readonly Random _rng;
-        public List<TCard> Cards { get; set; }
-        public List<TCard> BurntCards { get; set; }
+        public List<Card> Cards { get; private set; }
+        public List<Card> BurntCards { get; private set; }
 
         public Deck()
         {
-            _rng = new Random();
-            Cards = new List<TCard>();
-            BurntCards = new List<TCard>();
+            this._rng = new Random();
+            this.Cards = new List<Card>();
+            this.BurntCards = new List<Card>();
             BuildDeck();
             ShuffleCards(Cards);
         }
@@ -38,7 +37,7 @@ namespace CardGame.BL.Models.BaseModels
                     {
                         //Simply cycles through all enums of suit and rank, instantiates a card given
                         //the current indexes in the loops and adds to the decks list of cards
-                        Cards.Add((TCard)Activator.CreateInstance(typeof(TCard), rank, suit));
+                        this.Cards.Add((Card)Activator.CreateInstance(typeof(Card), rank, suit));
                     }
                 }
             }
@@ -48,7 +47,7 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        private void ShuffleCards(List<TCard> cards)
+        private void ShuffleCards(List<Card> cards)
         {
             try
             {
@@ -58,14 +57,14 @@ namespace CardGame.BL.Models.BaseModels
                 //Swaps that card with card[n] (which will be the index of the card we are currently on in the loop
                 //meaning the last card in the deck is assigned to the card at the randomly generated index
                 //and the last card in the deck becomes the card randomly generated
-                int n = Cards.Count;
+                int n = this.Cards.Count;
                 while (n > 1)
                 {
                     n--;
-                    int i = _rng.Next(n + 1);
-                    TCard card = Cards[i];
-                    Cards[i] = Cards[n];
-                    Cards[n] = card;
+                    int i = this._rng.Next(n + 1);
+                    Card card = this.Cards[i];
+                    this.Cards[i] = this.Cards[n];
+                    this.Cards[n] = card;
                 }
             }
             catch (Exception)
@@ -74,21 +73,21 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        public void DealCard(THand hand)
+        public void DealCards(THand hand)
         {
             try
             {
                 //Adds the first card of the deck to the hand passed in
                 //Adds it to the burnt pile
                 //Removes that card from the deck
-                if (Cards.Count <= 0)
+                if (this.Cards.Count <= 0)
                 {
                     ResetDeck();
                 }
-                var card = Cards.First();
+                var card = this.Cards.First();
                 hand.Cards.Add(card);
-                BurntCards.Add(card);
-                Cards.RemoveAt(0);
+                this.BurntCards.Add(card);
+                this.Cards.RemoveAt(0);
             }
             catch (Exception)
             {
@@ -96,7 +95,7 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
-        public THand DealCards(int handSize)
+        public THand DealHand(int handSize)
         {
             try
             {
@@ -111,10 +110,10 @@ namespace CardGame.BL.Models.BaseModels
                 {
                     if (Cards.Any())
                     {
-                        var card = Cards.First();
+                        var card = this.Cards.First();
                         hand.Cards.Add(card);
-                        BurntCards.Add(card);
-                        Cards.RemoveAt(0);
+                        this.BurntCards.Add(card);
+                        this.Cards.RemoveAt(0);
                     }
                     else
                     {
@@ -129,13 +128,27 @@ namespace CardGame.BL.Models.BaseModels
             }
         }
 
+        public void AddBurned()
+        {
+            try
+            {
+                ShuffleCards(this.BurntCards);
+                this.Cards.AddRange(this.BurntCards);
+                this.BurntCards.Clear();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void ResetDeck()
         {
             try
             {
-                ShuffleCards(BurntCards);
-                Cards.AddRange(BurntCards);
-                BurntCards.Clear();
+                this.Cards.AddRange(this.BurntCards);
+                ShuffleCards(this.Cards);
+                this.BurntCards.Clear();
             }
             catch (Exception)
             {
@@ -144,4 +157,3 @@ namespace CardGame.BL.Models.BaseModels
         }
     }
 }
-

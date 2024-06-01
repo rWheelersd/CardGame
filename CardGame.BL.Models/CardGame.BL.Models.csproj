@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BaseModels\images\**" />
-    <EmbeddedResource Remove="BaseModels\images\**" />
-    <None Remove="BaseModels\images\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
   </ItemGroup>
 

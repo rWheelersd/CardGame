@@ -1,5 +1,4 @@
-﻿using CardGame.BL.BlackJack;
-using CardGame.BL.Interfaces;
+﻿using CardGame.BL.BlackjackManagers;
 using CardGame.BL.Models.BaseModels;
 using CardGame.BL.Models.Blackjack;
 using System.Numerics;
@@ -58,7 +57,7 @@ while (!gameReady)
         {
             Console.WriteLine("Please enter a valid starting balance (no more than 10000).");
         }
-        
+
         Guid gameId = Guid.NewGuid();
         //Chosen game will be instantiated
         switch (gameChosen)
@@ -85,8 +84,8 @@ void PlayGame()
     {
         while (blackjackGameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
         {
-            blackjackGameManager.BlackjackGame.StartRound();
-            blackjackGameManager.PlayAITurns();
+            blackjackGameManager.StartRound();
+            blackjackGameManager.ProcessAI();
             blackjackGameManager.ManagePayouts();
 
             List<string> results = BlackjackPlayerManager.GetPlayerResults(blackjackGameManager.BlackjackGame.Players);
@@ -101,7 +100,7 @@ void PlayGame()
     }
     catch (Exception ex)
     {
-            throw ex;
+        throw ex;
     }
 }
 
@@ -285,9 +284,9 @@ int DisplayBettingDialouge(string username, int balance)
 string GetCards(BlackjackHand hand)
 {
     string cardNames = string.Empty; ;
-    foreach(BlackjackCard card in hand.Cards) 
-        {
-            cardNames += $"{card.CardName}\n";
-        }
+    foreach (Card card in hand.Cards)
+    {
+        cardNames += $"{card.CardName}\n";
+    }
     return cardNames;
 }

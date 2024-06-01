@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using static CardGame.BL.Models.Constants.BaseConstants;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
 
-namespace CardGame.BL.BlackJack
+namespace CardGame.BL.BlackjackManagers
 {
     public static class BlackjackPlayerManager
     {
@@ -27,7 +27,7 @@ namespace CardGame.BL.BlackJack
                     maxCapable = currentPlayer.Balance;
                 }
 
-                currentPlayer.Bet = rng.Next(minBet, maxCapable + 1);
+                currentPlayer.UpdateBet(rng.Next(minBet, maxCapable + 1));
             }
             catch (Exception)
             {

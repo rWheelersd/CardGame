@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace CardGame.BL.Models.BaseModels
 {
@@ -14,19 +15,50 @@ namespace CardGame.BL.Models.BaseModels
          */
 
         public Guid Id { get; set; }
-        public string Username { get; set; }
-        public bool IsDealer { get; set; }
-        public bool IsHuman { get; set; }
-        public int Balance { get; set; }
-        public int Bet { get; set; }
+        public string Username { get; private set; }
+        public bool IsDealer { get; private set; }
+        public bool IsHuman { get; private set; }
+        public int Balance { get; private set; }
+        public int Bet { get; private set; }
         public List<THand> Hands { get; set; }
 
         public Player(int playerNumber, int balance)
         {
-            Id = Guid.NewGuid();
-            Username = "Player " + playerNumber;
-            Balance = balance;
-            Hands = new List<THand>();
+            this.Id = Guid.NewGuid();
+            this.Username = "Player " + playerNumber;
+            this.Balance = balance;
+            this.Hands = new List<THand>();
+        }
+
+        public void SetUserName(string userName)
+        {
+            this.Username = userName.Trim();
+        }
+        public void SetDealer(bool isDealer)
+        {
+            this.IsDealer = isDealer;
+        }
+
+        public void SetHuman(bool isHuman)
+        {
+            this.IsHuman = isHuman;
+        }
+
+        public void UpdateBalance(int balanceModifier)
+        {
+            this.Balance += balanceModifier;
+        }
+
+        public void UpdateBet(int betModifier, bool reset = false)
+        {
+            if (reset)
+            {
+                this.Bet = 0;
+            }
+            else
+            {
+                this.Balance += betModifier;
+            }
         }
     }
 }

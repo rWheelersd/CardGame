@@ -1,11 +1,4 @@
-﻿using CardGame.BL.Models.Constants;
-using CardGame.BL.Models.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static CardGame.BL.Models.Constants.BaseConstants;
+﻿using static CardGame.BL.Models.Constants.BaseConstants;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
 
 namespace CardGame.BL.Models.BaseModels
@@ -18,19 +11,77 @@ namespace CardGame.BL.Models.BaseModels
      */
     public class Card
     {
-        public string CardName { get; set; }
+        public string CardName { get; private set; }
+        public bool IsVisible { get; private set; }
         public string ImageName { get; private set; }
-        public Rank CardRank { get; set; }
-        public Suit CardSuit { get; set; }
+        public Rank CardRank { get; private set; }
+        public Suit CardSuit { get; private set; }
+        public int BlackjackValue { get; private set; }
 
         public Card(Rank rank, Suit suit)
         {
-            CardRank = rank;
-            CardSuit = suit;
-            CardName = $"{rank} of {suit}";
-            ImageName = $"{rank}_of_{suit}.png".ToLower();
+            this.CardRank = rank;
+            this.CardSuit = suit;
+            this.CardName = $"{rank} of {suit}";
+            this.ImageName = $"{rank}_of_{suit}.png".ToLower();
+        }
+
+        public void RevealCard()
+        {
+            this.IsVisible = true;
+        }
+
+        public void SetBlackjackValue()
+        {
+            switch (this.CardRank)
+            {
+                case Rank.Two:
+                    this.BlackjackValue = (int)CardValues.Two;
+                    break;
+
+                case Rank.Three:
+                    this.BlackjackValue = (int)CardValues.Three;
+                    break;
+
+                case Rank.Four:
+                    this.BlackjackValue = (int)CardValues.Four;
+                    break;
+
+                case Rank.Five:
+                    this.BlackjackValue = (int)CardValues.Five;
+                    break;
+
+                case Rank.Six:
+                    this.BlackjackValue = (int)CardValues.Six;
+                    break;
+
+                case Rank.Seven:
+                    this.BlackjackValue = (int)CardValues.Seven;
+                    break;
+
+                case Rank.Eight:
+                    this.BlackjackValue = (int)CardValues.Eight;
+                    break;
+
+                case Rank.Nine:
+                    this.BlackjackValue = (int)CardValues.Nine;
+                    break;
+
+                case Rank.Ten:
+                case Rank.Jack:
+                case Rank.Queen:
+                case Rank.King:
+                    this.BlackjackValue = (int)CardValues.Ten;
+                    break;
+
+                case Rank.Ace:
+                    this.BlackjackValue = (int)CardValues.Ace;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
         }
     }
 }
-
-
