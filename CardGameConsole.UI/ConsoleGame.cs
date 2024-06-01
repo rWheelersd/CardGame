@@ -6,8 +6,6 @@ using System.Numerics;
 using static CardGame.BL.Models.Constants.BaseConstants;
 using static CardGame.BL.Models.Constants.BlackjackConstants;
 
-BlackjackGameManager blackjackGameManager;
-
 int playerCount;
 int humanCount;
 int startingBalance;
