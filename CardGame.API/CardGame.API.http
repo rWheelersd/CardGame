@@ -1,6 +1,0 @@
-@CardGame.API_HostAddress = http://localhost:5286
-
-GET {{CardGame.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
