@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public class Player<THand>
+    public abstract class Player<THand>
     {
         /*
          * Player class

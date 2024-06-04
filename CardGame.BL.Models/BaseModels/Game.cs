@@ -12,7 +12,7 @@ namespace CardGame.BL.Models.BaseModels
      * therfore it has genric parameter constraint which also have their own generic constraints outside of card.
      * A game of any type must have a deck and players. And players of those games must have hands that have cards.
      */
-    public class Game<THand, TPlayer>
+    public abstract class Game<THand, TPlayer>
         where TPlayer : Player<THand>, new()
         where THand : IHand<Card>, new()
     {
