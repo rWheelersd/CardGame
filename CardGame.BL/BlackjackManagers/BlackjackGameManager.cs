@@ -15,30 +15,6 @@ namespace CardGame.BL.BlackjackManagers
             BlackjackGame = new BlackjackGame(gameId, playerCount, humanPlayers, startingBalance);
         }
 
-        public void StartRound()
-        {
-            for (int i = 0; i < BlackjackGame.Players.Count; i++)
-            {
-                BlackjackGame.Players[i].Hands.Add(BlackjackGame.GameDeck.DealHand(2));
-                BlackjackGame.Players[i].Hands[0].Cards[0].RevealCard();
-                //Temporary name handling, change when implementing signalR and DB
-                if (BlackjackGame.Players[i].IsDealer)
-                {
-                    BlackjackGame.Players[i].SetUserName($"Dealer");
-                }
-                else
-                {
-                    BlackjackGame.Players[i].SetUserName($"Player {i}");
-                }
-            }
-
-            Card dealerCard = BlackjackGame.Players.FirstOrDefault(p => p.IsDealer)
-                                .Hands.First()
-                                .Cards.First(c => c.IsVisible == true);
-
-            BlackjackGame.SetDealerCard(dealerCard);
-        }
-
         public PlayerStatus PlayerTurn(int option, List<BlackjackHand> blackjackHands)
         {
             //Gets initial hand value, i dont like how this is done. Return to figure out a better way to do this later
