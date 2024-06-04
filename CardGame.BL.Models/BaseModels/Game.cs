@@ -40,7 +40,7 @@ namespace CardGame.BL.Models.BaseModels
             AddDealer();
         }
 
-        public abstract void StartRound();
+        //public abstract void StartRound();
 
         public void SetHumans(int humanPlayers)
         {

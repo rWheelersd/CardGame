@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CardGame.BL.Models.BaseModels
 {
-    public abstract class Player<THand>
+    public class Player<THand>
     {
         /*
          * Player class
@@ -57,7 +57,7 @@ namespace CardGame.BL.Models.BaseModels
             }
             else
             {
-                this.Balance += betModifier;
+                this.Bet += betModifier;
             }
         }
     }

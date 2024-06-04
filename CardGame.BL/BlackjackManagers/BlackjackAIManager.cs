@@ -133,5 +133,35 @@ namespace CardGame.BL.BlackjackManagers
                 }
             }
         }
+
+        internal void CollectBets(List<BlackjackPlayer> blackjackPlayers, int minBet, int maxBet)
+        {
+            try
+            {
+                foreach (BlackjackPlayer blackjackPlayer in blackjackPlayers)
+                {
+                    if (blackjackPlayer.IsHuman || blackjackPlayer.IsDealer)
+                    {
+                        continue;
+                    }
+
+                    //Gets a random bet for an AI player with given parameters
+                    int maxCapable = maxBet;
+                    Random rng = new Random();
+
+                    if (blackjackPlayer.Balance < maxBet)
+                    {
+                        maxCapable = blackjackPlayer.Balance;
+                    }
+
+                    blackjackPlayer.UpdateBet(rng.Next(minBet, maxCapable + 1));
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

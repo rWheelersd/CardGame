@@ -21,7 +21,7 @@ namespace CardGame.BL.Models.TexasHoldem
 
         }
 
-        public override void StartRound()
+        public void StartRound()
         {
             throw new NotImplementedException();
         }

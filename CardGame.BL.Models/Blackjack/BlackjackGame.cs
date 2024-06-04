@@ -20,6 +20,10 @@ public class BlackjackGame : Game<BlackjackHand, BlackjackPlayer>
     {
         this.minBet = (startingBalance * 5) / 100;
         this.maxBet = (startingBalance * 15) / 100;
+
+        int i = this.minBet;
+        int x = this.maxBet;
+
         AssignCardValues(this.GameDeck);
     }
 
@@ -41,28 +45,28 @@ public class BlackjackGame : Game<BlackjackHand, BlackjackPlayer>
     //Temporarily deals with usernames.
     //assigns the dealers visible card for game management (last player in player pool which is added in base class)
 
-    public override void StartRound()
-    {
-        for (int i = 0; i < this.Players.Count; i++)
-        {
-            this.Players[i].Hands.Add(this.GameDeck.DealHand(2));
-            this.Players[i].Hands[0].Cards[0].RevealCard();
-            //Temporary name handling, change when implementing signalR and DB
-            if (this.Players[i].IsDealer)
-            {
-                this.Players[i].SetUserName($"Dealer");
-            }
-            else
-            {
-                this.Players[i].SetUserName($"Player {i}");
-            }
-        }
+    //public override void StartRound()
+    //{
+    //    for (int i = 0; i < this.Players.Count; i++)
+    //    {
+    //        this.Players[i].Hands.Add(this.GameDeck.DealHand(2));
+    //        this.Players[i].Hands[0].Cards[0].RevealCard();
+    //        //Temporary name handling, change when implementing signalR and DB
+    //        if (this.Players[i].IsDealer)
+    //        {
+    //            this.Players[i].SetUserName($"Dealer");
+    //        }
+    //        else
+    //        {
+    //            this.Players[i].SetUserName($"Player {i}");
+    //        }
+    //    }
 
-        Card dealerCard = this.Players.FirstOrDefault(p => p.IsDealer)
-                            .Hands.First()
-                            .Cards.First(c => c.IsVisible == true);
+    //    Card dealerCard = this.Players.FirstOrDefault(p => p.IsDealer)
+    //                        .Hands.First()
+    //                        .Cards.First(c => c.IsVisible == true);
 
-        this.SetDealerCard(dealerCard);
-    }
+    //    this.SetDealerCard(dealerCard);
+    //}
 
 }

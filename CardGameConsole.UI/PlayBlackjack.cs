@@ -24,7 +24,7 @@ namespace CardGameConsole.UI
             {
                 while (gameManager.BlackjackGame.Players.Any(p => !p.IsDealer))
                 {
-                    gameManager.BlackjackGame.StartRound();
+                    gameManager.StartRound();
                     gameManager.ProcessAI();
                     gameManager.ManagePayouts();
 

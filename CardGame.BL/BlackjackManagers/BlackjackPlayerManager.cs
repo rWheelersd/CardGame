@@ -14,28 +14,6 @@ namespace CardGame.BL.BlackjackManagers
 {
     public static class BlackjackPlayerManager
     {
-        internal static void PlayerBet(BlackjackPlayer currentPlayer, int minBet, int maxBet)
-        {
-            try
-            {
-                //Gets a random bet for an AI player with given parameters
-                int maxCapable = maxBet;
-                Random rng = new Random();
-
-                if (currentPlayer.Balance < maxBet)
-                {
-                    maxCapable = currentPlayer.Balance;
-                }
-
-                currentPlayer.UpdateBet(rng.Next(minBet, maxCapable + 1));
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
         //Collects results for display
         public static List<string> GetPlayerResults(List<BlackjackPlayer> blackjackPlayers)
         {
