@@ -21,9 +21,6 @@ public class BlackjackGame : Game<BlackjackHand, BlackjackPlayer>
         this.minBet = (startingBalance * 5) / 100;
         this.maxBet = (startingBalance * 15) / 100;
 
-        int i = this.minBet;
-        int x = this.maxBet;
-
         AssignCardValues(this.GameDeck);
     }
 

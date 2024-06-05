@@ -39,6 +39,25 @@ namespace CardGame.BL.BlackjackManagers
             BlackjackGame.SetDealerCard(dealerCard);
         }
 
+        public void ResetGame()
+        {
+            //Resets each each property that needs to be reset prior to starting a new round
+            for (int i = BlackjackGame.Players.Count - 1; i >= 0; i--)
+            {
+                if (BlackjackGame.Players[i].Balance <= 0 && !BlackjackGame.Players[i].IsDealer)
+                {
+                    BlackjackGame.Players.Remove(BlackjackGame.Players[i]);
+                }
+                else
+                {
+                    BlackjackGame.Players[i].Status = PlayerStatus.Active;
+                    BlackjackGame.Players[i].Hands.Clear();
+                    BlackjackGame.Players[i].UpdateBet(0, true);
+                }
+            }
+            BlackjackGame.GameDeck.ResetDeck();
+        }
+
         public PlayerStatus HumanTurn(int option, List<BlackjackHand> blackjackHands)
         {
             //Gets initial hand value, i dont like how this is done. Return to figure out a better way to do this later
@@ -78,6 +97,20 @@ namespace CardGame.BL.BlackjackManagers
                 default: throw new ArgumentOutOfRangeException(nameof(option));
             }
         }
+        public void ProcessHuman(BlackjackPlayer blackjackPlayer)
+        {
+            try
+            {
+                BlackjackHumanManager.CollectBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
+
+
+                BlackjackHumanManager.DisplayOverViewDialogue(blackjackPlayer, dealerCard);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public void ProcessAI()
         {
@@ -91,25 +124,6 @@ namespace CardGame.BL.BlackjackManagers
             {
                 throw;
             }
-        }
-
-        public void ResetGame()
-        {
-            //Resets each each property that needs to be reset prior to starting a new round
-            for (int i = BlackjackGame.Players.Count - 1; i >= 0; i--)
-            {
-                if (BlackjackGame.Players[i].Balance <= 0 && !BlackjackGame.Players[i].IsDealer)
-                {
-                    BlackjackGame.Players.Remove(BlackjackGame.Players[i]);
-                }
-                else
-                {
-                    BlackjackGame.Players[i].Status = PlayerStatus.Active;
-                    BlackjackGame.Players[i].Hands.Clear();
-                    BlackjackGame.Players[i].UpdateBet(0, true);
-                }
-            }
-            BlackjackGame.GameDeck.ResetDeck();
         }
 
         public void ManagePayouts()
