@@ -10,6 +10,7 @@ namespace CardGame.BL.BlackjackManagers
         private int turnCounter = 0;
         public BlackjackGame BlackjackGame { get; private set; }
         private BlackjackAIManager AIManager { get; set; }
+        private BlackjackHumanManager HumanManager { get; set; }
         public BlackjackGameManager(Guid gameId, int playerCount, int humanPlayers, int startingBalance)
         {
             BlackjackGame = new BlackjackGame(gameId, playerCount, humanPlayers, startingBalance);
@@ -57,54 +58,19 @@ namespace CardGame.BL.BlackjackManagers
             }
             BlackjackGame.GameDeck.ResetDeck();
         }
-
-        public PlayerStatus HumanTurn(int option, List<BlackjackHand> blackjackHands)
-        {
-            //Gets initial hand value, i dont like how this is done. Return to figure out a better way to do this later
-            if (blackjackHands[0].HardValue == 0)
-            {
-                BlackjackHandManager.GetHandValues(blackjackHands[0]);
-            }
-
-            switch (option)
-            {
-                case 1: //HIT
-                    BlackjackGame.GameDeck.DealCards(blackjackHands[0]);
-                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
-                    if (blackjackHands[0].Action != HandActions.FlipBust && blackjackHands[0].Action != HandActions.FlipBlackjack)
-                    {
-                        return PlayerStatus.Active;
-                    }
-                    else
-                    {
-                        return PlayerStatus.Inactive;
-                    }
-
-                case 2: //Stand
-                    blackjackHands[0].SetAction(HandActions.Stand);
-                    return PlayerStatus.Inactive;
-
-                case 3: //Double Down
-                    BlackjackGame.GameDeck.DealCards(blackjackHands[0]);
-                    blackjackHands[0].SetAction(HandActions.Stand);
-                    BlackjackHandManager.GetHandValues(blackjackHands[0]);
-                    return PlayerStatus.Inactive;
-
-                case 4: //Split
-                    BlackjackHandManager.SplitHand(blackjackHands, blackjackHands[0]);
-                    return PlayerStatus.Active;
-
-                default: throw new ArgumentOutOfRangeException(nameof(option));
-            }
-        }
+        
         public void ProcessHuman(BlackjackPlayer blackjackPlayer)
         {
             try
+
             {
-                BlackjackHumanManager.CollectBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
+                HumanManager = new BlackjackHumanManager(BlackjackGame.dealerCard, BlackjackGame.GameDeck);
+                HumanManager.CollectBet(blackjackPlayer, BlackjackGame.minBet, BlackjackGame.maxBet);
 
-
-                BlackjackHumanManager.DisplayOverViewDialogue(blackjackPlayer, dealerCard);
+                while (blackjackPlayer.Status == PlayerStatus.Active)
+                {
+                    HumanManager.PlayTurn(blackjackPlayer);
+                }
             }
             catch (Exception)
             {
